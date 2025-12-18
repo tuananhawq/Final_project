@@ -1,0 +1,224 @@
+/* ========== LAYOUT ========== */
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    background: linear-gradient(135deg, #0b0b1e, #120a2a);
+    font-family: "Inter", sans-serif;
+}
+
+/* LEFT */
+.login-left {
+    width: 50%;
+    padding: 0 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #fff;
+}
+
+.login-left h1 {
+    font-size: 50px;
+    font-weight: 600;
+    color: #9ae6ff;
+    margin-bottom: 8px;
+}
+
+.login-left p {
+    font-size: 30px;
+    color: #b5b5c9;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+/* INPUT */
+.login-left label {
+    font-size: 12px;
+    margin-bottom: 6px;
+    color: #cfcfe3;
+}
+
+.input-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(
+    180deg,
+    rgba(20, 20, 50, 0.9),
+    rgba(10, 10, 30, 0.9)
+  );
+  border: 1px solid rgba(120, 120, 255, 0.35);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 22px;
+  transition: border 0.25s ease, box-shadow 0.25s ease;
+}
+
+.input-box:focus-within {
+  border-color: #6ecbff;
+  box-shadow: 0 0 0 2px rgba(110, 203, 255, 0.15);
+}
+
+.input-box svg {
+  color: #9aa4ff;
+}
+
+.input-box input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-size: 15px;          /* ⬅️ tăng chữ */
+  font-weight: 500;
+}
+
+.input-box input::placeholder {
+  color: rgba(200, 200, 255, 0.45);
+}
+
+
+.input-box span {
+    cursor: pointer;
+    color: #aaa;
+}
+
+/* ERROR */
+.error {
+    font-size: 12px;
+    color: #ff6b6b;
+    margin-bottom: 12px;
+}
+
+/* FORGOT */
+.forgot {
+    text-align: right;
+    font-size: 20px;
+    color: #6ecbff;
+    margin-bottom: 24px;
+    cursor: pointer;
+}
+
+/* BUTTON */
+.login-btn {
+    height: 48px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    background: linear-gradient(90deg, #4fd1ff, #9f7aea);
+    margin-bottom: 28px;
+}
+
+.login-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* DIVIDER */
+.divider {
+    text-align: center;
+    font-size: 20px;
+    color: #888;
+    margin-bottom: 20px;
+}
+
+/* SOCIAL */
+.social {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.social button {
+    flex: 1;
+    height: 40px;
+    border-radius: 6px;
+    border: none;
+    font-size: 12px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.google {
+    background: #db4437;
+}
+
+.facebook {
+    background: #1877f2;
+}
+
+.linkedin {
+    background: #0a66c2;
+}
+
+/* FOOTER */
+.footer {
+    font-size: 20px;
+    text-align: center;
+    color: #aaa;
+}
+
+.footer span {
+    color: #6ecbff;
+    cursor: pointer;
+}
+
+/* RIGHT */
+.login-right {
+    width: 50%;
+    height: 100vh;
+    /* ✅ ÉP FULL CHIỀU CAO */
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.05),
+            rgba(0, 0, 0, 0.05)),
+        url("/src/assets/anhbia3x12136-jp-2200w.png");
+
+    background-size: cover;
+    /* 🔥 QUAN TRỌNG */
+    background-position: center;
+    /* 🔥 QUAN TRỌNG */
+    background-repeat: no-repeat;
+
+    position: relative;
+}
+
+
+.login-logo {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    width: 120px;
+    /* chỉnh to/nhỏ tại đây */
+    height: auto;
+    z-index: 10;
+}
+
+
+
+.badge {
+    position: absolute;
+    bottom: 60px;
+    background: #fff;
+    color: #4c51bf;
+    padding: 12px 28px;
+    border-radius: 24px;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== FIX INPUT WHITE BACKGROUND (CHROME AUTOFILL) ===== */
+.input-box input {
+  background-color: transparent !important;
+  color: #fff !important;
+}
+
+/* Chrome autofill fix */
+.input-box input:-webkit-autofill,
+.input-box input:-webkit-autofill:hover,
+.input-box input:-webkit-autofill:focus,
+.input-box input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px rgba(15, 15, 40, 0.95) inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
