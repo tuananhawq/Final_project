@@ -10,24 +10,13 @@ dotenv.config({
   path: path.resolve(__dirname, "../../.env"),  // lên 2 cấp vì passport.js nằm trong config/
 });
 
-console.log("Passport load GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID); // debug
 import passport from "passport";
+import bcrypt from "bcryptjs";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { Strategy as FacebookStrategy } from "passport-facebook";
 import User from "../models/User.js";
 
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (err) {
-    done(err, null);
-  }
-});
-
+/* ================= GOOGLE ================= */
 passport.use(
   new GoogleStrategy(
     {
@@ -35,33 +24,67 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: process.env.GOOGLE_CALLBACK_URL,
     },
-    async (accessToken, refreshToken, profile, done) => {
+    async (_, __, profile, done) => {
       try {
-        const email = profile.emails[0].value;
+        const email = profile.emails?.[0]?.value;
 
         let user = await User.findOne({ email });
 
         if (!user) {
-          // 🔥 HASH PASSWORD GIẢ
-          const dummyPassword = Math.random().toString(36).slice(-10);
-          const passwordHash = await bcrypt.hash(dummyPassword, 10);
-
+          const hash = await bcrypt.hash("GOOGLE_LOGIN", 10);
           user = await User.create({
             email,
             username: profile.displayName,
-            passwordHash,          // ✅ BẮT BUỘC CÓ
+            passwordHash: hash,
             provider: "google",
-            roles: ["user"],
             isVerified: true,
           });
         }
 
-        return done(null, user);
+        done(null, user);
       } catch (err) {
-        return done(err, null);
+        done(err);
       }
     }
   )
 );
 
-console.log("GOOGLE_CLIENT_ID =", process.env.GOOGLE_CLIENT_ID);
+/* ================= FACEBOOK ================= */
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: process.env.FACEBOOK_CLIENT_ID,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+      callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+      profileFields: ["id", "displayName", "emails"],
+    },
+    async (_, __, profile, done) => {
+      try {
+        const email = profile.emails?.[0]?.value;
+
+        let user = await User.findOne({
+          $or: [
+            { facebookId: profile.id },
+            { email }
+          ]
+        });
+
+        if (!user) {
+          const hash = await bcrypt.hash("FACEBOOK_LOGIN", 10);
+          user = await User.create({
+            email,
+            username: profile.displayName,
+            facebookId: profile.id,
+            passwordHash: hash,
+            provider: "facebook",
+            isVerified: true,
+          });
+        }
+
+        done(null, user);
+      } catch (err) {
+        done(err);
+      }
+    }
+  )
+);

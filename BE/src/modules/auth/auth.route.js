@@ -1,7 +1,7 @@
 import express from 'express';
 import passport from "passport";
 import jwt from "jsonwebtoken";
-import { register, login } from './auth.controller.js';
+import { register, login,forgotPassword, resetPassword } from './auth.controller.js';
 
 const router = express.Router();
 
@@ -41,7 +41,28 @@ router.get(
     res.redirect(`http://localhost:5173/login?token=${token}`);
   }
 );
+
+router.get("/facebook",
+  passport.authenticate("facebook", {
+    scope: ["email"],
+    session: false,
+  })
+);
+
+router.get("/facebook/callback",
+  passport.authenticate("facebook", { session: false }),
+  (req, res) => {
+    const token = jwt.sign(
+      { userId: req.user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+    res.redirect(`http://localhost:5173/login?token=${token}`);
+  }
+);
 router.post('/register', register);
 router.post('/login', login);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
 
 export default router;

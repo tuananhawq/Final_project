@@ -75,6 +75,9 @@ export default function Login() {
   const handleGoogleLogin = () => {
     window.location.href = "http://localhost:3000/api/auth/google";
   };
+  const handleFacebookLogin = () => {
+    window.location.href = "http://localhost:3000/api/auth/facebook";
+  };
 
   return (
     <div className="login-container">
@@ -113,7 +116,14 @@ export default function Login() {
 
         {error && <div className="error">{error}</div>}
 
-        <div className="forgot">Quên mật khẩu?</div>
+        <div
+          className="forgot"
+          onClick={() => navigate("/forgot-password")}
+          style={{ cursor: "pointer" }}
+        >
+          Quên mật khẩu?
+        </div>
+
 
         <button
           className="login-btn"
@@ -129,7 +139,10 @@ export default function Login() {
           <button className="google" onClick={handleGoogleLogin}>
             GOOGLE
           </button>
-          <button className="facebook">FACEBOOK</button>
+          <button className="facebook" onClick={handleFacebookLogin}>
+            FACEBOOK
+          </button>
+
         </div>
 
         <div className="footer">

@@ -27,38 +27,67 @@ export default function Register() {
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setForm({ ...form, [name]: type === "checkbox" ? checked : value });
+    const { name, value, type, checked } = e.target;
+    setForm({ ...form, [name]: type === "checkbox" ? checked : value });
+    setError(""); // 🔥 clear lỗi khi nhập lại
+};
+
+
+    // thêm helper validate ở trên component
+    const validateRegister = (form) => {
+        if (!form.name || !form.email || !form.password || !form.confirmPassword) {
+            return "Vui lòng nhập đầy đủ thông tin";
+        }
+
+        if (form.name.trim().length < 3) {
+            return "Tên phải có ít nhất 3 ký tự";
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(form.email)) {
+            return "Email không đúng định dạng";
+        }
+
+        if (form.password.length < 8) {
+            return "Mật khẩu phải có ít nhất 8 ký tự";
+        }
+
+        if (!/[A-Za-z]/.test(form.password) || !/[0-9]/.test(form.password)) {
+            return "Mật khẩu phải chứa ít nhất 1 chữ và 1 số";
+        }
+
+        if (form.password !== form.confirmPassword) {
+            return "Mật khẩu xác nhận không khớp";
+        }
+
+        if (!form.agree) {
+            return "Bạn cần đồng ý điều khoản & chính sách";
+        }
+
+        return "";
     };
 
     const handleRegister = async () => {
         setError("");
 
-        if (!form.name || !form.email || !form.password) {
-            setError("Vui lòng nhập đầy đủ thông tin");
-            return;
-        }
-
-        if (form.password !== form.confirmPassword) {
-            setError("Mật khẩu xác nhận không khớp");
-            return;
-        }
-
-        if (!form.agree) {
-            setError("Bạn cần đồng ý điều khoản & chính sách");
+        const validationError = validateRegister(form);
+        if (validationError) {
+            setError(validationError);
             return;
         }
 
         try {
             setLoading(true);
+
             await axios.post("http://localhost:3000/api/auth/register", {
-                username: form.name,   // ✅ ĐÚNG SCHEMA
+                username: form.name,   // ✅ đúng schema
                 email: form.email,
                 password: form.password
             });
 
-
             alert("Đăng ký thành công!");
+            navigate("/login");
+
         } catch (err) {
             const code = err.response?.data?.error;
 
@@ -69,11 +98,11 @@ export default function Register() {
             } else {
                 setError("Lỗi hệ thống");
             }
-        }
-        finally {
+        } finally {
             setLoading(false);
         }
     };
+
 
     return (
         <div className="register-container">
@@ -162,7 +191,7 @@ export default function Register() {
                 <div className="social">
                     <button className="google">GOOGLE</button>
                     <button className="facebook">FACEBOOK</button>
-                   
+
                 </div>
 
                 <div className="footer">

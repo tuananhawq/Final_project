@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -19,15 +19,28 @@ const userSchema = new mongoose.Schema({
     required: true
   },
 
+  // 🔥 THÊM CHO OAUTH
   provider: {
     type: String,
-    enum: ['local', 'google', 'facebook'],
-    default: 'local'
+    enum: ["local", "google", "facebook"],
+    default: "local"
+  },
+
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true
+  },
+
+  facebookId: {
+    type: String,
+    unique: true,
+    sparse: true
   },
 
   roles: {
     type: [String],
-    default: ['user']
+    default: ["user"]
   },
 
   isVerified: {
@@ -47,11 +60,11 @@ const userSchema = new mongoose.Schema({
 
   premiumStatus: {
     type: String,
-    enum: ['free', 'premium'],
-    default: 'free'
+    enum: ["free", "premium"],
+    default: "free"
   }
 }, {
   timestamps: true
 });
 
-export default mongoose.model('User', userSchema);
+export default mongoose.model("User", userSchema);
