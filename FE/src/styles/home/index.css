@@ -1,0 +1,16 @@
+/* ========== HOME PAGE STYLES INDEX ========== */
+/* Import tất cả CSS files của Home page components */
+/* Thứ tự import quan trọng để đảm bảo specificity đúng */
+
+/* 1. Page-level styles */
+@import './home.css';
+
+/* 2. Component styles (theo thứ tự render) */
+@import './home-header.css';
+@import './home-hero.css';
+@import './home-agencies.css';
+@import './home-creators.css';
+@import './home-topics.css';
+@import './home-testimonials.css';
+@import './home-footer.css';
+

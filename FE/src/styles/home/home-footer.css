@@ -1,0 +1,226 @@
+/* ========== HOME FOOTER COMPONENT ========== */
+/* Naming: home-footer__* để tránh conflict */
+
+.home-footer {
+  position: relative;
+  background: linear-gradient(
+    to bottom,
+    #000000,
+    rgba(17, 24, 39, 0.5),
+    rgba(31, 41, 55, 0.5)
+  );
+  padding-top: 5rem;
+  padding-bottom: 2rem;
+}
+
+.home-footer__container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .home-footer__container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-footer__container {
+    padding: 0 2rem;
+  }
+}
+
+/* Grid */
+.home-footer__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .home-footer__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-footer__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Section */
+.home-footer__section {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-footer__section--logo {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 1024px) {
+  .home-footer__section--logo {
+    grid-column: span 1;
+  }
+}
+
+.home-footer__logo {
+  width: 11rem;
+  height: 10rem;
+  margin-bottom: 1.5rem;
+  object-fit: contain;
+}
+
+.home-footer__description {
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+/* Subscribe */
+.home-footer__subscribe {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.home-footer__email-input {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background-color: rgba(248, 250, 252, 0.6);
+  border: none;
+  border-radius: 9999px;
+  color: #171717;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.home-footer__email-input::placeholder {
+  color: #171717;
+}
+
+.home-footer__email-input:focus {
+  outline: 2px solid #7dd3fc;
+  outline-offset: 2px;
+}
+
+.home-footer__subscribe-btn {
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #1f2937, #374151);
+  border: none;
+  border-radius: 1.5rem;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.home-footer__subscribe-btn:hover {
+  background: linear-gradient(135deg, #374151, #4b5563);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Section Title */
+.home-footer__section-title {
+  color: #7dd3fc;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+/* List */
+.home-footer__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.home-footer__list-item {
+  margin: 0;
+}
+
+.home-footer__link {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.25rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.home-footer__link:hover {
+  color: #7dd3fc;
+}
+
+.home-footer__contact {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.25rem;
+}
+
+/* Social */
+.home-footer__social {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.home-footer__social-link {
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-footer__social-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7dd3fc, #d946ef);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.home-footer__social-link:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: 0 6px 20px rgba(125, 211, 252, 0.3);
+}
+
+.home-footer__social-link:hover::before {
+  opacity: 0.2;
+}
+
+.home-footer__social-link:hover .home-footer__social-icon {
+  transform: scale(1.2);
+  color: #7dd3fc;
+}
+
+.home-footer__social-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #ffffff;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
