@@ -31,6 +31,8 @@ router.get(
     const token = jwt.sign(
       {
         userId: req.user._id,
+        username: req.user.username
+,
         roles: req.user.roles,
       },
       process.env.JWT_SECRET,
@@ -53,7 +55,12 @@ router.get("/facebook/callback",
   passport.authenticate("facebook", { session: false }),
   (req, res) => {
     const token = jwt.sign(
-      { userId: req.user._id },
+      {
+        userId: req.user._id,
+        username: req.user.username,
+  
+        roles: req.user.roles,
+      },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
