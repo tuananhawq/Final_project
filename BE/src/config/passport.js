@@ -38,7 +38,9 @@ passport.use(
             passwordHash: hash,
             provider: "google",
             isVerified: true,
+            roles: ["user"]   // 👈 BẮT BUỘC
           });
+
         }
 
         done(null, user);
@@ -78,6 +80,7 @@ passport.use(
             passwordHash: hash,
             provider: "facebook",
             isVerified: true,
+            roles: ["user"]
           });
         }
 

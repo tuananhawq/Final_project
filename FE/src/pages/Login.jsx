@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import "../styles/login.css";
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -29,14 +31,19 @@ export default function Login() {
    * /login?token=xxxxx
    */
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const token = params.get("token");
+  const token = new URLSearchParams(location.search).get("token");
 
-    if (token) {
-      localStorage.setItem("token", token);
-      navigate("/home");
-    }
-  }, [location, navigate]);
+  if (token) {
+    localStorage.setItem("token", token);
+
+    const { roles } = jwtDecode(token);
+
+    if (roles.includes("admin")) navigate("/admin");
+    else if (roles.includes("staff")) navigate("/staff");
+    else navigate("/home");
+  }
+}, []);
+
 
   /**
    * Login thường (email + password)
@@ -58,6 +65,9 @@ export default function Login() {
       );
 
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user)); // 🔥 BẮT BUỘC
+      navigate("/home");
+
       navigate("/home");
     } catch (err) {
       console.error(err);

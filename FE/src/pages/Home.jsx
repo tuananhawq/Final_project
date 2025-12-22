@@ -12,13 +12,13 @@ import "../styles/home/index.css";
 export default function Home() {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Kiểm tra token khi component mount
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   // Kiểm tra token khi component mount
+  //   const token = localStorage.getItem("token");
+  //   if (!token) {
+  //     navigate("/login");
+  //   }
+  // }, [navigate]);
 
   return (
     <div className="home-page">

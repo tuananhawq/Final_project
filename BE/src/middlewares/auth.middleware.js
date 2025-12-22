@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 
+/* ================= AUTH GUARD ================= */
 export const authGuard = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -21,7 +22,8 @@ export const authGuard = (req, res, next) => {
     // 4. Gắn user info vào request
     req.user = {
       id: decoded.userId,
-      roles: decoded.roles
+      username: decoded.username,
+      roles: decoded.roles || []   // 👈 đảm bảo luôn là mảng
     };
 
     next();
@@ -31,4 +33,24 @@ export const authGuard = (req, res, next) => {
       message: 'Token is invalid or expired'
     });
   }
+};
+
+/* ================= ROLE GUARD (THÊM MỚI) ================= */
+export const roleGuard = (...allowedRoles) => {
+  return (req, res, next) => {
+    const userRoles = req.user?.roles || [];
+
+    const hasPermission = allowedRoles.some(role =>
+      userRoles.includes(role)
+    );
+
+    if (!hasPermission) {
+      return res.status(403).json({
+        error: 'FORBIDDEN',
+        message: 'You do not have permission'
+      });
+    }
+
+    next();
+  };
 };

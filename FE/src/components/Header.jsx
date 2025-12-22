@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaSearch, FaMapMarkerAlt, FaBars, FaTimes } from "react-icons/fa";
+import { jwtDecode } from "jwt-decode";
 import "../styles/home/home-header.css";
 
 export function Header() {
@@ -9,18 +10,27 @@ export function Header() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-      return;
-    }
+  const token = localStorage.getItem("token");
 
-    // Lấy thông tin user từ localStorage hoặc API
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, [navigate]);
+  if (!token) {
+    setUser(null);
+    return;
+  }
+
+  try {
+    const decoded = jwtDecode(token);
+    setUser({
+      id: decoded.userId,
+      username: decoded.username,
+      roles: decoded.roles
+    });
+  } catch {
+    setUser(null);
+  }
+}, []);
+
+
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
