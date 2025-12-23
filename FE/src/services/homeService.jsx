@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const API_URL = "http://localhost:3000/api/home";
-const UPLOAD_URL = "http://localhost:3000/api/upload";
 
 // Get token từ localStorage
 const getAuthHeaders = () => {
@@ -9,20 +8,6 @@ const getAuthHeaders = () => {
   return {
     Authorization: `Bearer ${token}`,
   };
-};
-
-// ==================== UPLOAD ====================
-export const uploadImage = async (file) => {
-  const formData = new FormData();
-  formData.append("image", file);
-  
-  const res = await axios.post(`${UPLOAD_URL}/upload`, formData, {
-    headers: {
-      ...getAuthHeaders(),
-      "Content-Type": "multipart/form-data",
-    },
-  });
-  return res.data;
 };
 
 // ==================== HERO ====================

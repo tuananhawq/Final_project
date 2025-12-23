@@ -767,52 +767,6 @@ const swaggerSpec = {
           403: { description: 'Forbidden - Staff/Admin only' }
         }
       }
-    },
-
-    // ==================== UPLOAD ====================
-    '/api/upload/upload': {
-      post: {
-        tags: ['Upload'],
-        summary: 'Upload image (Admin only)',
-        requestBody: {
-          required: true,
-          content: {
-            'multipart/form-data': {
-              schema: {
-                type: 'object',
-                required: ['image'],
-                properties: {
-                  image: {
-                    type: 'string',
-                    format: 'binary',
-                    description: 'Image file (jpeg, jpg, png, gif, webp) - Max 5MB'
-                  }
-                }
-              }
-            }
-          }
-        },
-        responses: {
-          200: {
-            description: 'Image uploaded successfully',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    message: { type: 'string', example: 'Upload thành công' },
-                    url: { type: 'string', example: '/uploads/image-1234567890.jpg' },
-                    filename: { type: 'string', example: 'image-1234567890.jpg' }
-                  }
-                }
-              }
-            }
-          },
-          400: { description: 'Bad request - Invalid file type or no file' },
-          401: { description: 'Unauthorized' },
-          403: { description: 'Forbidden - Staff/Admin only' }
-        }
-      }
     }
   },
 

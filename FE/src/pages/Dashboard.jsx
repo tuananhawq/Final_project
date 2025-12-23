@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { HomeManagement } from "../components/HomeManagement.jsx";
+import { BlogManagement } from "../components/BlogManagement.jsx";
 import "../styles/dashboard.css";
 
 export default function Dashboard() {
@@ -69,6 +70,13 @@ export default function Dashboard() {
             >
               Quản lý Home
             </div>
+            <div
+              className={`nav-item ${activeMenu === "blog-management" ? "active" : ""}`}
+              onClick={() => setActiveMenu("blog-management")}
+              style={{ cursor: "pointer" }}
+            >
+              Quản lý Blog
+            </div>
             <div className="nav-item">Users</div>
             <div className="nav-item">Reports</div>
             <div className="nav-item">Settings</div>
@@ -102,6 +110,8 @@ export default function Dashboard() {
           <main className="dashboard-content">
             {activeMenu === "home-management" ? (
               <HomeManagement />
+            ) : activeMenu === "blog-management" ? (
+              <BlogManagement />
             ) : (
               <>
                 {/* STATS */}

@@ -23,7 +23,6 @@ import {
   getFooter,
   updateFooter,
 } from "../services/homeService.jsx";
-import { ImageUpload } from "./ImageUpload.jsx";
 
 export function HomeManagement() {
   const [activeTab, setActiveTab] = useState("hero");
@@ -544,12 +543,17 @@ export function HomeManagement() {
                 onChange={(e) => setHeroForm({ ...heroForm, ctaText: e.target.value })}
                 style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd" }}
               />
-              <ImageUpload
-                label="Hình ảnh nền"
-                value={heroForm.backgroundImage}
-                onChange={(url) => setHeroForm({ ...heroForm, backgroundImage: url })}
-                required
-              />
+              <label>
+                Hình ảnh nền <span style={{ color: "#c00" }}>*</span>
+                <input
+                  type="text"
+                  placeholder="Nhập URL hình ảnh"
+                  value={heroForm.backgroundImage}
+                  onChange={(e) => setHeroForm({ ...heroForm, backgroundImage: e.target.value })}
+                  required
+                  style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", width: "100%", marginTop: "5px" }}
+                />
+              </label>
               <label>
                 <input
                   type="checkbox"
@@ -679,12 +683,17 @@ export function HomeManagement() {
                 <option value="TOP 2">TOP 2</option>
                 <option value="TOP 3">TOP 3</option>
               </select>
-              <ImageUpload
-                label="Hình ảnh"
-                value={agencyForm.image}
-                onChange={(url) => setAgencyForm({ ...agencyForm, image: url })}
-                required
-              />
+              <label>
+                Hình ảnh <span style={{ color: "#c00" }}>*</span>
+                <input
+                  type="text"
+                  placeholder="Nhập URL hình ảnh"
+                  value={agencyForm.image}
+                  onChange={(e) => setAgencyForm({ ...agencyForm, image: e.target.value })}
+                  required
+                  style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", width: "100%", marginTop: "5px" }}
+                />
+              </label>
               <select
                 value={agencyForm.size}
                 onChange={(e) => setAgencyForm({ ...agencyForm, size: e.target.value })}
@@ -820,12 +829,17 @@ export function HomeManagement() {
                 required
                 style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd" }}
               />
-              <ImageUpload
-                label="Avatar"
-                value={creatorForm.avatar}
-                onChange={(url) => setCreatorForm({ ...creatorForm, avatar: url })}
-                required
-              />
+              <label>
+                Avatar <span style={{ color: "#c00" }}>*</span>
+                <input
+                  type="text"
+                  placeholder="Nhập URL avatar"
+                  value={creatorForm.avatar}
+                  onChange={(e) => setCreatorForm({ ...creatorForm, avatar: e.target.value })}
+                  required
+                  style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", width: "100%", marginTop: "5px" }}
+                />
+              </label>
               <input
                 type="text"
                 placeholder="Số followers (tùy chọn)"
@@ -952,12 +966,17 @@ export function HomeManagement() {
                 required
                 style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd" }}
               />
-              <ImageUpload
-                label="Hình ảnh"
-                value={topicForm.image}
-                onChange={(url) => setTopicForm({ ...topicForm, image: url })}
-                required
-              />
+              <label>
+                Hình ảnh <span style={{ color: "#c00" }}>*</span>
+                <input
+                  type="text"
+                  placeholder="Nhập URL hình ảnh"
+                  value={topicForm.image}
+                  onChange={(e) => setTopicForm({ ...topicForm, image: e.target.value })}
+                  required
+                  style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", width: "100%", marginTop: "5px" }}
+                />
+              </label>
               <select
                 value={topicForm.position}
                 onChange={(e) => setTopicForm({ ...topicForm, position: e.target.value })}
@@ -1101,12 +1120,17 @@ export function HomeManagement() {
                 rows={4}
                 style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd" }}
               />
-              <ImageUpload
-                label="Avatar"
-                value={testimonialForm.avatar}
-                onChange={(url) => setTestimonialForm({ ...testimonialForm, avatar: url })}
-                required
-              />
+              <label>
+                Avatar <span style={{ color: "#c00" }}>*</span>
+                <input
+                  type="text"
+                  placeholder="Nhập URL avatar"
+                  value={testimonialForm.avatar}
+                  onChange={(e) => setTestimonialForm({ ...testimonialForm, avatar: e.target.value })}
+                  required
+                  style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", width: "100%", marginTop: "5px" }}
+                />
+              </label>
               <label>
                 <input
                   type="checkbox"

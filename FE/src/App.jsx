@@ -5,6 +5,8 @@ import Home from "./pages/Home.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import BlogList from "./pages/BlogList.jsx";
+import BlogDetail from "./pages/BlogDetail.jsx";
 export default function App() {
   return (
     <Routes>
@@ -20,6 +22,10 @@ export default function App() {
       {/* User pages */}
       <Route path="/home" element={<Home />} />
       <Route path="/dashboard" element={<Dashboard />} />
+
+      {/* Blog */}
+      <Route path="/blog" element={<BlogList />} />
+      <Route path="/blog/:id" element={<BlogDetail />} />
     </Routes>
   );
 }
