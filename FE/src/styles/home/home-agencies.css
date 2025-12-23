@@ -149,29 +149,69 @@
   position: relative;
   border-radius: 50px;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
 }
 
 .home-agencies__card--large {
   height: 24rem;
-  box-shadow: 0 25px 50px rgba(255, 255, 255, 0.2), 0 0 30px rgba(125, 211, 252, 0.1);
+  box-shadow: 
+    0 25px 50px rgba(255, 255, 255, 0.2), 
+    0 0 30px rgba(125, 211, 252, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   border: 4px solid rgba(255, 255, 255, 0.3);
-  transition: all 0.4s ease;
+  transition: all 0.5s ease;
+  position: relative;
+}
+
+.home-agencies__card--large::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50px;
+  padding: 4px;
+  background: linear-gradient(135deg, #7dd3fc, #d946ef, #7dd3fc);
+  background-size: 200% 200%;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: -1;
+  animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .home-agencies__card-wrapper:hover .home-agencies__card--large {
-  box-shadow: 0 35px 60px rgba(255, 255, 255, 0.3), 0 0 50px rgba(125, 211, 252, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    0 35px 60px rgba(255, 255, 255, 0.3), 
+    0 0 50px rgba(125, 211, 252, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.home-agencies__card-wrapper:hover .home-agencies__card--large::before {
+  opacity: 0.5;
 }
 
 .home-agencies__card--small {
   height: 18rem;
-  box-shadow: 0 20px 25px rgba(255, 255, 255, 0.1);
-  transition: all 0.4s ease;
+  box-shadow: 
+    0 20px 25px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.5s ease;
 }
 
 .home-agencies__card-wrapper:hover .home-agencies__card--small {
-  box-shadow: 0 30px 40px rgba(255, 255, 255, 0.15), 0 0 30px rgba(217, 70, 239, 0.1);
+  box-shadow: 
+    0 30px 40px rgba(255, 255, 255, 0.2), 
+    0 0 30px rgba(217, 70, 239, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .home-agencies__card-image {

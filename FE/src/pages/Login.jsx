@@ -36,10 +36,11 @@ export default function Login() {
   if (token) {
     localStorage.setItem("token", token);
 
-    const { roles } = jwtDecode(token);
+    const decoded = jwtDecode(token);
+    const roles = decoded.roles || [];
 
     if (roles.includes("admin")) navigate("/admin");
-    else if (roles.includes("staff")) navigate("/staff");
+    else if (roles.includes("staff")) navigate("/dashboard");
     else navigate("/home");
   }
 }, []);
@@ -66,9 +67,18 @@ export default function Login() {
 
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user)); // 🔥 BẮT BUỘC
-      navigate("/home");
 
-      navigate("/home");
+      // Decode token để kiểm tra role và redirect đúng trang
+      const decoded = jwtDecode(res.data.token);
+      const roles = decoded.roles || [];
+
+      if (roles.includes("admin")) {
+        navigate("/admin");
+      } else if (roles.includes("staff")) {
+        navigate("/dashboard");
+      } else {
+        navigate("/home");
+      }
     } catch (err) {
       console.error(err);
       setError(

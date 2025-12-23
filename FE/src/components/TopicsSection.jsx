@@ -1,24 +1,35 @@
+import { useEffect, useState } from "react";
+import { getTopics } from "../services/homeService.jsx";
 import "../styles/home/home-topics.css";
 
-const topics = [
-  {
-    id: 1,
-    title: "Gaming",
-    image: "/src/assets/anhbia3x12136-jp-2200w.png",
-  },
-  {
-    id: 2,
-    title: "Beauty & Fashion",
-    image: "/src/assets/anhbia3x12136-jp-2200w.png",
-  },
-  {
-    id: 3,
-    title: "Technology",
-    image: "/src/assets/anhbia3x12136-jp-2200w.png",
-  },
-];
+const positions = ["left", "center", "right"];
 
 export function TopicsSection() {
+  const [topics, setTopics] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTopics = async () => {
+      try {
+        const data = await getTopics();
+        setTopics(data);
+      } catch (error) {
+        console.error("Error fetching topics:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTopics();
+  }, []);
+
+  if (loading) {
+    return <div className="home-topics">Loading...</div>;
+  }
+
+  if (topics.length === 0) {
+    return null;
+  }
+
   return (
     <section className="home-topics">
       <div className="home-topics__container">
@@ -33,30 +44,27 @@ export function TopicsSection() {
 
         {/* Topics Images with Overlapping Effect */}
         <div className="home-topics__grid">
-          {topics.map((topic, index) => (
-            <div
-              key={topic.id}
-              className={`home-topics__item ${
-                index === 0
-                  ? "home-topics__item--left"
-                  : index === 1
-                  ? "home-topics__item--center"
-                  : "home-topics__item--right"
-              }`}
-            >
-              <div className="home-topics__card">
-                <img
-                  src={topic.image}
-                  alt={topic.title}
-                  className="home-topics__card-image"
-                />
-                <div className="home-topics__card-overlay" />
-                <div className="home-topics__card-content">
-                  <h3 className="home-topics__card-title">{topic.title}</h3>
+          {topics.map((topic, index) => {
+            const position = topic.position || positions[index % 3];
+            return (
+              <div
+                key={topic._id}
+                className={`home-topics__item home-topics__item--${position}`}
+              >
+                <div className="home-topics__card">
+                  <img
+                    src={topic.image}
+                    alt={topic.title}
+                    className="home-topics__card-image"
+                  />
+                  <div className="home-topics__card-overlay" />
+                  <div className="home-topics__card-content">
+                    <h3 className="home-topics__card-title">{topic.title}</h3>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

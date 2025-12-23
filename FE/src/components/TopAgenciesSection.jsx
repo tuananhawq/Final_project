@@ -1,30 +1,33 @@
+import { useEffect, useState } from "react";
+import { getAgencies } from "../services/homeService.jsx";
 import "../styles/home/home-agencies.css";
 
-const agencies = [
-  {
-    id: 2,
-    rank: "TOP 1",
-    name: "CREATIVE AGENCY",
-    image: "/src/assets/anhbia3x12136-jp-2200w.png",
-    size: "large",
-  },
-  {
-    id: 1,
-    rank: "TOP 2",
-    name: "DIGITAL BRAND",
-    image: "/src/assets/anhbia3x12136-jp-2200w.png",
-    size: "small",
-  },
-  {
-    id: 3,
-    rank: "TOP 3",
-    name: "MARKETING PRO",
-    image: "/src/assets/anhbia3x12136-jp-2200w.png",
-    size: "small",
-  },
-];
-
 export function TopAgenciesSection() {
+  const [agencies, setAgencies] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAgencies = async () => {
+      try {
+        const data = await getAgencies();
+        setAgencies(data);
+      } catch (error) {
+        console.error("Error fetching agencies:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAgencies();
+  }, []);
+
+  if (loading) {
+    return <div className="home-agencies">Loading...</div>;
+  }
+
+  if (agencies.length === 0) {
+    return null;
+  }
+
   return (
     <section className="home-agencies">
       <div className="home-agencies__container">
@@ -41,7 +44,7 @@ export function TopAgenciesSection() {
         <div className="home-agencies__grid">
           {agencies.map((agency) => (
             <div
-              key={agency.id}
+              key={agency._id}
               className={`home-agencies__card-wrapper ${
                 agency.size === "large"
                   ? "home-agencies__card-wrapper--large"

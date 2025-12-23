@@ -1,33 +1,33 @@
+import { useEffect, useState } from "react";
+import { getTestimonials } from "../services/homeService.jsx";
 import "../styles/home/home-testimonials.css";
 
-const testimonials = [
-  {
-    id: 1,
-    name: "Nguyễn Minh Tuấn",
-    role: "CEO - TechStart",
-    content:
-      "REVLIVE đã giúp chúng tôi kết nối với những creator tài năng nhất. Nền tảng rất dễ sử dụng và hiệu quả!",
-    avatar: "/src/assets/logo-revlive.png",
-  },
-  {
-    id: 2,
-    name: "Lê Thu Hà",
-    role: "Content Creator",
-    content:
-      "Tôi đã tìm được nhiều brand uy tín để hợp tác thông qua REVLIVE. Đây là nền tảng tuyệt vời cho các creator!",
-    avatar: "/src/assets/logo-revlive.png",
-  },
-  {
-    id: 3,
-    name: "Trần Đức Anh",
-    role: "Marketing Manager - Fashion Brand",
-    content:
-      "Chất lượng creator trên REVLIVE rất cao. Chúng tôi đã có nhiều chiến dịch thành công nhờ nền tảng này.",
-    avatar: "/src/assets/logo-revlive.png",
-  },
-];
-
 export function TestimonialsSection() {
+  const [testimonials, setTestimonials] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const data = await getTestimonials();
+        setTestimonials(data);
+      } catch (error) {
+        console.error("Error fetching testimonials:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTestimonials();
+  }, []);
+
+  if (loading) {
+    return <div className="home-testimonials">Loading...</div>;
+  }
+
+  if (testimonials.length === 0) {
+    return null;
+  }
+
   return (
     <section className="home-testimonials">
       <div className="home-testimonials__container">
@@ -44,7 +44,7 @@ export function TestimonialsSection() {
         {/* Testimonials Grid */}
         <div className="home-testimonials__grid">
           {testimonials.map((testimonial) => (
-            <div key={testimonial.id} className="home-testimonials__card">
+            <div key={testimonial._id} className="home-testimonials__card">
               <div className="home-testimonials__card-header">
                 <div className="home-testimonials__avatar-wrapper">
                   <div className="home-testimonials__avatar-border">

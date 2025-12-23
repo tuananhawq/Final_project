@@ -17,6 +17,8 @@ import cors from 'cors';              // ✅ THÊM
 import passport from "passport";
 import { connectDB } from './config/db.js';
 import authRoutes from './modules/auth/auth.route.js';
+import homeRoutes from './modules/home/home.route.js';
+import uploadRoutes from './modules/home/upload.route.js';
 import { setupSwagger } from './config/swagger.js';
 import "./config/passport.js";
 
@@ -33,8 +35,14 @@ app.use(cors({
 
 app.use(express.json());
 app.use(passport.initialize());
+
+// Serve static files từ thư mục uploads
+app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
+
 // routes
 app.use('/api/auth', authRoutes);
+app.use('/api/home', homeRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // swagger
 setupSwagger(app);
