@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
-
+import uploadRoutes from "./modules/upload/upload.route.js";
 // 👉 fix cho ESM + Windows
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,6 +39,7 @@ app.use(passport.initialize());
 
 // routes
 app.use('/api/auth', authRoutes);
+app.use("/api/upload", uploadRoutes);
 app.use('/api/home', homeRoutes);
 app.use('/api/blog', blogRoutes);
 

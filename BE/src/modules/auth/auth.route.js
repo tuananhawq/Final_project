@@ -2,6 +2,9 @@ import express from 'express';
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import { register, login,forgotPassword, resetPassword } from './auth.controller.js';
+import { getProfile, updateProfile } from "./profile.controller.js";
+import { authGuard } from "../../middlewares/auth.middleware.js";
+import { changePassword } from './changePassword.controller.js';
 
 const router = express.Router();
 
@@ -31,8 +34,7 @@ router.get(
     const token = jwt.sign(
       {
         userId: req.user._id,
-        username: req.user.username
-,
+        username: req.user.username,
         roles: req.user.roles,
       },
       process.env.JWT_SECRET,
@@ -71,5 +73,7 @@ router.post('/register', register);
 router.post('/login', login);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
-
+router.get("/me", authGuard, getProfile);
+router.put("/me", authGuard, updateProfile);
+router.post("/change-password", authGuard, changePassword);
 export default router;

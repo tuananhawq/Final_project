@@ -1,0 +1,462 @@
+/* ===== PROFILE CARD ===== */
+.profile-container {
+  max-width: 600px;
+  margin: 120px auto 40px;
+  padding: 32px;
+  background: linear-gradient(180deg, #020617, #020617ee);
+  border-radius: 18px;
+  color: #fff;
+  box-shadow: 0 30px 60px rgba(0,0,0,.6);
+  text-align: center;
+}
+
+/* ===== AVATAR ===== */
+.avatar-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.avatar-upload {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.profile-avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #6366f1;
+}
+
+/* Hover overlay */
+.avatar-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(0,0,0,.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: .25s ease;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.avatar-upload:hover .avatar-overlay {
+  opacity: 1;
+}
+
+/* ===== BADGES ===== */
+.badges {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 12px 0 20px;
+}
+
+.badge {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge.role {
+  background: #1f2937;
+  color: #93c5fd;
+}
+
+.badge.premium {
+  background: linear-gradient(135deg, gold, orange);
+  color: #000;
+}
+
+.badge.premium.free {
+  background: #374151;
+  color: #d1d5db;
+}
+
+/* ===== FORM ===== */
+.profile-container label {
+  display: block;
+  text-align: left;
+  margin-top: 16px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: #c7d2fe;
+}
+
+.profile-container input,
+.profile-container textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #020617;
+  color: #fff;
+  outline: none;
+}
+
+.profile-container textarea {
+  height: 90px;
+  resize: none;
+}
+
+/* ===== BUTTON ===== */
+.profile-container button {
+  margin-top: 22px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff;
+  cursor: pointer;
+  transition: transform .15s ease;
+}
+
+.profile-container button:hover {
+  transform: translateY(-1px);
+}
+
+.profile-container button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.profile-change-password-btn {
+  max-width: 450px;
+  margin-top: 12px;
+  background: linear-gradient(90deg,#6366f1,#d946ef) !important;
+}
+
+.profile-password-msg {
+  margin-top: 10px;
+  color: #fbbf24;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Modern Profile Styles */
+.modern-profile {
+  max-width: 400px;
+  margin: 48px auto 0 auto;
+  background: linear-gradient(180deg, #10172a 0%, #1a2236 100%);
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  padding: 2.5rem 2rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  letter-spacing: 1px;
+}
+
+.modern-avatar-wrapper {
+  margin-bottom: 1.2rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.modern-avatar-upload {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modern-profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid #7dd3fc;
+  box-shadow: 0 4px 24px rgba(125, 211, 252, 0.18);
+  object-fit: cover;
+  background: #fff;
+  transition: box-shadow 0.3s, border 0.3s;
+}
+
+.modern-avatar-upload:hover .modern-profile-avatar {
+  border: 4px solid #d946ef;
+  box-shadow: 0 6px 32px rgba(217, 70, 239, 0.18);
+}
+
+.modern-avatar-overlay {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.modern-avatar-upload:hover .modern-avatar-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.avatar-upload input[type="file"] {
+  display: none;
+}
+
+.modern-badges {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.modern-badge-role {
+  background: #7dd3fc;
+  color: #222;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 4px 14px;
+  font-size: 0.9rem;
+}
+
+.modern-badge-premium {
+  background: #d946ef;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 4px 14px;
+  font-size: 0.9rem;
+}
+
+.profile-email {
+  color: #fff;
+  margin-bottom: 1.2rem;
+  font-size: 1rem;
+}
+
+.profile-form-group {
+  width: 100%;
+  margin-bottom: 1.1rem;
+}
+
+.profile-label {
+  color: #7dd3fc;
+  font-size: 0.95rem;
+  margin-bottom: 0.3rem;
+  display: block;
+  font-weight: 500;
+}
+
+.profile-input, .profile-textarea {
+  width: 100%;
+  max-width: 430px;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  border: none;
+  background: #151c2c;
+  color: #fff;
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+  outline: none;
+  box-shadow: 0 2px 8px rgba(125, 211, 252, 0.05);
+  transition: box-shadow 0.2s, border 0.2s;
+}
+
+.profile-input:focus, .profile-textarea:focus {
+  box-shadow: 0 0 0 2px #7dd3fc;
+}
+
+.profile-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.profile-save-btn {
+  width: 100%;
+  max-width: 450px;
+  padding: 0.9rem 0;
+  background: linear-gradient(90deg, #7dd3fc, #d946ef);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(125, 211, 252, 0.12);
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.profile-save-btn:hover {
+  background: linear-gradient(90deg, #d946ef, #7dd3fc);
+  box-shadow: 0 4px 20px rgba(217, 70, 239, 0.18);
+}
+
+/* Profile background */
+.profile-bg {
+  min-height: 100vh;
+  width: 100vw;
+  background: linear-gradient(120deg, #232526 0%, #414345 100%), url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1500&q=80'); /* Livestream/tech background */
+  background-blend-mode: overlay;
+  background-size: cover;
+  background-position: center;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -1;
+}
+
+.profile-role-status {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.6rem;
+}
+
+.profile-role {
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  background: #232b3b;
+  border-radius: 8px;
+  padding: 3px 18px;
+  letter-spacing: 0.5px;
+  margin-bottom: 0;
+}
+
+.profile-premium-status {
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  background: linear-gradient(90deg, #7dd3fc, #d946ef);
+  border-radius: 8px;
+  padding: 3px 18px;
+  letter-spacing: 0.5px;
+  margin-bottom: 0;
+  box-shadow: 0 2px 8px rgba(125, 211, 252, 0.08);
+}
+
+.profile-premium-status.free {
+  color: #7dd3fc;
+  background: #232b3b;
+  border: 1px solid #7dd3fc;
+}
+
+/* Ẩn overlay avatar đổi ảnh */
+.modern-avatar-overlay, .avatar-overlay {
+  display: none !important;
+}
+
+/* ===== CHANGE PASSWORD MODAL ===== */
+.change-password-modal-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.change-password-modal {
+  background: linear-gradient(180deg, #181e2a 0%, #232b3b 100%);
+  border-radius: 18px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.22);
+  padding: 2.2rem 2rem 1.5rem 2rem;
+  min-width: 450px;
+  max-width: 95vw;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.change-password-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #7dd3fc;
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.5px;
+}
+
+.close-modal-btn {
+  margin-top: 1.2rem;
+  background: #232b3b;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 22px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.close-modal-btn:hover {
+  background: #374151;
+}
+
+/* Eye icon chỉnh đẹp hơn */
+.profile-password-eye {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #7dd3fc;
+  font-size: 1.25rem;
+  transition: color 0.18s;
+}
+.profile-password-eye:hover {
+  color: #d946ef;
+}
+
+/* ===== HOME BUTTON ===== */
+.profile-home-btn {
+  position: absolute;
+  top: 32px;
+  left: 32px;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(90deg, #7dd3fc, #d946ef);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 22px 10px 16px;
+  font-size: 1.08rem;
+  font-weight: 700;
+  box-shadow: 0 2px 12px rgba(125, 211, 252, 0.12);
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.18s, box-shadow 0.18s;
+}
+.profile-home-btn:hover {
+  background: linear-gradient(90deg, #d946ef, #7dd3fc);
+  box-shadow: 0 4px 20px rgba(217, 70, 239, 0.18);
+}
+.badge.premium.free {
+  display: none !important;
+}
+.badge.role {
+  display: none !important;
+}
+
+/* ✅ Chỉ HIỆN badge role đúng trong khu vực badges */
+.badges .badge.role {
+  display: inline-flex !important;
+}
