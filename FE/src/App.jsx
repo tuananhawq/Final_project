@@ -7,6 +7,7 @@ import ResetPassword from "./pages/ResetPassword.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import BlogList from "./pages/BlogList.jsx";
 import BlogDetail from "./pages/BlogDetail.jsx";
+import Profile from "./pages/Profile.jsx";
 export default function App() {
   return (
     <Routes>
@@ -18,6 +19,7 @@ export default function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/profile" element={<Profile />} />
 
       {/* User pages */}
       <Route path="/home" element={<Home />} />

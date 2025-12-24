@@ -37,12 +37,22 @@ const userSchema = new mongoose.Schema({
     unique: true,
     sparse: true
   },
+  avatar: {
+    type: String,
+    default: ""
+  },
+  
+  bio: {
+    type: String,
+    default: ""
+  },
+
 
   roles: {
-  type: [String],
-  enum: ["guest", "user", "creator", "brand", "staff", "admin"],
-  default: ["user"]
-},
+    type: [String],
+    enum: ["guest", "user", "creator", "brand", "staff", "admin"],
+    default: ["user"]
+  },
 
   isVerified: {
     type: Boolean,

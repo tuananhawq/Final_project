@@ -41,7 +41,7 @@
 .home-header__content {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   height: 5rem;
 }
 
@@ -75,6 +75,8 @@
   display: none;
   align-items: center;
   gap: 2rem;
+  flex: 1;
+  justify-content: center;
 }
 
 @media (min-width: 1024px) {
@@ -125,6 +127,8 @@
   display: none;
   align-items: center;
   gap: 1.5rem;
+  margin-left: auto; /* Đẩy sang phải */
+  /* Bỏ flex: 1 và justify-content */
 }
 
 @media (min-width: 1024px) {
@@ -183,10 +187,14 @@
 
 /* User Section */
 .home-header__user {
+  position: relative; /* 🔥 BẮT BUỘC */
   display: flex;
   align-items: center;
   gap: 1rem;
+  
+  
 }
+
 
 .home-header__user-info {
   display: flex;
@@ -202,9 +210,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  overflow: hidden; /* 🔥 QUAN TRỌNG */
   box-shadow: 0 4px 15px rgba(125, 211, 252, 0.3);
 }
+
 
 .home-header__user-info:hover .home-header__user-avatar {
   transform: scale(1.1) rotate(5deg);
@@ -325,3 +334,87 @@
   font-size: 1rem;
 }
 
+/* ===== USER DROPDOWN ===== */
+.home-header__dropdown {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  background: linear-gradient(180deg, #0b132b, #1c2541);
+  border-radius: 12px;
+  padding: 16px;
+  z-index: 999;
+}
+
+/* CENTER USER INFO */
+.dropdown-user-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 12px;
+}
+
+.dropdown-avatar-lg {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6a5af9, #00d4ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: white;
+}
+
+.dropdown-name {
+  font-size: 14px;
+  color: #fff;
+}
+
+.dropdown-role {
+  font-size: 12px;
+  color: #b8c1ff;
+}
+
+/* DIVIDER */
+.dropdown-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.15);
+  margin: 10px 0;
+}
+
+/* BUTTONS */
+.dropdown-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.dropdown-btn:hover {
+  background: rgba(255,255,255,0.18);
+}
+
+.dropdown-btn.logout {
+  color: #ff6b6b;
+}
+
+.dropdown-btn.logout:hover {
+  background: rgba(255, 107, 107, 0.15);
+}
+
+.home-header__user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 🔥 CẮT ẢNH ĐẸP */
+  border-radius: 50%;
+  display: block;
+}

@@ -965,8 +965,92 @@ const swaggerSpec = {
         }
       }
     }
+    },
+    '/api/auth/me': {
+      get: {
+        tags: ['Profile'],
+        summary: 'Get current user profile',
+        security: [{ BearerAuth: [] }],
+        responses: {
+          200: {
+            description: 'Profile retrieved successfully',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    user: {
+                      type: 'object',
+                      properties: {
+                        id: { type: 'string', example: '64f1a2c...' },
+                        email: { type: 'string', example: 'user@gmail.com' },
+                        username: { type: 'string', example: 'Nguyen Van A' },
+                        roles: {
+                          type: 'array',
+                          items: { type: 'string' },
+                          example: ['user']
+                        },
+                        bio: { type: 'string', example: 'Content creator' },
+                        avatar: {
+                          type: 'string',
+                          example: 'https://res.cloudinary.com/...jpg'
+                        },
+                        premiumStatus: { type: 'boolean', example: false }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          401: { description: 'Unauthorized' },
+          404: { description: 'User not found' }
+        }
+      },
+      put: {
+        tags: ['Profile'],
+        summary: 'Update current user profile',
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  name: {
+                    type: 'string',
+                    example: 'Nguyen Van A'
+                  },
+                  bio: {
+                    type: 'string',
+                    example: 'I am a creator'
+                  },
+                  avatar: {
+                    type: 'string',
+                    example: 'https://res.cloudinary.com/...jpg'
+                  },
+                  avatarPublicId: {
+                    type: 'string',
+                    example: 'revlive/avatar_123'
+                  }
+                }
+              }
+            }
+          }
+        },
+        responses: {
+          200: {
+            description: 'Profile updated successfully'
+          },
+          401: { description: 'Unauthorized' },
+          404: { description: 'User not found' }
+        }
+      }
+    }
+
   }
-};
+;
 
 export const setupSwagger = (app) => {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

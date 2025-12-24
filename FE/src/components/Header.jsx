@@ -1,33 +1,49 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaSearch, FaMapMarkerAlt, FaBars, FaTimes } from "react-icons/fa";
-import { jwtDecode } from "jwt-decode";
+// import { jwtDecode } from "jwt-decode";
 import "../styles/home/home-header.css";
 
 export function Header() {
   const [user, setUser] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-  const token = localStorage.getItem("token");
+  const fetchUser = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setUser(null);
+      return;
+    }
 
-  if (!token) {
-    setUser(null);
-    return;
-  }
+    try {
+      const res = await fetch("http://localhost:3000/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
 
-  try {
-    const decoded = jwtDecode(token);
-    setUser({
-      id: decoded.userId,
-      username: decoded.username,
-      roles: decoded.roles
-    });
-  } catch {
-    setUser(null);
-  }
+      setUser(data.user);
+      localStorage.setItem("user", JSON.stringify(data.user));
+    } catch {
+      setUser(null);
+    }
+  };
+
+  fetchUser();
 }, []);
+
+
+
+  useEffect(() => {
+    const close = () => setOpenMenu(false);
+    window.addEventListener("click", close);
+    return () => window.removeEventListener("click", close);
+  }, []);
 
 
 
@@ -89,19 +105,63 @@ export function Header() {
             {/* User Section */}
             {user ? (
               <div className="home-header__user">
-                <div className="home-header__user-info">
+                {/* AVATAR */}
+                <div
+                  className="home-header__user-info"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenMenu(!openMenu);
+                  }}
+
+                >
                   <div className="home-header__user-avatar">
-                    <span className="home-header__user-initial">
-                      {user.name?.[0]?.toUpperCase() || user.username?.[0]?.toUpperCase() || "U"}
-                    </span>
+                    {user.avatar ? (
+                      <img src={user.avatar} alt="avatar" />
+                    ) : (
+                      <span className="home-header__user-initial">
+                        {user.username?.[0]?.toUpperCase() || "U"}
+                      </span>
+                    )}
                   </div>
-                  <span className="home-header__user-name">
-                    Chào, {user.name || user.username || "User"}
-                  </span>
+
                 </div>
-                <button onClick={handleLogout} className="home-header__logout-btn">
-                  Đăng xuất
-                </button>
+
+                {/* DROPDOWN */}
+                {openMenu && (
+                  <div className="home-header__dropdown">
+                    <div className="dropdown-user-center">
+                      <div className="dropdown-avatar-lg">
+                        {user.avatar ? (
+                          <img src={user.avatar} alt="avatar" style={{width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', border: '2px solid #7dd3fc', background: '#fff'}} />
+                        ) : (
+                          user.username?.[0]?.toUpperCase() || "U"
+                        )}
+                      </div>
+
+                      <div className="dropdown-name">{user.username}</div>
+                      <div className="dropdown-role">
+                        {user.roles?.join(", ")}
+                      </div>
+                    </div>
+
+                    <div className="dropdown-divider" />
+
+                    <button
+                      className="dropdown-btn"
+                      onClick={() => navigate("/profile")}
+                    >
+                      Thông tin cá nhân
+                    </button>
+
+                    <button
+                      className="dropdown-btn logout"
+                      onClick={handleLogout}
+                    >
+                      Đăng xuất
+                    </button>
+                  </div>
+                )}
+
               </div>
             ) : (
               <div className="home-header__auth">
@@ -113,6 +173,7 @@ export function Header() {
                 </Link>
               </div>
             )}
+
           </div>
 
           {/* Mobile Menu Button */}
