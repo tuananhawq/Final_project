@@ -51,6 +51,12 @@
   align-items: center;
   text-decoration: none;
 }
+.home-header__logo-img {
+  height: 90px;          /* Giảm từ 40px xuống 32px (nhỏ hơn, gọn hơn) */
+  width: auto;
+  object-fit: contain;   /* Giữ tỷ lệ ảnh không bị méo */
+  transition: all 0.3s ease;
+}
 
 .home-header__logo-text {
   font-size: 1.5rem;

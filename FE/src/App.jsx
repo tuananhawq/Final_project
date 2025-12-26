@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import BlogList from "./pages/BlogList.jsx";
 import BlogDetail from "./pages/BlogDetail.jsx";
 import Profile from "./pages/Profile.jsx";
+import About from "./pages/About.jsx";
 export default function App() {
   return (
     <Routes>
@@ -23,6 +24,7 @@ export default function App() {
 
       {/* User pages */}
       <Route path="/home" element={<Home />} />
+      <Route path="/about" element={<About />} />
       <Route path="/dashboard" element={<Dashboard />} />
 
       {/* Blog */}

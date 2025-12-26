@@ -61,7 +61,11 @@ export function Header() {
         <div className="home-header__content">
           {/* Logo */}
           <Link to="/home" className="home-header__logo">
-            <span className="home-header__logo-text">REVLIVE</span>
+            <img 
+              src="/src/assets/logo-revlive.png" 
+              alt="REVLIVE Logo" 
+              className="home-header__logo-img" 
+            />
           </Link>
 
           {/* Desktop Navigation */}

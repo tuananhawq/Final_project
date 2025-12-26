@@ -1,0 +1,220 @@
+/* src/styles/about/about.css */
+.about-page {
+  min-height: 100vh;
+  background: #000;
+  color: #fff;
+}
+
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Hero - dùng gradient thay vì ảnh để tránh lỗi */
+.about-hero {
+  position: relative;
+  height: 60vh;
+  min-height: 500px;
+  background: linear-gradient(135deg, #1e1b4b, #0f172a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.about-hero__container {
+  z-index: 1;
+}
+
+.about-hero__title {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, #a78bfa, #60a5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.about-hero__subtitle {
+  font-size: 1.5rem;
+  max-width: 800px;
+  color: #e0e0e0;
+}
+
+.about-intro,
+.about-mission,
+.about-team,
+.about-cta {
+  padding: 100px 0;
+}
+
+.about-section-title {
+  font-size: 2.8rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(90deg, #c084fc, #7dd3fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.about-section-title--center {
+  text-align: center;
+}
+
+.about-text {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #e0e0e0;
+  margin-bottom: 1.5rem;
+}
+
+.about-mission__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+  margin-top: 60px;
+}
+
+.about-mission__item {
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(59, 7, 99, 0.3);
+  border-radius: 20px;
+  border: 1px solid rgba(167, 139, 250, 0.3);
+}
+
+.about-mission__icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.about-mission__item h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #a78bfa;
+}
+
+.about-team__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 3 cột desktop, responsive tốt */
+  gap: 60px; /* Thoáng hơn */
+  margin-top: 60px;
+  justify-items: center;
+}
+
+.team-member {
+  text-align: center;
+  max-width: 360px; /* Card rộng hơn chút */
+}
+
+.team-img {
+  width: 100%;
+  height: 380px; /* Tăng chiều cao để rõ mặt hơn */
+  object-fit: cover; /* Cắt ảnh gọn, không méo */
+  object-position: center top; /* Ưu tiên cắt phần mặt */
+  border-radius: 20px; /* Bo tròn hiện đại */
+  border: 4px solid #7dd3fc;
+  margin-bottom: 28px;
+  transition: all 0.4s ease;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+}
+
+.team-img:hover {
+  transform: translateY(-12px) scale(1.05);
+  box-shadow: 0 25px 50px rgba(167, 139, 250, 0.5);
+  border-color: #a78bfa;
+}
+
+.team-member h4 {
+  font-size: 1.7rem;
+  margin-bottom: 8px;
+  color: #fff;
+}
+
+.team-member p {
+  color: #a78bfa;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+/* Mobile fine-tune */
+@media (max-width: 768px) {
+  .team-img {
+    height: 320px; /* Mobile nhỏ hơn chút */
+  }
+  .about-team__grid {
+    gap: 40px;
+  }
+}
+
+.about-cta {
+  background: linear-gradient(135deg, #1e1b4b, #0f172a);
+  text-align: center;
+  padding: 120px 0;
+}
+
+.about-cta h2 {
+  font-size: 3rem;
+  margin-bottom: 2rem;
+}
+
+.about-cta p {
+  font-size: 1.3rem;
+  color: #e0e0e0;
+  margin-bottom: 1rem;
+}
+
+.about-cta__buttons {
+  margin-top: 40px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #a78bfa, #60a5fa);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(167, 139, 250, 0.4);
+}
+
+.btn-secondary {
+  border: 2px solid #7dd3fc;
+  color: #7dd3fc;
+}
+
+.btn-secondary:hover {
+  background: #7dd3fc;
+  color: #000;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .about-hero__title {
+    font-size: 2.8rem;
+  }
+  .about-section-title {
+    font-size: 2.2rem;
+  }
+  .about-intro,
+  .about-mission,
+  .about-team,
+  .about-cta {
+    padding: 60px 0;
+  }
+}
