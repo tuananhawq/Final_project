@@ -9,6 +9,7 @@ import BlogList from "./pages/BlogList.jsx";
 import BlogDetail from "./pages/BlogDetail.jsx";
 import Profile from "./pages/Profile.jsx";
 import About from "./pages/About.jsx";
+import HighlightDetail from "./pages/HighlightDetail.jsx";
 export default function App() {
   return (
     <Routes>
@@ -26,7 +27,7 @@ export default function App() {
       <Route path="/home" element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/dashboard" element={<Dashboard />} />
-
+      <Route path="/highlight/:id" element={<HighlightDetail />} />
       {/* Blog */}
       <Route path="/blog" element={<BlogList />} />
       <Route path="/blog/:id" element={<BlogDetail />} />

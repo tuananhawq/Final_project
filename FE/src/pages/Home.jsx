@@ -6,7 +6,9 @@ import { TopAgenciesSection } from "../components/TopAgenciesSection";
 import { TopCreatorsSection } from "../components/TopCreatorsSection";
 import { TopicsSection } from "../components/TopicsSection";
 import { TestimonialsSection } from "../components/TestimonialsSection";
+import { BannerSection } from "../components/BannerSection";
 import { Footer } from "../components/Footer";
+import { HighlightFeed } from "../components/HighlightFeed";
 import "../styles/home/index.css";
 
 export default function Home() {
@@ -25,10 +27,12 @@ export default function Home() {
       <Header />
       <main className="home-page__main">
         <HeroSection />
-        <TopAgenciesSection />
+        {/* <TopAgenciesSection />
         <TopCreatorsSection />
         <TopicsSection />
-        <TestimonialsSection />
+        <TestimonialsSection /> */}
+        {/* <BannerSection /> */}
+        <HighlightFeed />
       </main>
       <Footer />
     </div>
