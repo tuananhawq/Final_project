@@ -27,12 +27,13 @@ export default function Home() {
       <Header />
       <main className="home-page__main">
         <HeroSection />
-        {/* <TopAgenciesSection />
+        <TopAgenciesSection />
         <TopCreatorsSection />
         <TopicsSection />
-        <TestimonialsSection /> */}
+        {/* <HighlightFeed /> */}
+        <TestimonialsSection />
         {/* <BannerSection /> */}
-        <HighlightFeed />
+        
       </main>
       <Footer />
     </div>

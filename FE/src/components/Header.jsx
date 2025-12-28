@@ -73,8 +73,8 @@ export function Header() {
             <Link to="/home" className="home-header__nav-link home-header__nav-link--active">
               Trang chủ
             </Link>
-            <Link to="/creater" className="home-header__nav-link">
-              Creater Page
+            <Link to="/creator" className="home-header__nav-link">
+              Creator Page
             </Link>
             <Link to="/brand" className="home-header__nav-link">
               Brand Page
