@@ -20,6 +20,7 @@ import { connectDB } from './config/db.js';
 import authRoutes from './modules/auth/auth.route.js';
 import homeRoutes from './modules/home/home.route.js';
 import blogRoutes from './modules/blog/blog.route.js';
+import bannerRoute from "./modules/banner/banner.route.js";
 import { setupSwagger } from './config/swagger.js';
 import "./config/passport.js";
 
@@ -42,6 +43,7 @@ app.use('/api/auth', authRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use('/api/home', homeRoutes);
 app.use('/api/blog', blogRoutes);
+app.use("/api/banners", bannerRoute);
 
 // swagger
 setupSwagger(app);

@@ -1,0 +1,171 @@
+/* src/styles/home/highlight-feed.css */
+.highlight-feed {
+  padding: 120px 0;
+  background: #000;
+  color: #fff;
+}
+
+.highlight-feed .container {
+  max-width: 1400px; /* Tăng max-width để kéo dài hơn */
+  margin: 0 auto;
+  padding: 0 40px; /* Padding nhỏ hơn để gần mép */
+}
+
+/* Danh sách dọc */
+.feed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 140px; /* Khoảng cách lớn hơn giữa các bài */
+}
+
+/* Mỗi bài */
+.feed-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Title bên ngoài - kéo dài dấu gạch ngang */
+/* Title bên ngoài - giống hệt ảnh bạn gửi */
+.feed-title-outer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px; /* Khoảng cách giữa line và chữ */
+  margin-bottom: 60px;
+  width: 100%;
+  max-width: 1400px;
+}
+
+/* Dòng gạch ngang 2 bên - gradient xanh tím → tím hồng */
+.feed-line-left,
+.feed-line-right {
+  flex: 1;
+  height: 4px;
+  background: linear-gradient(to right, #60a5fa, #a78bfa, #d946ef);
+  max-width: none;
+  border-radius: 2px;
+  box-shadow: 0 0 15px rgba(167, 139, 250, 0.6);
+}
+
+.feed-line-right {
+  background: linear-gradient(to left, #60a5fa, #a78bfa, #d946ef);
+}
+
+/* Tiêu đề chính */
+.feed-title {
+  font-size: 3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa, #d946ef); /* Xanh → tím → hồng */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 40px rgba(217, 70, 239, 0.8);
+  letter-spacing: 3px;
+  padding: 0 20px; /* Tạo khoảng thở cho glow */
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .feed-title {
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+  }
+  .feed-title-outer {
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .feed-title {
+    font-size: 2rem;
+    letter-spacing: 1.5px;
+  }
+  .feed-title-outer {
+    gap: 20px;
+  }
+}
+
+/* Card ảnh - kéo dài ngang hơn */
+/* Card - xóa viền hoàn toàn */
+.feed-card {
+  display: block;
+  text-decoration: none;
+  width: 100%;
+  max-width: 1300px;
+  border-radius: 40px;
+  overflow: hidden;
+  border: none; /* ← XÓA VIỀN */
+  transition: all 0.4s ease;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+}
+
+.feed-card:hover {
+  transform: translateY(-20px);
+  box-shadow: 0 40px 80px rgba(167, 139, 250, 0.6);
+  /* Không có border hover nữa vì đã xóa */
+}
+
+/* Ảnh vẫn giữ hover zoom */
+.feed-image-wrapper {
+  height: 700px;
+  overflow: hidden;
+}
+
+.feed-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s ease;
+}
+
+.feed-card:hover .feed-image {
+  transform: scale(1.08);
+}
+
+/* XÓA HOÀN TOÀN PHẦN DESCRIPTION */
+.feed-description {
+  display: none; /* Hoặc xóa luôn class này nếu không dùng nữa */
+}
+
+/* Responsive - vẫn đẹp trên mobile */
+@media (max-width: 992px) {
+  .highlight-feed .container {
+    padding: 0 20px;
+  }
+  .feed-title-outer {
+    gap: 30px;
+  }
+  .feed-title {
+    font-size: 2.4rem;
+    letter-spacing: 2px;
+  }
+  .feed-image-wrapper {
+    height: 500px;
+  }
+  .feed-card {
+    max-width: 100%;
+    border-radius: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .feed-title {
+    font-size: 2rem;
+  }
+  .feed-title-outer {
+    gap: 20px;
+  }
+  .feed-image-wrapper {
+    height: 400px;
+  }
+  .feed-description {
+    padding: 30px;
+    font-size: 1.3rem;
+  }
+  .feed-list {
+    gap: 100px;
+  }
+}
