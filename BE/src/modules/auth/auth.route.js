@@ -3,8 +3,15 @@ import passport from "passport";
 import jwt from "jsonwebtoken";
 import { register, login,forgotPassword, resetPassword } from './auth.controller.js';
 import { getProfile, updateProfile } from "./profile.controller.js";
-import { authGuard } from "../../middlewares/auth.middleware.js";
+import { authGuard, roleGuard } from "../../middlewares/auth.middleware.js";
 import { changePassword } from './changePassword.controller.js';
+import {
+  getAllUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser
+} from './userManagement.controller.js';
 
 const router = express.Router();
 
@@ -76,4 +83,12 @@ router.post("/reset-password", resetPassword);
 router.get("/me", authGuard, getProfile);
 router.put("/me", authGuard, updateProfile);
 router.post("/change-password", authGuard, changePassword);
+
+// User Management Routes (Staff/Admin only)
+router.get("/admin/users", authGuard, roleGuard("staff", "admin"), getAllUsers);
+router.get("/admin/users/:id", authGuard, roleGuard("staff", "admin"), getUserById);
+router.post("/admin/users", authGuard, roleGuard("staff", "admin"), createUser);
+router.put("/admin/users/:id", authGuard, roleGuard("staff", "admin"), updateUser);
+router.delete("/admin/users/:id", authGuard, roleGuard("staff", "admin"), deleteUser);
+
 export default router;

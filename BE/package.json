@@ -8,6 +8,7 @@
     "dev": "nodemon src/app.js",
     "seed": "node seed.js",
     "seed-home": "node seed-home.js",
+    "seed-banners": "node seed-banners.js",
     "seed-blog": "node seed-blog.js"
   },
   "dependencies": {

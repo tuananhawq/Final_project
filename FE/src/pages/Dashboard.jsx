@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { HomeManagement } from "../components/HomeManagement.jsx";
 import { BlogManagement } from "../components/BlogManagement.jsx";
+import { UserManagement } from "../components/UserManagement.jsx";
 import "../styles/dashboard.css";
 
 export default function Dashboard() {
   const [staffName, setStaffName] = useState("");
-  const [activeMenu, setActiveMenu] = useState("dashboard");
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  
+  // Lấy tab từ URL, mặc định là "dashboard"
+  const activeMenu = searchParams.get("tab") || "dashboard";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -49,6 +53,11 @@ export default function Dashboard() {
     navigate("/login");
   };
 
+  // Hàm xử lý khi click menu item
+  const handleMenuClick = (menu) => {
+    setSearchParams({ tab: menu });
+  };
+
   return (
     <div className="dashboard-page">
       <div className="dashboard-layout">
@@ -58,26 +67,32 @@ export default function Dashboard() {
           <nav>
             <div
               className={`nav-item ${activeMenu === "dashboard" ? "active" : ""}`}
-              onClick={() => setActiveMenu("dashboard")}
+              onClick={() => handleMenuClick("dashboard")}
               style={{ cursor: "pointer" }}
             >
               Dashboard
             </div>
             <div
               className={`nav-item ${activeMenu === "home-management" ? "active" : ""}`}
-              onClick={() => setActiveMenu("home-management")}
+              onClick={() => handleMenuClick("home-management")}
               style={{ cursor: "pointer" }}
             >
               Quản lý Home
             </div>
             <div
               className={`nav-item ${activeMenu === "blog-management" ? "active" : ""}`}
-              onClick={() => setActiveMenu("blog-management")}
+              onClick={() => handleMenuClick("blog-management")}
               style={{ cursor: "pointer" }}
             >
               Quản lý Blog
             </div>
-            <div className="nav-item">Users</div>
+            <div
+              className={`nav-item ${activeMenu === "user-management" ? "active" : ""}`}
+              onClick={() => handleMenuClick("user-management")}
+              style={{ cursor: "pointer" }}
+            >
+              Quản lý Users
+            </div>
             <div className="nav-item">Reports</div>
             <div className="nav-item">Settings</div>
           </nav>
@@ -112,6 +127,8 @@ export default function Dashboard() {
               <HomeManagement />
             ) : activeMenu === "blog-management" ? (
               <BlogManagement />
+            ) : activeMenu === "user-management" ? (
+              <UserManagement />
             ) : (
               <>
                 {/* STATS */}
