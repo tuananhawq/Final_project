@@ -10,6 +10,7 @@ import BlogDetail from "./pages/BlogDetail.jsx";
 import Profile from "./pages/Profile.jsx";
 import About from "./pages/About.jsx";
 import CreatorPage from "./pages/CreatorPage.jsx";
+import BrandPage from "./pages/BrandPage.jsx";
 import HighlightDetail from "./pages/HighlightDetail.jsx";
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/highlight/:id" element={<HighlightDetail />} />
       <Route path="/creator" element={<CreatorPage />} />
+      <Route path="/brand" element={<BrandPage />} />
       {/* Blog */}
       <Route path="/blog" element={<BlogList />} />
       <Route path="/blog/:id" element={<BlogDetail />} />
