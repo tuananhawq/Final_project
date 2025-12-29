@@ -43,11 +43,31 @@ body {
   margin-bottom: 40px;
 }
 
+/* Thay phần .panel-avatar cũ bằng code này */
 .panel-avatar {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: linear-gradient(135deg,#7dd3fc,#a78bfa);
+  width: 100px; /* Tăng size một chút cho đẹp */
+  height: 120px;
+  border-radius: 50%; /* Oval shape */
+   /* Nền đen */
+  display: flex;
+  align-items: center;
+   
+  overflow: hidden;
+  /* BỎ VIỀN NGOÀI */
+  border: none;
+}
+
+.panel-avatar svg {
+  width: 70%;
+  height: 70%;
+}
+
+.panel-avatar svg path {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .panel-info h3 {

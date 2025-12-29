@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
 
 const creatorSchema = new mongoose.Schema({
-  name: {
-    type: String,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true,
+    unique: true, // 1 user chỉ có 1 profile creator
   },
   description: {
     type: String,
