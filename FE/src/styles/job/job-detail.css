@@ -1,0 +1,209 @@
+/* src/styles/job/job-detail-cv.css - ĐÃ CHỈNH CHỮ NHỎ HƠN, PHÙ HỢP VỚI SIDEBAR */
+.job-detail-cv-page {
+  padding-top: 30px;
+  min-height: 100vh;
+  background: #000;
+  color: #fff;
+}
+
+.job-layout {
+  display: flex;
+
+  /* ⬇️ THÊM DÒNG NÀY */
+  margin-top: 1120px; /* đúng bằng chiều cao header */
+
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 60px;
+  gap: 60px;
+}
+
+
+.job-cv-content {
+  flex: 1;
+  padding: 60px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.cv-container {
+  width: 100%;
+  max-width: 900px;
+  background: rgba(15, 15, 35, 0.8);
+  border-radius: 48px;
+  padding: 60px 80px; /* tăng padding ngang cho thoáng */
+  border: 3px solid rgba(125, 211, 252, 0.4);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+}
+
+/* Header CV - chữ nhỏ hơn, cân đối */
+.cv-header {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  margin-bottom: 60px;
+  padding-bottom: 40px;
+  border-bottom: 2px solid rgba(125, 211, 252, 0.3);
+}
+
+.cv-logo {
+  width: 140px;
+  height: 140px;
+  border-radius: 32px;
+  object-fit: contain;
+  background: #fff;
+  padding: 15px;
+  box-shadow: 0 0 60px rgba(125, 211, 252, 0.7);
+}
+
+.cv-company-info h1 {
+  font-size: 3rem; /* Giảm từ 4.5rem → cân đối với sidebar */
+  font-weight: 800;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa, #d946ef);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+.cv-website {
+  font-size: 1.4rem;
+  color: #7dd3fc;
+  margin-top: 12px;
+}
+
+/* Tiêu đề tuyển dụng - nhỏ hơn, đẹp */
+.cv-job-title {
+  font-size: 3rem; /* Giảm từ 4rem → phù hợp */
+  text-align: center;
+  margin: 60px 0 80px;
+  background: linear-gradient(90deg, #f472b6, #d946ef, #7dd3fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 60px rgba(217, 70, 239, 0.6);
+}
+
+/* Section chung */
+.cv-section {
+  margin-bottom: 70px;
+}
+
+.section-title {
+  font-size: 2.2rem; /* Giảm từ 2.8rem → gọn gàng */
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #7dd3fc;
+  position: relative;
+  padding-left: 35px;
+}
+
+.section-title::before {
+  width: 16px;
+  height: 16px;
+}
+
+/* Nội dung và list */
+.section-content {
+  font-size: 1.6rem; /* Dễ đọc hơn */
+  line-height: 2;
+  color: #e0e0e0;
+}
+
+.cv-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.cv-list li {
+  font-size: 1.6rem;
+  line-height: 2.2;
+  position: relative;
+  padding-left: 40px;
+  margin-bottom: 18px;
+}
+
+.cv-list li::before {
+  content: "▹";
+  position: absolute;
+  left: 0;
+  color: #d946ef;
+  font-size: 1.8rem;
+}
+
+/* Nút ứng tuyển - nhỏ gọn hơn */
+.cv-apply-section {
+  text-align: center;
+  margin: 100px 0;
+}
+
+.cv-apply-btn {
+  padding: 22px 90px;
+  font-size: 2.2rem; /* Giảm từ 3rem → cân đối */
+  font-weight: 800;
+  background: linear-gradient(90deg, #d946ef, #7dd3fc, #60a5fa);
+  border: none;
+  border-radius: 70px;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 0 100px rgba(217, 70, 239, 0.8);
+  transition: 0.4s;
+}
+
+.cv-apply-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 140px rgba(217, 70, 239, 1);
+}
+
+.apply-note {
+  margin-top: 30px;
+  font-size: 1.4rem;
+  color: #aaa;
+}
+
+/* Nút quay lại */
+.cv-back-btn {
+  display: block;
+  margin: 60px auto 0;
+  padding: 16px 50px;
+  background: transparent;
+  border: 2px solid #7dd3fc;
+  color: #7dd3fc;
+  border-radius: 50px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.cv-back-btn:hover {
+  background: #7dd3fc;
+  color: #000;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .job-layout {
+    flex-direction: column;
+    padding: 0 20px;
+  }
+  .cv-container {
+    padding: 40px;
+  }
+  .cv-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 30px;
+  }
+  .cv-company-info h1 {
+    font-size: 2.6rem;
+  }
+  .cv-job-title {
+    font-size: 2.6rem;
+  }
+  .section-title {
+    font-size: 2rem;
+  }
+  .cv-apply-btn {
+    padding: 20px 70px;
+    font-size: 2rem;
+  }
+}

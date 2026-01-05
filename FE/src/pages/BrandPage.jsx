@@ -86,7 +86,7 @@ export default function BrandPage() {
                         {isBrand && (
                             <>
                                 <div className="menu-item">
-                                    <span className="menu-icon">📢</span> TUYỂN DỤNG ĐỀ XUẤT
+                                    <span className="menu-icon">📢</span> CV ĐỀ XUẤT
                                 </div>
                                 <div className="menu-item">
                                     <span className="menu-icon">📋</span> QUẢN LÝ CV

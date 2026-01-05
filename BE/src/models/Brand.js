@@ -5,8 +5,8 @@ const brandSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
-    unique: true, // 1 user chỉ có 1 profile brand
+    required: false,
+    // unique: true,
   },
   companyName: {
     type: String,
@@ -17,7 +17,7 @@ const brandSchema = new mongoose.Schema({
     required: true,
   },
   logo: {
-    type: String, // URL ảnh logo
+    type: String,
     default: "",
   },
   website: {
@@ -25,7 +25,7 @@ const brandSchema = new mongoose.Schema({
     default: "",
   },
   industry: {
-    type: String, // ngành nghề: Beauty, Food, Tech...
+    type: String,
     default: "",
   },
   followers: {
@@ -42,4 +42,7 @@ const brandSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
-export default mongoose.model("Brand", brandSchema);
+// ←←←← SỬA DÒNG NÀY: "Job" → "Brand"
+const Brand = mongoose.models.Brand || mongoose.model("Brand", brandSchema);
+
+export default Brand;
