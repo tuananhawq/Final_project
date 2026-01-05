@@ -23,6 +23,7 @@ import blogRoutes from './modules/blog/blog.route.js';
 import bannerRoute from "./modules/banner/banner.route.js";
 import creatorRoute from "./modules/creator/creator.route.js";  
 import brandRoute from "./modules/brand/brand.route.js";
+import jobRoute from "./modules/job/job.route.js";
 import { setupSwagger } from './config/swagger.js';
 import "./config/passport.js";
 
@@ -48,6 +49,7 @@ app.use('/api/blog', blogRoutes);
 app.use("/api/banners", bannerRoute);
 app.use("/api/creators", creatorRoute);
 app.use("/api/brands", brandRoute);
+app.use("/api/jobs", jobRoute);
 // swagger
 setupSwagger(app);
 

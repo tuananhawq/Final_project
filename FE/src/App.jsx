@@ -11,7 +11,9 @@ import Profile from "./pages/Profile.jsx";
 import About from "./pages/About.jsx";
 import CreatorPage from "./pages/CreatorPage.jsx";
 import BrandPage from "./pages/BrandPage.jsx";
+import JobDetailPage from "./pages/JobDetailPage.jsx";
 import HighlightDetail from "./pages/HighlightDetail.jsx";
+import JobOffersPage from "./pages/JobOffersPage.jsx";
 export default function App() {
   return (
     <Routes>
@@ -32,6 +34,8 @@ export default function App() {
       <Route path="/highlight/:id" element={<HighlightDetail />} />
       <Route path="/creator" element={<CreatorPage />} />
       <Route path="/brand" element={<BrandPage />} />
+      <Route path="/job-offers" element={<JobOffersPage />} />
+      <Route path="/job/:id" element={<JobDetailPage />} />
       {/* Blog */}
       <Route path="/blog" element={<BlogList />} />
       <Route path="/blog/:id" element={<BlogDetail />} />

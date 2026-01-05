@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
+import { EmployerSidebar } from "../components/EmployerSidebar";
 import "../styles/creator/creator-page.css";
 
 export default function CreatorPage() {
@@ -54,50 +55,7 @@ export default function CreatorPage() {
 
             <div className="creator-layout">
                 {/* ===== SIDEBAR ===== */}
-                <aside className="employer-panel">
-                    <div className="panel-header">
-                        <div className="panel-avatar">
-                            <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="50" cy="30" r="20" fill="#000" />
-                                <path d="M 25 60 Q 50 100 75 60 L 75 120 L 25 120 Z" fill="#000" />
-                                <circle cx="50" cy="30" r="20" fill="none" stroke="#fff" strokeWidth="6" strokeLinecap="round" />
-                                <path d="M 25 60 Q 50 85 75 60" fill="none" stroke="#fff" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </div>
-                        <div className="panel-info">
-                            <h3>{user?.username || "Tên User Tạm"}</h3>
-                            <p>{isCreator ? "Creator" : "User"}</p>
-                            <span>Tài khoản cấp {user?.premiumStatus === "premium" ? "3/3" : "1/3"}</span>
-                            {!isCreator && (
-                                <button className="upgrade-btn" onClick={() => navigate("/upgrade-creator")}>
-                                    Nâng cấp Creator
-                                </button>
-                            )}
-                        </div>
-                    </div>
-
-                    <nav className="panel-menu">
-                        {/* BẢNG TIN luôn hiện - mặc định active */}
-                        <div className="menu-item active">
-                            <span className="menu-icon">📰</span> BẢNG TIN
-                        </div>
-
-                        {/* Các menu chỉ hiện khi là Creator */}
-                        {isCreator && (
-                            <>
-                                <div className="menu-item">
-                                    <span className="menu-icon">📢</span> TUYỂN DỤNG ĐỀ XUẤT
-                                </div>
-                                <div className="menu-item">
-                                    <span className="menu-icon">📋</span> QUẢN LÝ CV
-                                </div>
-                                <div className="menu-item">
-                                    <span className="menu-icon">🏠</span> TIN TUYỂN DỤNG CỦA TÔI
-                                </div>
-                            </>
-                        )}
-                    </nav>
-                </aside>
+                <EmployerSidebar user={user} isCreator={isCreator} />
 
                 {/* ===== MAIN CONTENT ===== */}
                 <main className="creator-content">

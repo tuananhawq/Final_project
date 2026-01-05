@@ -30,7 +30,7 @@ export default function Home() {
         <TopAgenciesSection />
         <TopCreatorsSection />
         <TopicsSection />
-        {/* <HighlightFeed /> */}
+        <HighlightFeed />
         <TestimonialsSection />
         {/* <BannerSection /> */}
         
