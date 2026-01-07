@@ -24,6 +24,9 @@ import bannerRoute from "./modules/banner/banner.route.js";
 import creatorRoute from "./modules/creator/creator.route.js";  
 import brandRoute from "./modules/brand/brand.route.js";
 import jobRoute from "./modules/job/job.route.js";
+import jobPostRoute from "./modules/jobPost/jobPost.route.js";
+import cvRoute from "./modules/cv/cv.route.js";
+import brandCvRoute from "./modules/brandCv/brandCv.route.js";
 import { setupSwagger } from './config/swagger.js';
 import "./config/passport.js";
 
@@ -50,6 +53,9 @@ app.use("/api/banners", bannerRoute);
 app.use("/api/creators", creatorRoute);
 app.use("/api/brands", brandRoute);
 app.use("/api/jobs", jobRoute);
+app.use("/api", jobPostRoute);
+app.use("/api", cvRoute);
+app.use("/api", brandCvRoute);
 // swagger
 setupSwagger(app);
 

@@ -99,6 +99,11 @@ body {
   background: rgba(99,102,241,.2);
 }
 
+.menu-item.active {
+  background: linear-gradient(90deg, rgba(129,140,248,.4), rgba(236,72,153,.3));
+  box-shadow: 0 0 0 1px rgba(129,140,248,.5);
+}
+
 /* ========== MAIN CONTENT ========== */
 .brand-content {
   display: flex;
@@ -157,6 +162,349 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* ====== GENERIC SECTION STYLES FOR BRAND TABS ====== */
+.brand-section-title {
+  font-size: 2rem;
+  margin-bottom: 24px;
+}
+
+.brand-section-loading,
+.brand-empty-state {
+  padding: 24px;
+  border-radius: 16px;
+  background: rgba(15,23,42,0.85);
+  color: #e5e7eb;
+}
+
+.brand-news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.brand-news-item {
+  padding: 16px 20px;
+  border-radius: 16px;
+  background: rgba(15,23,42,0.9);
+  border: 1px solid rgba(148,163,184,0.3);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.brand-news-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 35px rgba(0,0,0,0.5);
+  border-color: rgba(129,140,248,0.7);
+}
+
+.brand-news-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.brand-name {
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.job-type {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(59,130,246,0.2);
+  color: #bfdbfe;
+  font-size: 0.75rem;
+}
+
+.job-title {
+  margin: 4px 0 8px;
+  font-size: 1.2rem;
+}
+
+.brand-news-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: #9ca3af;
+  flex-wrap: wrap;
+}
+
+.budget {
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+.work-time {
+  color: #6ee7b7;
+}
+
+.brand-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.brand-pagination button {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(55,65,81,0.8);
+  color: #e5e7eb;
+  cursor: pointer;
+}
+
+.brand-pagination button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.brand-pagination span {
+  font-size: 0.9rem;
+  color: #cbd5f5;
+}
+
+/* ===== MODAL ===== */
+.brand-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.brand-modal {
+  max-width: 720px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: radial-gradient(circle at top left,#1e293b,#020617);
+  border-radius: 24px;
+  padding: 24px 28px;
+  box-shadow: 0 28px 80px rgba(0,0,0,0.8);
+}
+
+.brand-modal h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 1.6rem;
+}
+
+.brand-modal-section {
+  margin-top: 16px;
+}
+
+.brand-modal-section h4 {
+  margin-bottom: 4px;
+}
+
+.brand-modal-close {
+  margin-top: 20px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(90deg,#4f46e5,#ec4899);
+  color: white;
+  cursor: pointer;
+}
+
+.brand-modal-brand,
+.brand-modal-budget {
+  font-size: 0.95rem;
+  color: #e5e7eb;
+}
+
+.brand-modal-budget {
+  color: #facc15;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.brand-error-text {
+  color: #fecaca;
+  background: rgba(248,113,113,0.1);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+}
+
+.brand-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.brand-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+.brand-form input,
+.brand-form textarea {
+  border-radius: 10px;
+  border: 1px solid rgba(148,163,184,0.6);
+  background: rgba(15,23,42,0.8);
+  color: #e5e7eb;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.brand-form input::placeholder,
+.brand-form textarea::placeholder {
+  color: #6b7280;
+}
+
+.brand-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.primary-btn,
+.secondary-btn,
+.danger-btn,
+.cv-detail-btn {
+  border-radius: 999px;
+  border: none;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.primary-btn {
+  background: linear-gradient(90deg,#4f46e5,#ec4899);
+  color: white;
+}
+
+.secondary-btn {
+  background: rgba(31,41,55,0.9);
+  color: #e5e7eb;
+}
+
+.danger-btn {
+  background: rgba(239,68,68,0.9);
+  color: #fee2e2;
+}
+
+/* ===== CV CARDS ===== */
+.cv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+  gap: 18px;
+}
+
+.cv-card {
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(15,23,42,0.9);
+  border: 1px solid rgba(148,163,184,0.2);
+}
+
+.cv-card-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cv-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(15,23,42,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #bfdbfe;
+}
+
+.cv-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cv-title {
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.cv-main-skills,
+.cv-experience {
+  font-size: 0.9rem;
+  margin-top: 6px;
+}
+
+.cv-detail-btn {
+  margin-top: 10px;
+  background: rgba(59,130,246,0.4);
+  color: #eff6ff;
+}
+
+/* ===== BRAND CV MANAGER & JOB POSTS ===== */
+.brand-cv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.brand-cv-list,
+.brand-job-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.brand-cv-card,
+.brand-job-card {
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(15,23,42,0.9);
+  border: 1px solid rgba(148,163,184,0.25);
+}
+
+.brand-cv-content,
+.brand-job-content {
+  font-size: 0.9rem;
+  color: #d1d5db;
+  margin-top: 8px;
+}
+
+.brand-cv-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.brand-job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand-job-meta {
+  display: flex;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: #9ca3af;
+  margin-top: 6px;
+  flex-wrap: wrap;
 }
 
 /* ========== RESPONSIVE ========== */

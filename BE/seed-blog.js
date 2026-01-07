@@ -14,6 +14,177 @@ dotenv.config({
 
 const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/myapp_db";
 
+const rawBlogs = [
+  {
+    title: "10 Xu Hướng Lập Trình Web Cần Chú Ý Trong Năm 2026",
+    content: "<h2>Kỷ nguyên của AI-Driven Development</h2><p>Việc tích hợp AI vào quy trình code không còn là lựa chọn mà là bắt buộc...</p>",
+    excerpt: "Điểm qua những công nghệ web đột phá như WebAssembly, AI coding assistants và kiến trúc serverless.",
+    category: "Technology",
+    tags: ["Programming", "Web", "2026", "AI"],
+    views: 1200,
+    featured: true,
+  },
+  {
+    title: "Bí Quyết Quản Lý Tài Chính Cá Nhân Cho Gen Z",
+    content: "<h2>Quy tắc 50/30/20 cải tiến</h2><p>Làm thế nào để đầu tư chứng khoán và crypto một cách thông minh từ số vốn nhỏ...</p>",
+    excerpt: "Hướng dẫn chi tiết cách quản lý chi tiêu và đầu tư hiệu quả cho người trẻ khởi nghiệp.",
+    category: "Finance",
+    tags: ["Money", "GenZ", "Investment"],
+    views: 850,
+  },
+  {
+    title: "Cách Xây Dựng Thương Hiệu Cá Nhân Trên LinkedIn",
+    content: "<h2>Tại sao LinkedIn quan trọng?</h2><p>Profile của bạn chính là bộ mặt thương hiệu chuyên nghiệp...</p>",
+    excerpt: "Tối ưu hóa hồ sơ LinkedIn để thu hút nhà tuyển dụng và đối tác kinh doanh.",
+    category: "Business",
+    tags: ["LinkedIn", "Career", "Branding"],
+    views: 2100,
+    featured: true,
+  },
+  {
+    title: "Tương Lai Của Năng Lượng Tái Tạo",
+    content: "<h2>Pin mặt trời thế hệ mới</h2><p>Công nghệ lưu trữ năng lượng đang thay đổi bộ mặt ngành điện lực...</p>",
+    excerpt: "Khám phá các giải pháp năng lượng xanh giúp bảo vệ môi trường bền vững.",
+    category: "Environment",
+    tags: ["Green Energy", "Future", "Solar"],
+    views: 560,
+  },
+  {
+    title: "5 Công Thức Nấu Ăn Eat Clean Cho Người Bận Rộn",
+    content: "<h2>Bữa sáng đủ chất trong 5 phút</h2><p>Sử dụng yến mạch và hạt chia để có năng lượng cả ngày...</p>",
+    excerpt: "Tổng hợp các món ăn nhanh, gọn, lẹ nhưng vẫn đảm bảo sức khỏe và vóc dáng.",
+    category: "Lifestyle",
+    tags: ["Health", "Food", "EatClean"],
+    views: 3200,
+    featured: true,
+  },
+  {
+    title: "Sự Trỗi Dậy Của Thương Mại Điện Tử Xuyên Biên Giới",
+    content: "<h2>Bán hàng ra thế giới qua Amazon và Etsy</h2><p>Cơ hội cho các sản phẩm thủ công mỹ nghệ Việt Nam...</p>",
+    excerpt: "Phân tích tiềm năng và thách thức khi đưa sản phẩm nội địa ra thị trường quốc tế.",
+    category: "Business",
+    tags: ["E-commerce", "Global", "Sales"],
+    views: 1450,
+  },
+  {
+    title: "Hiểu Về Tâm Lý Học Người Tiêu Dùng Năm 2026",
+    content: "<h2>Hành vi mua sắm thay đổi như thế nào?</h2><p>Người dùng ưu tiên các giá trị đạo đức và sự minh bạch của nhãn hàng...</p>",
+    excerpt: "Nắm bắt tâm lý khách hàng để tối ưu hóa tỷ lệ chuyển đổi trong marketing.",
+    category: "Marketing",
+    tags: ["Psychology", "Consumer", "Insight"],
+    views: 980,
+  },
+  {
+    title: "Top 5 Thành Phố Đáng Ghé Thăm Tại Đông Nam Á",
+    content: "<h2>Hành trình khám phá Bangkok và Hội An</h2><p>Những trải nghiệm văn hóa không thể bỏ qua...</p>",
+    excerpt: "Gợi ý lịch trình du lịch giá rẻ nhưng cực chất cho mùa hè này.",
+    category: "Travel",
+    tags: ["Travel", "Asia", "Summer"],
+    views: 4100,
+    featured: true,
+  },
+  {
+    title: "Ứng Dụng Blockchain Ngoài Tiền Điện Tử",
+    content: "<h2>Blockchain trong quản lý chuỗi cung ứng</h2><p>Minh bạch hóa nguồn gốc thực phẩm bằng công nghệ sổ cái...</p>",
+    excerpt: "Blockchain không chỉ có Bitcoin, hãy xem nó đang thay đổi các ngành công nghiệp khác ra sao.",
+    category: "Technology",
+    tags: ["Blockchain", "Tech", "SupplyChain"],
+    views: 720,
+  },
+  {
+    title: "Nghệ Thuật Quản Lý Thời Gian Với Phương Pháp Deep Work",
+    content: "<h2>Làm việc sâu để đạt hiệu suất tối đa</h2><p>Loại bỏ các thông báo mạng xã hội và tập trung tuyệt đối...</p>",
+    excerpt: "Cách rèn luyện khả năng tập trung cao độ trong một thế giới đầy xao nhãng.",
+    category: "Productivity",
+    tags: ["Work", "Focus", "Success"],
+    views: 2800,
+    featured: true,
+  },
+  {
+    title: "Tại Sao Bạn Nên Học Một Ngôn Ngữ Mới?",
+    content: "<h2>Mở rộng tư duy qua ngôn ngữ</h2><p>Học ngoại ngữ giúp cải thiện trí nhớ và mở ra cơ hội việc làm toàn cầu...</p>",
+    excerpt: "Những lợi ích kinh ngạc của việc thông thạo từ 2 ngôn ngữ trở lên.",
+    category: "Education",
+    tags: ["Language", "Learning", "Skills"],
+    views: 650,
+  },
+  {
+    title: "Cybersecurity: Bảo Vệ Bản Thân Trên Không Gian Mạng",
+    content: "<h2>Cách tạo mật khẩu mạnh và bảo mật 2 lớp</h2><p>Đừng để dữ liệu cá nhân bị đánh cắp bởi những thủ đoạn đơn giản...</p>",
+    excerpt: "Cẩm nang an toàn thông tin dành cho người dùng không chuyên về kỹ thuật.",
+    category: "Security",
+    tags: ["Cyber", "Privacy", "Internet"],
+    views: 1100,
+  },
+  {
+    title: "Xu Hướng Thời Trang Bền Vững (Sustainable Fashion)",
+    content: "<h2>Nói không với Fast Fashion</h2><p>Sử dụng chất liệu tái chế và ủng hộ các thương hiệu địa phương...</p>",
+    excerpt: "Làm thế nào để mặc đẹp mà vẫn góp phần bảo vệ hành tinh.",
+    category: "Fashion",
+    tags: ["Sustainable", "Style", "Green"],
+    views: 1300,
+  },
+  {
+    title: "Lợi Ích Của Việc Thiền Định Mỗi Ngày",
+    content: "<h2>10 phút tĩnh lặng cho tâm hồn</h2><p>Giảm stress và lo âu hiệu quả chỉ bằng hơi thở...</p>",
+    excerpt: "Hướng dẫn thực hành thiền đơn giản cho người mới bắt đầu.",
+    category: "Health",
+    tags: ["Meditation", "MentalHealth", "Peace"],
+    views: 2200,
+    featured: true,
+  },
+  {
+    title: "Khám Phá Vũ Trụ: Những Nhiệm Vụ Sao Hỏa Sắp Tới",
+    content: "<h2>Tham vọng định cư trên Sao Hỏa của SpaceX</h2><p>Những bước tiến mới trong công nghệ tên lửa đẩy tái sử dụng...</p>",
+    excerpt: "Cập nhật những tin tức mới nhất về cuộc đua vào không gian của các cường quốc.",
+    category: "Science",
+    tags: ["Space", "Mars", "NASA"],
+    views: 3500,
+    featured: true,
+  },
+  {
+    title: "Cách Viết Nội Dung Chuẩn SEO Năm 2026",
+    content: "<h2>Ưu tiên trải nghiệm người dùng (EEAT)</h2><p>Google đánh giá cao những bài viết có chuyên môn và độ tin cậy cao...</p>",
+    excerpt: "Kỹ thuật viết bài giúp blog của bạn luôn đứng top tìm kiếm.",
+    category: "Marketing",
+    tags: ["SEO", "Content", "Google"],
+    views: 1950,
+  },
+  {
+    title: "Sức Mạnh Của Podcast Trong Truyền Thông",
+    content: "<h2>Tại sao mọi người thích nghe Podcast?</h2><p>Sự tiện lợi khi vừa có thể lái xe, tập gym vừa học hỏi kiến thức...</p>",
+    excerpt: "Cách xây dựng một kênh Podcast cá nhân thu hút hàng ngàn lượt nghe.",
+    category: "Media",
+    tags: ["Podcast", "Audio", "Trend"],
+    views: 1200,
+  },
+  {
+    title: "Phát Triển Tư Duy Phản Biện (Critical Thinking)",
+    content: "<h2>Đặt câu hỏi trước mọi thông tin</h2><p>Kỹ năng quan trọng nhất trong thời đại tin giả tràn lan...</p>",
+    excerpt: "Rèn luyện tư duy sắc bén để đưa ra những quyết định đúng đắn.",
+    category: "Education",
+    tags: ["Thinking", "Mindset", "Logic"],
+    views: 890,
+  },
+  {
+    title: "Làm Chủ Kỹ Năng Thuyết Trình Trước Đám Đông",
+    content: "<h2>Vượt qua nỗi sợ đứng trước ống kính</h2><p>Cấu trúc bài thuyết trình đỉnh cao theo phong cách TED Talks...</p>",
+    excerpt: "Biến những buổi thuyết trình nhàm chán thành những màn trình diễn đầy cảm hứng.",
+    category: "Skills",
+    tags: ["Presentation", "PublicSpeaking", "Confidence"],
+    views: 1550,
+    featured: true,
+  },
+  {
+    title: "Tương Lai Của Công Việc Remote (Làm Việc Từ Xa)",
+    content: "<h2>Mô hình Hybrid Work lên ngôi</h2><p>Sự cân bằng giữa cuộc sống và công việc khi không còn phải đến văn phòng...</p>",
+    excerpt: "Các công cụ và văn hóa cần thiết để quản lý đội ngũ làm việc từ xa hiệu quả.",
+    category: "Business",
+    tags: ["Remote", "WorkLife", "DigitalNomad"],
+    views: 2300,
+  },
+];
+
 async function seedBlog() {
   try {
     console.log("Đang kết nối MongoDB...");
@@ -29,118 +200,20 @@ async function seedBlog() {
     console.log("Đang làm sạch dữ liệu cũ...");
     await Blog.deleteMany({});
 
-    console.log("Đang tạo dữ liệu seed mới với nội dung phong phú...");
-    await Blog.insertMany([
-      {
-        title: "Tầm Nhìn Marketing Digital 2025: Khi AI Trở Thành Trợ Thủ Đắc Lực",
-        content: `
-          <p>Chào mừng bạn đến với kỷ nguyên mới của Marketing. Trong năm 2025, chúng ta không chỉ nói về việc chạy quảng cáo, mà là về <strong>trải nghiệm cá nhân hóa sâu sắc</strong>.</p>
-          
-          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80" alt="Marketing 2025" style="width:100%; border-radius: 8px; margin: 20px 0;"/>
+    console.log("Đang chuẩn bị 20 bài viết mới...");
+    const blogsToSeed = rawBlogs.map((blog, index) => ({
+      ...blog,
+      author: staffUser._id,
+      authorName: staffUser.username || "Staff",
+      // Tạo link ảnh ngẫu nhiên từ Unsplash dựa trên category
+      image: `https://loremflickr.com/800/600/${blog.category.toLowerCase()}`,
+      isPublished: true,
+      createdAt: new Date(Date.now() - index * 3600000 * 24), // Mỗi bài cách nhau 1 ngày
+    }));
 
-          <h2>1. Sự Trỗi Dậy Của Tìm Kiếm Bằng Giọng Nói (Voice Search)</h2>
-          <p>Với sự phổ biến của các thiết bị thông minh, việc tối ưu hóa SEO không còn chỉ dừng lại ở từ khóa văn bản. Người dùng đang hỏi Google như hỏi một người bạn. Các doanh nghiệp cần:</p>
-          <ul>
-            <li>Tập trung vào các cụm từ tìm kiếm dài (Long-tail keywords).</li>
-            <li>Sử dụng ngôn ngữ tự nhiên, gần gũi.</li>
-            <li>Tối ưu hóa cho các câu hỏi "Làm thế nào", "Tại sao".</li>
-          </ul>
+    await Blog.insertMany(blogsToSeed);
 
-          <h2>2. Nội Dung Video Ngắn (Short-form Video) Vẫn Là "Vua"</h2>
-          <p>TikTok và Reels đã thay đổi cách chúng ta tiêu thụ thông tin. Trong năm 2025, các video 15-30 giây mang tính giáo dục và giải trí sẽ chiếm 80% lưu lượng truy cập mạng xã hội.</p>
-          <blockquote>"Nội dung không chỉ cần hay, nó cần phải nhanh và chạm đúng nỗi đau của khách hàng ngay trong 3 giây đầu tiên."</blockquote>
-
-          <h2>3. Trí Tuệ Nhân Tạo (AI) Trong Sáng Tạo Nội Dung</h2>
-          <p>AI không thay thế con người, nhưng <em>người dùng AI sẽ thay thế người không dùng AI</em>. Việc sử dụng các mô hình ngôn ngữ lớn để lên kế hoạch nội dung và phân tích hành vi khách hàng sẽ giúp tiết kiệm 50% thời gian cho các Marketer.</p>
-          
-          <h2>Kết luận</h2>
-          <p>Đừng đứng ngoài cuộc chơi công nghệ. Hãy bắt đầu thử nghiệm với AI và tập trung vào chất lượng hơn là số lượng để giữ chân khách hàng của bạn.</p>
-        `,
-        excerpt: "Khám phá chiến lược Marketing Digital đỉnh cao cho năm 2025: Từ tối ưu hóa Voice Search đến sức mạnh của Video ngắn và AI toàn diện.",
-        author: staffUser._id,
-        authorName: staffUser.username || "Staff",
-        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f",
-        featured: true,
-        category: "Business",
-        tags: ["Marketing", "Digital", "Trends", "2025", "AI"],
-        views: 2450,
-        likes: [staffUser._id],
-        ratings: [{ userId: staffUser._id, rating: 5 }],
-        comments: [
-          {
-            userId: staffUser._id,
-            username: staffUser.username || "Staff",
-            content: "Nội dung rất sâu sắc, đặc biệt là phần về Voice Search!",
-            createdAt: new Date(),
-          },
-        ],
-        isPublished: true,
-      },
-      {
-        title: "Cuộc Cách Mạng Trí Tuệ Nhân Tạo: Tương Lai Hay Mối Đe Dọa?",
-        content: `
-          <h2>Kỷ Nguyên Của Những Cỗ Máy Biết Suy Nghĩ</h2>
-          <p>Chúng ta đang sống trong những năm tháng bản lề của lịch sử nhân loại. Trí tuệ nhân tạo (AI) đã bước ra khỏi những bộ phim viễn tưởng để len lỏi vào từng chiếc điện thoại, từng quy trình làm việc.</p>
-          
-          <h3>Ứng dụng đột phá trong y tế</h3>
-          <p>Các hệ thống AI hiện nay có khả năng chẩn đoán hình ảnh chính xác hơn cả bác sĩ chuyên khoa trong một số trường hợp. Điều này mở ra cơ hội cứu sống hàng triệu người thông qua việc phát hiện sớm bệnh lý.</p>
-          
-          <h3>Thách thức về đạo đức và việc làm</h3>
-          <p>Tuy nhiên, sự phát triển nóng của AI cũng đặt ra những câu hỏi hóc búa:</p>
-          <ul>
-            <li><strong>Bảo mật dữ liệu:</strong> Ai là người sở hữu thông tin mà AI học được?</li>
-            <li><strong>Việc làm:</strong> Những công việc lặp đi lặp lại sẽ đi về đâu?</li>
-            <li><strong>Đạo đức:</strong> Làm sao để AI không mang định kiến của con người?</li>
-          </ul>
-
-          <p>Dù có nhiều lo ngại, chúng ta không thể phủ nhận rằng AI đang giúp con người giải quyết những bài toán phức tạp mà trước đây mất hàng thập kỷ mới có lời giải.</p>
-          <p><em>Hãy cùng đón chờ xem AI sẽ đưa chúng ta đi xa đến đâu trong 10 năm tới.</em></p>
-        `,
-        excerpt: "Phân tích đa chiều về sự phát triển của AI, từ những ứng dụng kỳ diệu trong y tế đến những thách thức đạo đức mà nhân loại phải đối mặt.",
-        author: staffUser._id,
-        authorName: staffUser.username || "Staff",
-        image: "https://images.unsplash.com/photo-1677442136019-21780ecad995",
-        featured: true,
-        category: "Technology",
-        tags: ["AI", "Technology", "Future", "Ethics"],
-        views: 1890,
-        likes: [],
-        ratings: [],
-        comments: [],
-        isPublished: true,
-      },
-      {
-        title: "7 Bước Xây Dựng Đế Chế Kinh Doanh Online Từ Con Số 0",
-        content: `
-          <p>Bạn muốn khởi nghiệp nhưng không có quá nhiều vốn? Kinh doanh online chính là cánh cửa dành cho bạn. Nhưng hãy nhớ, <strong>đây không phải là con đường trải đầy hoa hồng</strong>.</p>
-          
-          <h2>Lộ trình thực chiến</h2>
-          <ol>
-            <li><strong>Nghiên cứu thị trường ngách:</strong> Đừng bán thứ gì cũng có, hãy bán thứ mà khách hàng đang khao khát tìm kiếm.</li>
-            <li><strong>Xây dựng thương hiệu cá nhân:</strong> Trong thế giới số, lòng tin là đơn vị tiền tệ quý giá nhất.</li>
-            <li><strong>Lựa chọn nền tảng phù hợp:</strong> TikTok, Facebook hay Website riêng? Mỗi nơi có một "luật chơi" khác nhau.</li>
-            <li><strong>Tối ưu hóa quy trình vận hành:</strong> Tự động hóa càng nhiều càng tốt để tập trung vào chiến lược.</li>
-          </ol>
-
-          <p>Nhiều người thất bại vì họ bỏ cuộc ngay khi gặp khó khăn về quảng cáo hay đơn hàng đầu tiên bị hoàn. Bí quyết thực sự nằm ở <strong>sự kiên trì</strong> và <strong>khả năng thích nghi</strong>.</p>
-          <p>Nếu bạn bắt đầu ngay hôm nay với một kế hoạch bài bản, bạn đã đi trước 90% những người chỉ dừng lại ở mức "suy nghĩ".</p>
-        `,
-        excerpt: "Hướng dẫn chi tiết từng bước cho người mới bắt đầu khởi nghiệp kinh doanh trên nền tảng số với số vốn tối ưu.",
-        author: staffUser._id,
-        authorName: staffUser.username || "Staff",
-        image: "https://images.unsplash.com/photo-1556742044-3c52d6e88c62",
-        featured: false,
-        category: "Business",
-        tags: ["Business", "Online", "Startup", "Success"],
-        views: 1150,
-        likes: [],
-        ratings: [],
-        comments: [],
-        isPublished: true,
-      },
-    ]);
-
-    console.log("✅ Seed Blog thành công với nội dung chất lượng cao!");
+    console.log(`✅ Thành công: Đã seed ${blogsToSeed.length} bài viết!`);
     process.exit(0);
   } catch (error) {
     console.error("❌ Lỗi khi seed:", error);
