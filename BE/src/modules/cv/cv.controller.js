@@ -1,9 +1,7 @@
 import Cv from "../../models/Cv.js";
 import User from "../../models/User.js";
 
-// CV đề xuất cho Brand
-// Logic mock: lấy ngẫu nhiên một số CV public của creator
-
+// CV đề xuất cho Brand - Lấy TẤT CẢ CV public của Creator
 export const getRecommendedCvs = async (req, res) => {
   try {
     // Tìm user là creator có CV public
@@ -14,16 +12,13 @@ export const getRecommendedCvs = async (req, res) => {
 
     const creatorIds = creators.map((u) => u._id);
 
-    const matchStage = {
+    // 🔥 Lấy TẤT CẢ CV public của Creator, sort theo createdAt DESC (mới nhất trước)
+    const cvs = await Cv.find({
       user: { $in: creatorIds },
       isPublic: true,
-    };
-
-    // Mock "đề xuất": random 10 CV
-    const cvs = await Cv.aggregate([
-      { $match: matchStage },
-      { $sample: { size: 10 } },
-    ]);
+    })
+      .sort({ createdAt: -1 })
+      .lean();
 
     // Map lại để gắn thông tin user (tên, avatar)
     const usersById = creators.reduce((acc, u) => {
@@ -37,10 +32,12 @@ export const getRecommendedCvs = async (req, res) => {
         _id: cv._id,
         fullName: cv.fullName,
         title: cv.title,
-        mainSkills: cv.mainSkills,
-        experienceYears: cv.experienceYears,
-        experienceDetail: cv.experienceDetail,
-        tags: cv.tags,
+        mainSkills: cv.mainSkills || [],
+        experienceYears: cv.experienceYears || 0,
+        experienceDetail: cv.experienceDetail || "",
+        tags: cv.tags || [],
+        cvFileUrl: cv.cvFileUrl || "",
+        cvFileType: cv.cvFileType || "",
         user: owner
           ? {
               _id: owner._id,

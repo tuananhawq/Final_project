@@ -51,6 +51,17 @@ const cvSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+
+    // 🔥 Thêm field cho upload ảnh CV
+    cvFileUrl: {
+      type: String,
+      default: "",
+    },
+    cvFileType: {
+      type: String,
+      enum: ["image", "pdf", "other", ""],
+      default: "",
+    },
   },
   {
     timestamps: true,

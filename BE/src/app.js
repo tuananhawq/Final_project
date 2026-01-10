@@ -27,6 +27,8 @@ import jobRoute from "./modules/job/job.route.js";
 import jobPostRoute from "./modules/jobPost/jobPost.route.js";
 import cvRoute from "./modules/cv/cv.route.js";
 import brandCvRoute from "./modules/brandCv/brandCv.route.js";
+import creatorCvRoute from "./modules/creatorCv/creatorCv.route.js";
+import applicationRoute from "./modules/application/application.route.js";
 import { setupSwagger } from './config/swagger.js';
 import "./config/passport.js";
 
@@ -56,6 +58,8 @@ app.use("/api/jobs", jobRoute);
 app.use("/api", jobPostRoute);
 app.use("/api", cvRoute);
 app.use("/api", brandCvRoute);
+app.use("/api", creatorCvRoute);
+app.use("/api", applicationRoute);
 // swagger
 setupSwagger(app);
 

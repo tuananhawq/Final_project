@@ -83,6 +83,22 @@ export function RecommendedCV() {
                   : "Chưa cập nhật số năm"}
               </div>
 
+              {/* Hiển thị ảnh CV nếu có */}
+              {cv.cvFileUrl && cv.cvFileType === "image" && (
+                <div className="cv-image-preview" style={{ marginTop: 12 }}>
+                  <img
+                    src={cv.cvFileUrl}
+                    alt="CV"
+                    style={{
+                      width: "100%",
+                      maxHeight: "200px",
+                      objectFit: "cover",
+                      borderRadius: 8,
+                    }}
+                  />
+                </div>
+              )}
+
               <button
                 className="cv-detail-btn"
                 onClick={() => setSelectedCv(cv)}
@@ -133,6 +149,24 @@ export function RecommendedCV() {
               <div className="brand-modal-section">
                 <h4>Tags</h4>
                 <p>{selectedCv.tags.join(", ")}</p>
+              </div>
+            )}
+
+            {/* Hiển thị ảnh CV trong modal nếu có */}
+            {selectedCv.cvFileUrl && selectedCv.cvFileType === "image" && (
+              <div className="brand-modal-section">
+                <h4>Hình ảnh CV</h4>
+                <img
+                  src={selectedCv.cvFileUrl}
+                  alt="CV"
+                  style={{
+                    width: "100%",
+                    maxHeight: "400px",
+                    objectFit: "contain",
+                    borderRadius: 12,
+                    marginTop: 8,
+                  }}
+                />
               </div>
             )}
 

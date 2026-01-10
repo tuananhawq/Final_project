@@ -8,6 +8,7 @@ import Creator from "./src/models/Creator.js";
 import Topic from "./src/models/Topic.js";
 import Testimonial from "./src/models/Testimonial.js";
 import Footer from "./src/models/Footer.js";
+import User from "./src/models/User.js";
 
 // 👉 fix cho ESM + Windows
 const __filename = fileURLToPath(import.meta.url);
@@ -32,6 +33,7 @@ async function seedHome() {
     await Hero.deleteMany({});
     await Agency.deleteMany({});
     await Creator.deleteMany({});
+    await User.deleteMany({});
     await Topic.deleteMany({});
     await Testimonial.deleteMany({});
     await Footer.deleteMany({});
@@ -79,9 +81,63 @@ async function seedHome() {
 
     // Seed Creators
     console.log("Đang seed Creators...");
+    
+    // Tạo Users trước
+    const creatorUsers = await User.insertMany([
+      {
+        email: "creator1@revlive.com",
+        username: "nguyen_van_a",
+        passwordHash: "hashedpassword123",
+        provider: "local",
+        avatar: "/src/assets/logo-revlive.png",
+        bio: "Content Creator"
+      },
+      {
+        email: "creator2@revlive.com",
+        username: "tran_thi_b",
+        passwordHash: "hashedpassword123",
+        provider: "local",
+        avatar: "/src/assets/logo-revlive.png",
+        bio: "Livestream Host"
+      },
+      {
+        email: "creator3@revlive.com",
+        username: "le_van_c",
+        passwordHash: "hashedpassword123",
+        provider: "local",
+        avatar: "/src/assets/logo-revlive.png",
+        bio: "Gaming Streamer"
+      },
+      {
+        email: "creator4@revlive.com",
+        username: "pham_thi_d",
+        passwordHash: "hashedpassword123",
+        provider: "local",
+        avatar: "/src/assets/logo-revlive.png",
+        bio: "Beauty Influencer"
+      },
+      {
+        email: "creator5@revlive.com",
+        username: "hoang_van_e",
+        passwordHash: "hashedpassword123",
+        provider: "local",
+        avatar: "/src/assets/logo-revlive.png",
+        bio: "Tech Reviewer"
+      },
+      {
+        email: "creator6@revlive.com",
+        username: "do_thi_f",
+        passwordHash: "hashedpassword123",
+        provider: "local",
+        avatar: "/src/assets/logo-revlive.png",
+        bio: "Fashion Creator"
+      }
+    ]);
+
+    // Tạo Creators liên kết với Users
     await Creator.insertMany([
       {
-        name: "Nguyễn Văn A",
+        user: creatorUsers[0]._id,
         description: "Content Creator",
         avatar: "/src/assets/logo-revlive.png",
         followers: "1.2M",
@@ -89,7 +145,7 @@ async function seedHome() {
         order: 0,
       },
       {
-        name: "Trần Thị B",
+        user: creatorUsers[1]._id,
         description: "Livestream Host",
         avatar: "/src/assets/logo-revlive.png",
         followers: "850K",
@@ -97,7 +153,7 @@ async function seedHome() {
         order: 1,
       },
       {
-        name: "Lê Văn C",
+        user: creatorUsers[2]._id,
         description: "Gaming Streamer",
         avatar: "/src/assets/logo-revlive.png",
         followers: "2.1M",
@@ -105,7 +161,7 @@ async function seedHome() {
         order: 2,
       },
       {
-        name: "Phạm Thị D",
+        user: creatorUsers[3]._id,
         description: "Beauty Influencer",
         avatar: "/src/assets/logo-revlive.png",
         followers: "930K",
@@ -113,7 +169,7 @@ async function seedHome() {
         order: 3,
       },
       {
-        name: "Hoàng Văn E",
+        user: creatorUsers[4]._id,
         description: "Tech Reviewer",
         avatar: "/src/assets/logo-revlive.png",
         followers: "670K",
@@ -121,7 +177,7 @@ async function seedHome() {
         order: 4,
       },
       {
-        name: "Đỗ Thị F",
+        user: creatorUsers[5]._id,
         description: "Fashion Creator",
         avatar: "/src/assets/logo-revlive.png",
         followers: "1.5M",
