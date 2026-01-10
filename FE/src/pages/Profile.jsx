@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaHome, FaEye, FaEyeSlash } from "react-icons/fa";
+import { Header } from "../components/Header";
 import axios from "axios";
 import "../styles/profile.css";
 
@@ -40,14 +41,8 @@ export default function Profile() {
 
     return (
         <div className="profile-bg">
-        <button
-          className="profile-home-btn"
-          onClick={() => navigate("/home")}
-          title="Quay lại trang chủ"
-        >
-          <FaHome style={{fontSize: 22, marginRight: 8, verticalAlign: 'middle'}} />
-          <span style={{verticalAlign: 'middle'}}>Trang chủ</span>
-        </button>
+            <Header />
+        
         <div className="profile-container modern-profile">
             <h2 className="profile-title">Thông tin cá nhân</h2>
 

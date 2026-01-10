@@ -2,7 +2,8 @@
 .profile-container {
   max-width: 600px;
   margin: 120px auto 40px;
-  padding: 32px;
+  padding-top: 50px;
+  /* padding: 32px; */
   background: linear-gradient(180deg, #020617, #020617ee);
   border-radius: 18px;
   color: #fff;
@@ -86,8 +87,8 @@
 .profile-container label {
   display: block;
   text-align: left;
-  margin-top: 16px;
-  margin-bottom: 6px;
+  /* margin-top: 16px;
+  margin-bottom: 6px; */
   font-size: 13px;
   color: #c7d2fe;
 }
@@ -311,7 +312,7 @@
 .profile-bg {
   min-height: 100vh;
   width: 100vw;
-  background: linear-gradient(120deg, #232526 0%, #414345 100%), url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1500&q=80'); /* Livestream/tech background */
+  background: radial-gradient(circle at top, #0f172a, #020617); /* Livestream/tech background */
   background-blend-mode: overlay;
   background-size: cover;
   background-position: center;
