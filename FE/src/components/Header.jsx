@@ -56,6 +56,20 @@ export function Header() {
     navigate("/login");
   };
 
+  // Kiểm tra role để ẩn/hiện các link
+  const userRoles = user?.roles || [];
+  const isUser = userRoles.includes("user") && !userRoles.includes("creator") && !userRoles.includes("brand");
+  const isCreator = userRoles.includes("creator");
+  const isBrand = userRoles.includes("brand");
+  
+  // Logic ẩn/hiện:
+  // - User: ẩn cả Creator và Brand
+  // - Creator: ẩn Brand
+  // - Brand: ẩn Creator
+  // - Chưa đăng nhập: hiển thị cả hai
+  const showCreatorLink = !isUser && !isBrand;
+  const showBrandLink = !isUser && !isCreator;
+
   return (
     <header className="home-header">
       <div className="home-header__container">
@@ -74,12 +88,16 @@ export function Header() {
             <Link to="/home" className="home-header__nav-link home-header__nav-link--active">
               Trang chủ
             </Link>
-            <Link to="/creator" className="home-header__nav-link">
-              Creator Page
-            </Link>
-            <Link to="/brand" className="home-header__nav-link">
-              Brand Page
-            </Link>
+            {showCreatorLink && (
+              <Link to="/creator" className="home-header__nav-link">
+                Creator Page
+              </Link>
+            )}
+            {showBrandLink && (
+              <Link to="/brand" className="home-header__nav-link">
+                Brand Page
+              </Link>
+            )}
             <Link to="/services" className="home-header__nav-link">
               Dịch vụ
             </Link>
@@ -197,12 +215,16 @@ export function Header() {
               <Link to="/home" className="home-header__mobile-link">
                 Trang chủ
               </Link>
-              <Link to="/creater" className="home-header__mobile-link">
-                Creater Page
-              </Link>
-              <Link to="/brand" className="home-header__mobile-link">
-                Brand Page
-              </Link>
+              {showCreatorLink && (
+                <Link to="/creator" className="home-header__mobile-link">
+                  Creator Page
+                </Link>
+              )}
+              {showBrandLink && (
+                <Link to="/brand" className="home-header__mobile-link">
+                  Brand Page
+                </Link>
+              )}
               <Link to="/services" className="home-header__mobile-link">
                 Dịch vụ
               </Link>
