@@ -259,14 +259,28 @@ async function seedAll() {
       {
         owner: brandUsers[0]._id,
         title: "Coca-Cola Vietnam - Thông tin thương hiệu",
-        content: "Coca-Cola là thương hiệu nước giải khát hàng đầu thế giới với hơn 130 năm lịch sử. Chúng tôi cam kết mang đến những trải nghiệm tuyệt vời cho người tiêu dùng và tìm kiếm các đối tác Creator sáng tạo để lan tỏa thông điệp tích cực.",
+        content: "Coca-Cola là thương hiệu nước giải khát hàng đầu thế giới với hơn 130 năm lịch sử. Chúng tôi cam kết mang đến những trải nghiệm tuyệt vời cho người tiêu dùng và tìm kiếm các đối tác Creator sáng tạo để lan tỏa thông điệp tích cực. Chúng tôi hợp tác với các Creator có từ 50K followers trở lên, chuyên về lifestyle, food & beverage, và có khả năng tạo nội dung sáng tạo, tích cực.",
         cvFileUrl: "",
         cvFileType: "",
       },
       {
         owner: brandUsers[1]._id,
         title: "PepsiCo Vietnam - Giới thiệu thương hiệu",
-        content: "PepsiCo là tập đoàn đa quốc gia về thực phẩm và đồ uống, với danh mục sản phẩm đa dạng. Chúng tôi tìm kiếm các Creator để hợp tác trong các chiến dịch marketing sáng tạo và hiệu quả.",
+        content: "PepsiCo là tập đoàn đa quốc gia về thực phẩm và đồ uống, với danh mục sản phẩm đa dạng. Chúng tôi tìm kiếm các Creator để hợp tác trong các chiến dịch marketing sáng tạo và hiệu quả. Chúng tôi ưu tiên các Creator có kinh nghiệm với các thương hiệu FMCG, có khả năng tạo nội dung viral và engagement rate cao.",
+        cvFileUrl: "",
+        cvFileType: "",
+      },
+      {
+        owner: brandUsers[2]._id,
+        title: "Samsung Electronics Vietnam - Thông tin thương hiệu",
+        content: "Samsung Electronics Vietnam là nhà sản xuất điện tử hàng đầu thế giới. Chúng tôi tìm kiếm các Creator chuyên về công nghệ để review và giới thiệu các sản phẩm mới nhất. Yêu cầu: Creator có từ 100K followers trở lên, chuyên về tech review, unboxing, và có khả năng tạo nội dung kỹ thuật nhưng dễ hiểu.",
+        cvFileUrl: "",
+        cvFileType: "",
+      },
+      {
+        owner: brandUsers[3]._id,
+        title: "Nike Vietnam - Giới thiệu thương hiệu",
+        content: "Nike Vietnam là thương hiệu thể thao toàn cầu, hợp tác với các Creator thể thao và lifestyle để truyền cảm hứng. Chúng tôi tìm kiếm các Creator chuyên về fitness, sports, và healthy lifestyle. Yêu cầu: Creator có từ 80K followers trở lên, có kinh nghiệm tạo nội dung về thể thao, workout, và có thể tham gia các sự kiện thể thao offline.",
         cvFileUrl: "",
         cvFileType: "",
       },
@@ -1059,6 +1073,107 @@ async function seedAll() {
         experienceYears: 4,
         experienceDetail: "4 năm kinh nghiệm trong lĩnh vực beauty. Professional makeup artist, tạo tutorial makeup, review mỹ phẩm và skincare. Instagram 180K followers, TikTok 150K followers. Đã hợp tác với L'Oréal, Maybelline, các thương hiệu mỹ phẩm hàng đầu.",
         tags: ["beauty", "makeup", "skincare", "tutorial", "review"],
+        isPublic: true,
+      },
+      // Thêm CVs cho các Creator users còn lại
+      {
+        user: additionalCreatorUsers[0]._id, // creator9 - gaming_streamer
+        fullName: "Nguyễn Văn Đức",
+        title: "Gaming Streamer & Esports Content Creator",
+        mainSkills: ["Gaming Content", "Live Streaming", "Esports Commentary", "Video Editing"],
+        experienceYears: 3,
+        experienceDetail: "3 năm kinh nghiệm streaming game và tạo nội dung esports. Chuyên về các tựa game MOBA, FPS và Battle Royale. Twitch 50K followers, YouTube 30K subscribers. Đã hợp tác với các thương hiệu gaming như Razer, Logitech, và các game publishers.",
+        tags: ["gaming", "streaming", "esports", "twitch", "youtube"],
+        isPublic: true,
+      },
+      {
+        user: additionalCreatorUsers[1]._id, // creator10 - music_producer
+        fullName: "Trần Minh Tuấn",
+        title: "Music Producer & Audio Content Creator",
+        mainSkills: ["Music Production", "Audio Editing", "Sound Design", "Podcast Creation"],
+        experienceYears: 5,
+        experienceDetail: "5 năm kinh nghiệm trong lĩnh vực music production và audio content. Chuyên sản xuất nhạc nền, jingles và podcast. Spotify 20K monthly listeners, YouTube 15K subscribers. Đã hợp tác với các thương hiệu để tạo nhạc quảng cáo và audio branding.",
+        tags: ["music", "production", "audio", "podcast", "sound"],
+        isPublic: true,
+      },
+      {
+        user: additionalCreatorUsers[2]._id, // creator11 - fashion_stylist
+        fullName: "Lê Thị Hoa",
+        title: "Fashion Stylist & Style Content Creator",
+        mainSkills: ["Fashion Styling", "Outfit Coordination", "Fashion Photography", "Trend Analysis"],
+        experienceYears: 4,
+        experienceDetail: "4 năm kinh nghiệm trong lĩnh vực fashion styling. Chuyên tạo nội dung về outfit ideas, fashion trends và style tips. Instagram 120K followers, TikTok 90K followers. Đã hợp tác với các thương hiệu thời trang như Zara, H&M, và các local brands.",
+        tags: ["fashion", "styling", "outfit", "trends", "style"],
+        isPublic: true,
+      },
+      {
+        user: additionalCreatorUsers[3]._id, // creator12 - pet_content
+        fullName: "Phạm Văn Long",
+        title: "Pet Content Creator & Animal Lover",
+        mainSkills: ["Pet Photography", "Animal Content", "Pet Care Tips", "Video Editing"],
+        experienceYears: 2,
+        experienceDetail: "2 năm kinh nghiệm tạo nội dung về thú cưng. Chuyên về chó, mèo và các động vật nhỏ. Instagram 80K followers, TikTok 100K followers. Đã hợp tác với các thương hiệu pet food và pet care như Royal Canin, Pedigree.",
+        tags: ["pet", "animal", "dog", "cat", "care"],
+        isPublic: true,
+      },
+      {
+        user: additionalCreatorUsers[4]._id, // creator13 - comedy_creator
+        fullName: "Võ Thị Lan",
+        title: "Comedy Creator & Entertainment Content",
+        mainSkills: ["Comedy Writing", "Sketch Creation", "Entertainment Content", "Video Production"],
+        experienceYears: 3,
+        experienceDetail: "3 năm kinh nghiệm tạo nội dung giải trí và hài kịch. Chuyên về sketch comedy, prank videos và entertainment content. TikTok 200K followers, YouTube 60K subscribers. Đã hợp tác với các thương hiệu để tạo nội dung quảng cáo vui nhộn và thu hút.",
+        tags: ["comedy", "entertainment", "sketch", "funny", "viral"],
+        isPublic: true,
+      },
+      {
+        user: additionalCreatorUsers[5]._id, // creator14 - education_content
+        fullName: "Đỗ Văn Hùng",
+        title: "Education Content Creator & Teacher",
+        mainSkills: ["Educational Content", "Teaching", "Tutorial Creation", "Knowledge Sharing"],
+        experienceYears: 6,
+        experienceDetail: "6 năm kinh nghiệm trong lĩnh vực giáo dục. Chuyên tạo nội dung giáo dục về toán, lý, hóa và kỹ năng sống. YouTube 100K subscribers, TikTok 150K followers. Đã hợp tác với các nền tảng giáo dục và các thương hiệu sách giáo khoa.",
+        tags: ["education", "teaching", "tutorial", "learning", "knowledge"],
+        isPublic: true,
+      },
+      {
+        user: additionalCreatorUsers[6]._id, // creator15 - diy_crafts
+        fullName: "Nguyễn Thị Hương",
+        title: "DIY & Crafts Content Creator",
+        mainSkills: ["DIY Projects", "Craft Making", "Tutorial Creation", "Creative Content"],
+        experienceYears: 4,
+        experienceDetail: "4 năm kinh nghiệm tạo nội dung về DIY và crafts. Chuyên về handmade, home decor và creative projects. Instagram 90K followers, YouTube 40K subscribers. Đã hợp tác với các thương hiệu craft supplies và home decor.",
+        tags: ["diy", "crafts", "handmade", "creative", "tutorial"],
+        isPublic: true,
+      },
+      {
+        user: additionalCreatorUsers[7]._id, // creator16 - travel_vlogger
+        fullName: "Trần Văn Nam",
+        title: "Travel Vlogger & Adventure Content Creator",
+        mainSkills: ["Travel Vlogging", "Adventure Content", "Travel Photography", "Video Editing"],
+        experienceYears: 5,
+        experienceDetail: "5 năm kinh nghiệm tạo nội dung về du lịch và khám phá. Chuyên về travel vlog, adventure content và destination reviews. YouTube 150K subscribers, Instagram 200K followers. Đã hợp tác với các tourism boards, hotels và travel brands.",
+        tags: ["travel", "vlog", "adventure", "exploration", "tourism"],
+        isPublic: true,
+      },
+      {
+        user: additionalCreatorUsers[8]._id, // creator17 - sports_analyst
+        fullName: "Lê Văn An",
+        title: "Sports Analyst & Sports Content Creator",
+        mainSkills: ["Sports Analysis", "Sports Commentary", "Sports Content", "Video Production"],
+        experienceYears: 4,
+        experienceDetail: "4 năm kinh nghiệm phân tích và tạo nội dung về thể thao. Chuyên về bóng đá, bóng rổ và các môn thể thao phổ biến. YouTube 80K subscribers, TikTok 120K followers. Đã hợp tác với các thương hiệu thể thao và sports media.",
+        tags: ["sports", "analysis", "football", "basketball", "commentary"],
+        isPublic: true,
+      },
+      {
+        user: additionalCreatorUsers[9]._id, // creator18 - parenting_tips
+        fullName: "Phạm Thị Mai",
+        title: "Parenting Content Creator & Mom Blogger",
+        mainSkills: ["Parenting Tips", "Family Content", "Childcare Advice", "Lifestyle Content"],
+        experienceYears: 5,
+        experienceDetail: "5 năm kinh nghiệm tạo nội dung về parenting và gia đình. Chuyên về tips chăm sóc trẻ, giáo dục con cái và family lifestyle. Instagram 150K followers, Facebook 100K followers. Đã hợp tác với các thương hiệu baby care, toys và family products.",
+        tags: ["parenting", "family", "kids", "lifestyle", "tips"],
         isPublic: true,
       },
     ]);
