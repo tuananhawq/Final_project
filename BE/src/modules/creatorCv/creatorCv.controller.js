@@ -7,8 +7,39 @@ export const createCreatorCv = async (req, res) => {
   try {
     const { fullName, title, mainSkills, experienceYears, experienceDetail, tags, isPublic, cvFileUrl, cvFileType } = req.body;
 
-    if (!fullName || !title) {
-      return res.status(400).json({ error: "MISSING_REQUIRED_FIELDS" });
+    // Validate required fields
+    if (!fullName || !fullName.trim()) {
+      return res.status(400).json({ error: "MISSING_REQUIRED_FIELDS", message: "Họ tên là bắt buộc" });
+    }
+
+    if (!title || !title.trim()) {
+      return res.status(400).json({ error: "MISSING_REQUIRED_FIELDS", message: "Tiêu đề CV là bắt buộc" });
+    }
+
+    // Validate và chuẩn hóa dữ liệu
+    const normalizedMainSkills = Array.isArray(mainSkills) 
+      ? mainSkills.filter(s => s && s.trim()).map(s => s.trim())
+      : [];
+    
+    const normalizedTags = Array.isArray(tags)
+      ? tags.filter(t => t && t.trim()).map(t => t.trim())
+      : [];
+
+    const normalizedExperienceYears = experienceYears 
+      ? (typeof experienceYears === 'number' ? experienceYears : parseInt(experienceYears) || 0)
+      : 0;
+
+    // Validate cvFileType nếu có cvFileUrl
+    let normalizedCvFileType = cvFileType || "";
+    if (cvFileUrl && !normalizedCvFileType) {
+      // Tự động detect file type từ URL
+      if (cvFileUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+        normalizedCvFileType = "image";
+      } else if (cvFileUrl.match(/\.pdf$/i)) {
+        normalizedCvFileType = "pdf";
+      } else {
+        normalizedCvFileType = "other";
+      }
     }
 
     // 🔥 Mỗi Creator chỉ có 1 CV: nếu đã có thì update, chưa có thì tạo mới
@@ -16,15 +47,15 @@ export const createCreatorCv = async (req, res) => {
       { user: req.user.id },
       {
         user: req.user.id,
-        fullName,
-        title,
-        mainSkills: mainSkills || [],
-        experienceYears: experienceYears || 0,
-        experienceDetail: experienceDetail || "",
-        tags: tags || [],
-        isPublic: isPublic !== undefined ? isPublic : true,
+        fullName: fullName.trim(),
+        title: title.trim(),
+        mainSkills: normalizedMainSkills,
+        experienceYears: normalizedExperienceYears,
+        experienceDetail: experienceDetail ? experienceDetail.trim() : "",
+        tags: normalizedTags,
+        isPublic: isPublic !== undefined ? Boolean(isPublic) : true,
         cvFileUrl: cvFileUrl || "",
-        cvFileType: cvFileType || "",
+        cvFileType: normalizedCvFileType,
       },
       {
         upsert: true,
@@ -36,10 +67,30 @@ export const createCreatorCv = async (req, res) => {
     return res.status(201).json({ cv });
   } catch (err) {
     console.error("createCreatorCv error:", err);
+    console.error("Error details:", {
+      name: err.name,
+      message: err.message,
+      code: err.code,
+      errors: err.errors
+    });
+    
     if (err.code === 11000) {
-      return res.status(400).json({ error: "CREATOR_ALREADY_HAS_CV" });
+      return res.status(400).json({ error: "CREATOR_ALREADY_HAS_CV", message: "Creator đã có CV" });
     }
-    return res.status(500).json({ error: "SERVER_ERROR" });
+    
+    // Validation errors từ Mongoose
+    if (err.name === 'ValidationError') {
+      const validationErrors = Object.values(err.errors).map(e => e.message).join(', ');
+      return res.status(400).json({ 
+        error: "VALIDATION_ERROR", 
+        message: `Lỗi validation: ${validationErrors}` 
+      });
+    }
+    
+    return res.status(500).json({ 
+      error: "SERVER_ERROR", 
+      message: err.message || "Có lỗi xảy ra khi tạo CV" 
+    });
   }
 };
 

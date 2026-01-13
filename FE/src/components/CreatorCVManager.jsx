@@ -149,18 +149,19 @@ export function CreatorCVManager() {
         headers: { Authorization: `Bearer ${token}` },
       };
 
+      // Chuẩn hóa dữ liệu trước khi gửi
       const payload = {
-        fullName: form.fullName,
-        title: form.title,
+        fullName: form.fullName.trim(),
+        title: form.title.trim(),
         mainSkills: form.mainSkills
           ? form.mainSkills.split(",").map((s) => s.trim()).filter(Boolean)
           : [],
-        experienceYears: parseInt(form.experienceYears) || 0,
-        experienceDetail: form.experienceDetail,
+        experienceYears: form.experienceYears ? (parseInt(form.experienceYears) || 0) : 0,
+        experienceDetail: form.experienceDetail ? form.experienceDetail.trim() : "",
         tags: form.tags
           ? form.tags.split(",").map((t) => t.trim()).filter(Boolean)
           : [],
-        isPublic: form.isPublic,
+        isPublic: form.isPublic !== undefined ? Boolean(form.isPublic) : true,
         cvFileUrl: form.cvFileUrl || "",
         cvFileType: form.cvFileType || "",
       };
@@ -175,7 +176,9 @@ export function CreatorCVManager() {
       await fetchCv();
     } catch (err) {
       console.error("Save creator CV error:", err);
-      setError("Có lỗi xảy ra khi lưu CV.");
+      console.error("Error response:", err.response?.data);
+      const errorMsg = err.response?.data?.error || err.response?.data?.message || err.message || "Có lỗi xảy ra khi lưu CV.";
+      setError(errorMsg);
     }
   };
 

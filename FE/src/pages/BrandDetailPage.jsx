@@ -16,10 +16,12 @@ export default function BrandDetailPage() {
   useEffect(() => {
     const fetchBrand = async () => {
       try {
-        const res = await axios.get(`${API_URLS.BRAND}/brands/${id}`);
+        // Sử dụng endpoint đúng: /api/brands/:id
+        const res = await axios.get(`${API_URLS.BRANDS}/${id}`);
         setBrand(res.data.brand);
       } catch (error) {
         console.error("Fetch brand detail error:", error);
+        console.error("Error response:", error.response?.data);
       } finally {
         setLoading(false);
       }

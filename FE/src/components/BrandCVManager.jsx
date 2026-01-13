@@ -150,7 +150,9 @@ export function BrandCVManager() {
       await fetchCvs();
     } catch (err) {
       console.error("Save brand CV error:", err);
-      setError("Có lỗi xảy ra khi lưu CV.");
+      console.error("Error response:", err.response?.data);
+      const errorMsg = err.response?.data?.error || err.response?.data?.message || err.message || "Có lỗi xảy ra khi lưu CV.";
+      setError(errorMsg);
     }
   };
 

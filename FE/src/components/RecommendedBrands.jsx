@@ -9,10 +9,12 @@ export function RecommendedBrands() {
   const fetchBrands = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${API_URLS.BRAND}/brands`);
+      // Sử dụng endpoint đúng: /api/brands
+      const res = await axios.get(`${API_URLS.BRANDS}`);
       setBrands(res.data.brands || []);
     } catch (err) {
       console.error("Fetch brands error:", err);
+      console.error("Error details:", err.response?.data);
     } finally {
       setLoading(false);
     }

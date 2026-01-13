@@ -9,11 +9,12 @@ export const API_URLS = {
   BANNER: `${API_BASE_URL}/banner`,
   CREATOR: `${API_BASE_URL}/creator`,
   BRAND: `${API_BASE_URL}/brand`,
+  BRANDS: `${API_BASE_URL}/brands`, // Endpoint để lấy danh sách brands
   JOB: `${API_BASE_URL}/job`,
   JOB_POST: `${API_BASE_URL}`,
   CV: `${API_BASE_URL}/cv`,
-  BRAND_CV: `${API_BASE_URL}/brand-cv`,
-  CREATOR_CV: `${API_BASE_URL}/creator-cv`,
+  BRAND_CV: `${API_BASE_URL}/brand/cv`, // Endpoint đúng: /api/brand/cv
+  CREATOR_CV: `${API_BASE_URL}/creator/cv`, // Endpoint đúng: /api/creator/cv
   APPLICATION: `${API_BASE_URL}/application`,
   UPLOAD: `${API_BASE_URL}/upload`,
   PAYMENT: `${API_BASE_URL}/payment`,
