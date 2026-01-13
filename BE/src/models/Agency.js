@@ -14,6 +14,10 @@ const agencySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  description: {
+    type: String,
+    default: "",
+  },
   size: {
     type: String,
     enum: ["large", "small"],

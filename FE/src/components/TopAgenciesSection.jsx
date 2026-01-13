@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getAgencies } from "../services/homeService.jsx";
 import "../styles/home/home-agencies.css";
 
@@ -43,13 +44,15 @@ export function TopAgenciesSection() {
         {/* Cards Grid */}
         <div className="home-agencies__grid">
           {agencies.map((agency) => (
-            <div
+            <Link
               key={agency._id}
+              to={`/agency/${agency._id}`}
               className={`home-agencies__card-wrapper ${
                 agency.size === "large"
                   ? "home-agencies__card-wrapper--large"
                   : ""
               }`}
+              style={{ textDecoration: "none", color: "inherit" }}
             >
               <div
                 className={`home-agencies__card ${
@@ -71,7 +74,7 @@ export function TopAgenciesSection() {
                   <h3 className="home-agencies__card-name">{agency.name}</h3>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

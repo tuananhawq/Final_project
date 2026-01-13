@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   getAllHeroes,
   createHero,
@@ -23,11 +23,21 @@ import {
   getFooter,
   updateFooter,
 } from "../services/homeService.jsx";
+import {
+  uploadHeroImage,
+  uploadAgencyImage,
+  uploadCreatorAvatar,
+  uploadTopicImage,
+  uploadTestimonialAvatar,
+} from "../services/uploadService.jsx";
+import { useNotification } from "../context/NotificationContext.jsx";
 
 export function HomeManagement() {
   const [activeTab, setActiveTab] = useState("hero");
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState({});
   const [message, setMessage] = useState("");
+  const { confirm } = useNotification();
 
   // Hero state
   const [heroes, setHeroes] = useState([]);
@@ -47,6 +57,7 @@ export function HomeManagement() {
     name: "",
     rank: "TOP 1",
     image: "",
+    description: "",
     size: "small",
     isActive: true,
   });
@@ -68,6 +79,7 @@ export function HomeManagement() {
   const [topicForm, setTopicForm] = useState({
     title: "",
     image: "",
+    description: "",
     position: "center",
     isActive: true,
   });
@@ -178,6 +190,23 @@ export function HomeManagement() {
     setTimeout(() => setMessage(""), 3000);
   };
 
+  // Upload handlers
+  const handleImageUpload = async (file, uploadFn, setFormFn, fieldName, uploadKey) => {
+    if (!file) return;
+    
+    setUploading({ ...uploading, [uploadKey]: true });
+    
+    try {
+      const result = await uploadFn(file);
+      setFormFn((prev) => ({ ...prev, [fieldName]: result.url }));
+      showMessage("Upload hình ảnh thành công!");
+    } catch (error) {
+      showMessage("Lỗi khi upload: " + (error.response?.data?.message || error.message), "error");
+    } finally {
+      setUploading({ ...uploading, [uploadKey]: false });
+    }
+  };
+
   // Hero handlers
   const handleHeroSubmit = async (e) => {
     e.preventDefault();
@@ -220,7 +249,8 @@ export function HomeManagement() {
   };
 
   const handleDeleteHero = async (id) => {
-    if (!window.confirm("Bạn có chắc muốn xóa Hero này?")) return;
+    const ok = await confirm("Bạn có chắc muốn xóa Hero này?");
+    if (!ok) return;
     try {
       await deleteHero(id);
       showMessage("Xóa Hero thành công!");
@@ -246,6 +276,7 @@ export function HomeManagement() {
         name: "",
         rank: "TOP 1",
         image: "",
+        description: "",
         size: "small",
         isActive: true,
       });
@@ -264,13 +295,15 @@ export function HomeManagement() {
       name: agency.name || "",
       rank: agency.rank || "TOP 1",
       image: agency.image || "",
+      description: agency.description || "",
       size: agency.size || "small",
       isActive: agency.isActive !== undefined ? agency.isActive : true,
     });
   };
 
   const handleDeleteAgency = async (id) => {
-    if (!window.confirm("Bạn có chắc muốn xóa Agency này?")) return;
+    const ok = await confirm("Bạn có chắc muốn xóa Agency này?");
+    if (!ok) return;
     try {
       await deleteAgency(id);
       showMessage("Xóa Agency thành công!");
@@ -320,7 +353,8 @@ export function HomeManagement() {
   };
 
   const handleDeleteCreator = async (id) => {
-    if (!window.confirm("Bạn có chắc muốn xóa Creator này?")) return;
+    const ok = await confirm("Bạn có chắc muốn xóa Creator này?");
+    if (!ok) return;
     try {
       await deleteCreator(id);
       showMessage("Xóa Creator thành công!");
@@ -345,6 +379,7 @@ export function HomeManagement() {
       setTopicForm({
         title: "",
         image: "",
+        description: "",
         position: "center",
         isActive: true,
       });
@@ -362,13 +397,15 @@ export function HomeManagement() {
     setTopicForm({
       title: topic.title || "",
       image: topic.image || "",
+      description: topic.description || "",
       position: topic.position || "center",
       isActive: topic.isActive !== undefined ? topic.isActive : true,
     });
   };
 
   const handleDeleteTopic = async (id) => {
-    if (!window.confirm("Bạn có chắc muốn xóa Topic này?")) return;
+    const ok = await confirm("Bạn có chắc muốn xóa Topic này?");
+    if (!ok) return;
     try {
       await deleteTopic(id);
       showMessage("Xóa Topic thành công!");
@@ -418,7 +455,8 @@ export function HomeManagement() {
   };
 
   const handleDeleteTestimonial = async (id) => {
-    if (!window.confirm("Bạn có chắc muốn xóa Testimonial này?")) return;
+    const ok = await confirm("Bạn có chắc muốn xóa Testimonial này?");
+    if (!ok) return;
     try {
       await deleteTestimonial(id);
       showMessage("Xóa Testimonial thành công!");
@@ -545,14 +583,42 @@ export function HomeManagement() {
               />
               <label>
                 Hình ảnh nền <span style={{ color: "#c00" }}>*</span>
-                <input
-                  type="text"
-                  placeholder="Nhập URL hình ảnh"
-                  value={heroForm.backgroundImage}
-                  onChange={(e) => setHeroForm({ ...heroForm, backgroundImage: e.target.value })}
-                  required
-                  style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", width: "100%", marginTop: "5px" }}
-                />
+                <div style={{ display: "flex", gap: "10px", marginTop: "5px" }}>
+                  <input
+                    type="text"
+                    placeholder="Nhập URL hình ảnh hoặc upload"
+                    value={heroForm.backgroundImage}
+                    onChange={(e) => setHeroForm({ ...heroForm, backgroundImage: e.target.value })}
+                    required
+                    style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", flex: 1 }}
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        handleImageUpload(file, uploadHeroImage, setHeroForm, "backgroundImage", "hero_upload");
+                      }
+                    }}
+                    style={{ display: "none" }}
+                    id="hero-image-upload"
+                  />
+                  <label
+                    htmlFor="hero-image-upload"
+                    style={{
+                      padding: "8px 16px",
+                      background: uploading.hero_upload ? "#666" : "#111827",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: uploading.hero_upload ? "not-allowed" : "pointer",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {uploading.hero_upload ? "Đang upload..." : "📤 Upload"}
+                  </label>
+                </div>
               </label>
               <label>
                 <input
@@ -685,14 +751,55 @@ export function HomeManagement() {
               </select>
               <label>
                 Hình ảnh <span style={{ color: "#c00" }}>*</span>
-                <input
-                  type="text"
-                  placeholder="Nhập URL hình ảnh"
-                  value={agencyForm.image}
-                  onChange={(e) => setAgencyForm({ ...agencyForm, image: e.target.value })}
-                  required
-                  style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", width: "100%", marginTop: "5px" }}
+                <div style={{ display: "flex", gap: "10px", marginTop: "5px" }}>
+                  <input
+                    type="text"
+                    placeholder="Nhập URL hình ảnh hoặc upload"
+                    value={agencyForm.image}
+                    onChange={(e) => setAgencyForm({ ...agencyForm, image: e.target.value })}
+                    required
+                    style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", flex: 1 }}
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        handleImageUpload(file, uploadAgencyImage, setAgencyForm, "image", "agency_upload");
+                      }
+                    }}
+                    style={{ display: "none" }}
+                    id="agency-image-upload"
+                  />
+                  <label
+                    htmlFor="agency-image-upload"
+                    style={{
+                      padding: "8px 16px",
+                      background: uploading.image_upload ? "#666" : "#111827",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: uploading.image_upload ? "not-allowed" : "pointer",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {uploading.image_upload ? "Đang upload..." : "📤 Upload"}
+                  </label>
+                </div>
+              </label>
+              <label>
+                Mô tả chi tiết (Description)
+                <textarea
+                  placeholder="Nhập mô tả chi tiết về Agency/Brand (sẽ hiển thị ở trang detail)..."
+                  value={agencyForm.description}
+                  onChange={(e) => setAgencyForm({ ...agencyForm, description: e.target.value })}
+                  rows={6}
+                  style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", width: "100%", marginTop: "5px", fontFamily: "inherit", resize: "vertical" }}
                 />
+                <small style={{ color: "#666", display: "block", marginTop: "4px" }}>
+                  Mô tả này sẽ hiển thị ở trang detail khi người dùng click vào Agency
+                </small>
               </label>
               <select
                 value={agencyForm.size}
@@ -733,6 +840,7 @@ export function HomeManagement() {
                       name: "",
                       rank: "TOP 1",
                       image: "",
+                      description: "",
                       size: "small",
                       isActive: true,
                     });
@@ -769,6 +877,13 @@ export function HomeManagement() {
                 <div>
                   <strong>{agency.rank} - {agency.name}</strong>
                   <p style={{ margin: "5px 0", color: "#666" }}>Size: {agency.size}</p>
+                  {agency.description && (
+                    <p style={{ margin: "5px 0", color: "#666", fontSize: "0.9rem", fontStyle: "italic" }}>
+                      {agency.description.length > 100 
+                        ? agency.description.substring(0, 100) + "..." 
+                        : agency.description}
+                    </p>
+                  )}
                   <span style={{ fontSize: "12px", color: agency.isActive ? "#0c0" : "#c00" }}>
                     {agency.isActive ? "Đang hiển thị" : "Ẩn"}
                   </span>
@@ -821,24 +936,58 @@ export function HomeManagement() {
                 required
                 style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd" }}
               />
-              <input
-                type="text"
-                placeholder="Mô tả (ví dụ: Content Creator - 1.2M followers)"
-                value={creatorForm.description}
-                onChange={(e) => setCreatorForm({ ...creatorForm, description: e.target.value })}
-                required
-                style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd" }}
-              />
+              <label>
+                Mô tả <span style={{ color: "#c00" }}>*</span>
+                <textarea
+                  placeholder="Nhập mô tả chi tiết về Creator (sẽ hiển thị ở trang detail)..."
+                  value={creatorForm.description}
+                  onChange={(e) => setCreatorForm({ ...creatorForm, description: e.target.value })}
+                  required
+                  rows={4}
+                  style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", width: "100%", marginTop: "5px", fontFamily: "inherit", resize: "vertical" }}
+                />
+                <small style={{ color: "#666", display: "block", marginTop: "4px" }}>
+                  Mô tả này sẽ hiển thị ở trang detail khi người dùng click vào Creator
+                </small>
+              </label>
               <label>
                 Avatar <span style={{ color: "#c00" }}>*</span>
-                <input
-                  type="text"
-                  placeholder="Nhập URL avatar"
-                  value={creatorForm.avatar}
-                  onChange={(e) => setCreatorForm({ ...creatorForm, avatar: e.target.value })}
-                  required
-                  style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", width: "100%", marginTop: "5px" }}
-                />
+                <div style={{ display: "flex", gap: "10px", marginTop: "5px" }}>
+                  <input
+                    type="text"
+                    placeholder="Nhập URL avatar hoặc upload"
+                    value={creatorForm.avatar}
+                    onChange={(e) => setCreatorForm({ ...creatorForm, avatar: e.target.value })}
+                    required
+                    style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", flex: 1 }}
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        handleImageUpload(file, uploadCreatorAvatar, setCreatorForm, "avatar", "creator_upload");
+                      }
+                    }}
+                    style={{ display: "none" }}
+                    id="creator-avatar-upload"
+                  />
+                  <label
+                    htmlFor="creator-avatar-upload"
+                    style={{
+                      padding: "8px 16px",
+                      background: uploading.creator_upload ? "#666" : "#111827",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: uploading.creator_upload ? "not-allowed" : "pointer",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {uploading.creator_upload ? "Đang upload..." : "📤 Upload"}
+                  </label>
+                </div>
               </label>
               <input
                 type="text"
@@ -968,14 +1117,55 @@ export function HomeManagement() {
               />
               <label>
                 Hình ảnh <span style={{ color: "#c00" }}>*</span>
-                <input
-                  type="text"
-                  placeholder="Nhập URL hình ảnh"
-                  value={topicForm.image}
-                  onChange={(e) => setTopicForm({ ...topicForm, image: e.target.value })}
-                  required
-                  style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", width: "100%", marginTop: "5px" }}
+                <div style={{ display: "flex", gap: "10px", marginTop: "5px" }}>
+                  <input
+                    type="text"
+                    placeholder="Nhập URL hình ảnh hoặc upload"
+                    value={topicForm.image}
+                    onChange={(e) => setTopicForm({ ...topicForm, image: e.target.value })}
+                    required
+                    style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", flex: 1 }}
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        handleImageUpload(file, uploadTopicImage, setTopicForm, "image", "topic_upload");
+                      }
+                    }}
+                    style={{ display: "none" }}
+                    id="topic-image-upload"
+                  />
+                  <label
+                    htmlFor="topic-image-upload"
+                    style={{
+                      padding: "8px 16px",
+                      background: uploading.topic_upload ? "#666" : "#111827",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: uploading.topic_upload ? "not-allowed" : "pointer",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {uploading.topic_upload ? "Đang upload..." : "📤 Upload"}
+                  </label>
+                </div>
+              </label>
+              <label>
+                Mô tả chi tiết (Description)
+                <textarea
+                  placeholder="Nhập mô tả chi tiết về chủ đề (sẽ hiển thị ở trang detail)..."
+                  value={topicForm.description}
+                  onChange={(e) => setTopicForm({ ...topicForm, description: e.target.value })}
+                  rows={6}
+                  style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", width: "100%", marginTop: "5px", fontFamily: "inherit", resize: "vertical" }}
                 />
+                <small style={{ color: "#666", display: "block", marginTop: "4px" }}>
+                  Mô tả này sẽ hiển thị ở trang detail khi người dùng click vào chủ đề
+                </small>
               </label>
               <select
                 value={topicForm.position}
@@ -1016,6 +1206,7 @@ export function HomeManagement() {
                     setTopicForm({
                       title: "",
                       image: "",
+                      description: "",
                       position: "center",
                       isActive: true,
                     });
@@ -1052,6 +1243,13 @@ export function HomeManagement() {
                 <div>
                   <strong>{topic.title}</strong>
                   <p style={{ margin: "5px 0", color: "#666" }}>Vị trí: {topic.position}</p>
+                  {topic.description && (
+                    <p style={{ margin: "5px 0", color: "#666", fontSize: "0.9rem", fontStyle: "italic" }}>
+                      {topic.description.length > 100 
+                        ? topic.description.substring(0, 100) + "..." 
+                        : topic.description}
+                    </p>
+                  )}
                   <span style={{ fontSize: "12px", color: topic.isActive ? "#0c0" : "#c00" }}>
                     {topic.isActive ? "Đang hiển thị" : "Ẩn"}
                   </span>
@@ -1122,14 +1320,42 @@ export function HomeManagement() {
               />
               <label>
                 Avatar <span style={{ color: "#c00" }}>*</span>
-                <input
-                  type="text"
-                  placeholder="Nhập URL avatar"
-                  value={testimonialForm.avatar}
-                  onChange={(e) => setTestimonialForm({ ...testimonialForm, avatar: e.target.value })}
-                  required
-                  style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", width: "100%", marginTop: "5px" }}
-                />
+                <div style={{ display: "flex", gap: "10px", marginTop: "5px" }}>
+                  <input
+                    type="text"
+                    placeholder="Nhập URL avatar hoặc upload"
+                    value={testimonialForm.avatar}
+                    onChange={(e) => setTestimonialForm({ ...testimonialForm, avatar: e.target.value })}
+                    required
+                    style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd", flex: 1 }}
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        handleImageUpload(file, uploadTestimonialAvatar, setTestimonialForm, "avatar", "testimonial_upload");
+                      }
+                    }}
+                    style={{ display: "none" }}
+                    id="testimonial-avatar-upload"
+                  />
+                  <label
+                    htmlFor="testimonial-avatar-upload"
+                    style={{
+                      padding: "8px 16px",
+                      background: uploading.testimonial_upload ? "#666" : "#111827",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: uploading.testimonial_upload ? "not-allowed" : "pointer",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {uploading.testimonial_upload ? "Đang upload..." : "📤 Upload"}
+                  </label>
+                </div>
               </label>
               <label>
                 <input

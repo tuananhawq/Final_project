@@ -44,7 +44,16 @@ export default function CreatorLayout() {
   }, [navigate]);
 
   if (loading) {
-    return <div className="loading">Đang tải...</div>;
+    return (
+      <div className="creator-page">
+        <Header />
+        <div className="creator-loading-container">
+          <div className="creator-loading-spinner"></div>
+          <p className="creator-loading-text">Đang tải...</p>
+        </div>
+        <Footer />
+      </div>
+    );
   }
 
   const isCreator = user?.roles?.includes("creator") || false;

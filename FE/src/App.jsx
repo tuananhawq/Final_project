@@ -23,6 +23,13 @@ import BrandMyNewsPage from "./pages/brand/BrandMyNewsPage.jsx";
 import JobDetailPage from "./pages/JobDetailPage.jsx";
 import HighlightDetail from "./pages/HighlightDetail.jsx";
 import JobOffersPage from "./pages/JobOffersPage.jsx";
+import AgencyDetailPage from "./pages/AgencyDetailPage.jsx";
+import CreatorDetailPage from "./pages/CreatorDetailPage.jsx";
+import TopicDetailPage from "./pages/TopicDetailPage.jsx";
+import TestimonialDetailPage from "./pages/TestimonialDetailPage.jsx";
+import JobPostDetailPage from "./pages/JobPostDetailPage.jsx";
+import CVDetailPage from "./pages/CVDetailPage.jsx";
+import BrandDetailPage from "./pages/BrandDetailPage.jsx";
 
 export default function App() {
   return (
@@ -42,12 +49,18 @@ export default function App() {
       <Route path="/about" element={<About />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/highlight/:id" element={<HighlightDetail />} />
+      <Route path="/agency/:id" element={<AgencyDetailPage />} />
+      <Route path="/creator-detail/:id" element={<CreatorDetailPage />} />
+      <Route path="/topic/:id" element={<TopicDetailPage />} />
+      <Route path="/testimonial/:id" element={<TestimonialDetailPage />} />
       
       {/* Creator routes với nested routing */}
       <Route path="/creator" element={<CreatorLayout />}>
         <Route index element={<Navigate to="/creator/news" replace />} />
         <Route path="news" element={<CreatorNewsPage />} />
+        <Route path="news/:id" element={<JobPostDetailPage />} />
         <Route path="recommended" element={<CreatorRecommendedPage />} />
+        <Route path="recommended/:id" element={<BrandDetailPage />} />
         <Route path="cv" element={<CreatorCVPage />} />
         <Route path="applications" element={<CreatorApplicationsPage />} />
       </Route>
@@ -56,9 +69,12 @@ export default function App() {
       <Route path="/brand" element={<BrandLayout />}>
         <Route index element={<Navigate to="/brand/news" replace />} />
         <Route path="news" element={<BrandNewsPage />} />
+        <Route path="news/:id" element={<JobPostDetailPage />} />
         <Route path="recommended" element={<BrandRecommendedPage />} />
+        <Route path="recommended/:id" element={<CVDetailPage />} />
         <Route path="cv" element={<BrandCVPage />} />
         <Route path="mynews" element={<BrandMyNewsPage />} />
+        <Route path="mynews/:id" element={<JobPostDetailPage />} />
       </Route>
 
       <Route path="/job-offers" element={<JobOffersPage />} />

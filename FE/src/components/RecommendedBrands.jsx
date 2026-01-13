@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 export function RecommendedBrands() {
   const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedBrand, setSelectedBrand] = useState(null);
-
   const fetchBrands = async () => {
     try {
       setLoading(true);
@@ -74,75 +73,18 @@ export function RecommendedBrands() {
                 )}
               </div>
 
-              <button
+              <Link
+                to={`/creator/recommended/${brand._id}`}
                 className="cv-detail-btn"
-                onClick={() => setSelectedBrand(brand)}
+                style={{ textDecoration: "none", display: "block", textAlign: "center" }}
               >
                 Xem chi tiết Brand
-              </button>
+              </Link>
             </div>
           ))}
         </div>
       )}
 
-      {selectedBrand && (
-        <div
-          className="brand-modal-overlay"
-          onClick={() => setSelectedBrand(null)}
-        >
-          <div
-            className="brand-modal"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <h3>{selectedBrand.companyName}</h3>
-            {selectedBrand.logo && (
-              <img
-                src={selectedBrand.logo}
-                alt={selectedBrand.companyName}
-                style={{ maxWidth: "200px", marginBottom: 16 }}
-              />
-            )}
-
-            <div className="brand-modal-section">
-              <h4>Ngành nghề</h4>
-              <p>{selectedBrand.industry || "Chưa cập nhật"}</p>
-            </div>
-
-            <div className="brand-modal-section">
-              <h4>Mô tả</h4>
-              <p>{selectedBrand.description || "Chưa có mô tả"}</p>
-            </div>
-
-            {selectedBrand.website && (
-              <div className="brand-modal-section">
-                <h4>Website</h4>
-                <a
-                  href={selectedBrand.website}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="brand-website"
-                >
-                  {selectedBrand.website}
-                </a>
-              </div>
-            )}
-
-            <div className="brand-modal-section">
-              <h4>Followers</h4>
-              <p>{selectedBrand.followers || "0"}</p>
-            </div>
-
-            <button
-              className="brand-modal-close"
-              onClick={() => setSelectedBrand(null)}
-            >
-              Đóng
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getTopics } from "../services/homeService.jsx";
 import "../styles/home/home-topics.css";
 
@@ -37,7 +38,7 @@ export function TopicsSection() {
         <div className="home-topics__title-wrapper">
           <div className="home-topics__decorative-line" />
           <h2 className="home-topics__title">
-            Chủ đề yêu thích trong tuần
+            Chủ đề yêu thích
           </h2>
           <div className="home-topics__decorative-line" />
         </div>
@@ -47,9 +48,11 @@ export function TopicsSection() {
           {topics.map((topic, index) => {
             const position = topic.position || positions[index % 3];
             return (
-              <div
+              <Link
                 key={topic._id}
+                to={`/topic/${topic._id}`}
                 className={`home-topics__item home-topics__item--${position}`}
+                style={{ textDecoration: "none", color: "inherit" }}
               >
                 <div className="home-topics__card">
                   <img
@@ -62,7 +65,7 @@ export function TopicsSection() {
                     <h3 className="home-topics__card-title">{topic.title}</h3>
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>

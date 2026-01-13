@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getCreators } from "../services/homeService.jsx";
 import "../styles/home/home-creators.css";
 
@@ -43,7 +44,12 @@ export function TopCreatorsSection() {
         {/* Creators Grid */}
         <div className="home-creators__grid">
           {creators.map((creator) => (
-            <div key={creator._id} className="home-creators__item">
+            <Link
+              key={creator._id}
+              to={`/creator-detail/${creator._id}`}
+              className="home-creators__item"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
               <div className="home-creators__avatar-wrapper">
                 <div className="home-creators__avatar-border">
                   <div className="home-creators__avatar-inner">
@@ -60,7 +66,7 @@ export function TopCreatorsSection() {
                 {creator.description}
                 {creator.followers && ` - ${creator.followers} followers`}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { HomeManagement } from "../components/HomeManagement.jsx";
 import { BlogManagement } from "../components/BlogManagement.jsx";
 import { UserManagement } from "../components/UserManagement.jsx";
+import { ImageManagement } from "../components/ImageManagement.jsx";
 import "../styles/dashboard.css";
 
 export default function Dashboard() {
@@ -70,31 +71,42 @@ export default function Dashboard() {
               onClick={() => handleMenuClick("dashboard")}
               style={{ cursor: "pointer" }}
             >
-              Dashboard
+              <span>📊</span> Dashboard
             </div>
             <div
               className={`nav-item ${activeMenu === "home-management" ? "active" : ""}`}
               onClick={() => handleMenuClick("home-management")}
               style={{ cursor: "pointer" }}
             >
-              Quản lý Home
+              <span>🏠</span> Quản lý Home
             </div>
             <div
               className={`nav-item ${activeMenu === "blog-management" ? "active" : ""}`}
               onClick={() => handleMenuClick("blog-management")}
               style={{ cursor: "pointer" }}
             >
-              Quản lý Blog
+              <span>📝</span> Quản lý Blog
             </div>
             <div
               className={`nav-item ${activeMenu === "user-management" ? "active" : ""}`}
               onClick={() => handleMenuClick("user-management")}
               style={{ cursor: "pointer" }}
             >
-              Quản lý Users
+              <span>👥</span> Quản lý Users
             </div>
-            <div className="nav-item">Reports</div>
-            <div className="nav-item">Settings</div>
+            <div
+              className={`nav-item ${activeMenu === "image-management" ? "active" : ""}`}
+              onClick={() => handleMenuClick("image-management")}
+              style={{ cursor: "pointer" }}
+            >
+              <span>🖼️</span> Quản lý Hình ảnh
+            </div>
+            <div className="nav-item">
+              <span>📈</span> Reports
+            </div>
+            <div className="nav-item">
+              <span>⚙️</span> Settings
+            </div>
           </nav>
           <div className="sidebar-footer">© 2025 Company</div>
         </aside>
@@ -129,6 +141,8 @@ export default function Dashboard() {
               <BlogManagement />
             ) : activeMenu === "user-management" ? (
               <UserManagement />
+            ) : activeMenu === "image-management" ? (
+              <ImageManagement />
             ) : (
               <>
                 {/* STATS */}

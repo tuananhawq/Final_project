@@ -1,0 +1,297 @@
+/* Agency Detail Page Styles */
+.agency-detail-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  color: #e5e7eb;
+}
+
+.agency-detail-main {
+  flex: 1;
+  width: 100%;
+}
+
+/* Loading & Not Found */
+.agency-detail-loading,
+.agency-detail-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 40px 20px;
+}
+
+.agency-detail-not-found h2 {
+  margin-bottom: 20px;
+  color: #e5e7eb;
+}
+
+.agency-detail-not-found button {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.agency-detail-not-found button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* Hero Section - Tiêu đề lớn căn giữa */
+.agency-detail-hero {
+  padding: 80px 20px 60px;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.1) 0%,
+    rgba(139, 92, 246, 0.1) 100%
+  );
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.agency-detail-hero__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.agency-detail-hero__title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #e5e7eb 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.agency-detail-hero__subtitle {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  color: #94a3b8;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Content Section - 2 cột */
+.agency-detail-content {
+  padding: 80px 20px;
+}
+
+.agency-detail-content__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+
+/* Cột trái: Hình ảnh + Rank Badge */
+.agency-detail-content__left {
+  position: sticky;
+  top: 100px;
+}
+
+.agency-detail-image-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+.agency-detail-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.agency-detail-image-wrapper:hover .agency-detail-image {
+  transform: scale(1.05);
+}
+
+.agency-detail-rank-badge {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  padding: 16px 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(251, 191, 36, 0.4);
+  z-index: 10;
+}
+
+.agency-detail-rank-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.05em;
+}
+
+/* Cột phải: Nội dung chữ */
+.agency-detail-content__right {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.agency-detail-story {
+  background: rgba(30, 41, 59, 0.6);
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.agency-detail-story__title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #e5e7eb;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid rgba(99, 102, 241, 0.3);
+}
+
+.agency-detail-story__content {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #cbd5e1;
+}
+
+.agency-detail-story__content p {
+  margin-bottom: 20px;
+}
+
+.agency-detail-story__content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Achievements Section */
+.agency-detail-achievements {
+  background: rgba(30, 41, 59, 0.6);
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.agency-detail-achievements__title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #e5e7eb;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+}
+
+.agency-detail-achievements__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.agency-detail-achievements__list li {
+  padding: 16px 0;
+  padding-left: 32px;
+  position: relative;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.agency-detail-achievements__list li:last-child {
+  border-bottom: none;
+}
+
+.agency-detail-achievements__list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 16px;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .agency-detail-content__container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .agency-detail-content__left {
+    position: static;
+  }
+
+  .agency-detail-image-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .agency-detail-hero {
+    padding: 60px 20px 40px;
+  }
+
+  .agency-detail-content {
+    padding: 60px 20px;
+  }
+
+  .agency-detail-story,
+  .agency-detail-achievements {
+    padding: 30px 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .agency-detail-hero {
+    padding: 40px 20px 30px;
+  }
+
+  .agency-detail-content {
+    padding: 40px 20px;
+  }
+
+  .agency-detail-story,
+  .agency-detail-achievements {
+    padding: 24px 20px;
+  }
+
+  .agency-detail-story__title {
+    font-size: 1.5rem;
+  }
+
+  .agency-detail-achievements__title {
+    font-size: 1.5rem;
+  }
+
+  .agency-detail-rank-badge {
+    top: 16px;
+    right: 16px;
+    padding: 12px 18px;
+  }
+
+  .agency-detail-rank-text {
+    font-size: 1.25rem;
+  }
+}

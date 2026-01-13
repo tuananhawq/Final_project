@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { CreateJobPostModal } from "./CreateJobPostModal";
 import { ApplicationManagement } from "./ApplicationManagement";
+import { useNotification } from "../context/NotificationContext.jsx";
 
 export function MyJobPosts() {
   const [posts, setPosts] = useState([]);
@@ -12,6 +14,7 @@ export function MyJobPosts() {
   const [applicationCounts, setApplicationCounts] = useState({});
 
   const token = localStorage.getItem("token");
+  const { confirm, notifySuccess, notifyError } = useNotification();
 
   const fetchPosts = async () => {
     try {
@@ -68,9 +71,8 @@ export function MyJobPosts() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Bạn có chắc chắn muốn xóa tin tuyển dụng này?")) {
-      return;
-    }
+    const ok = await confirm("Bạn có chắc chắn muốn xóa tin tuyển dụng này?");
+    if (!ok) return;
     try {
       await axios.delete(
         `http://localhost:3000/api/brand/job-post/${id}`,
@@ -79,8 +81,10 @@ export function MyJobPosts() {
         }
       );
       await fetchPosts();
+      notifySuccess("Đã xóa tin tuyển dụng.");
     } catch (err) {
       console.error("Delete job post error:", err);
+      notifyError("Xóa tin tuyển dụng thất bại. Vui lòng thử lại.");
     }
   };
 
@@ -110,7 +114,14 @@ export function MyJobPosts() {
           {posts.map((post) => (
             <div key={post._id} className="brand-job-card">
               <div className="brand-job-header">
-                <h3>{post.title}</h3>
+                <Link
+                  to={`/brand/mynews/${post._id}`}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  <h3 style={{ cursor: "pointer", display: "inline-block" }}>
+                    {post.title}
+                  </h3>
+                </Link>
                 <span className="job-type">{post.jobType}</span>
               </div>
               <div className="brand-job-meta">

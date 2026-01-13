@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNotification } from "../context/NotificationContext.jsx";
 
 export function BrandCVManager() {
   const [cvs, setCvs] = useState([]);
@@ -16,6 +17,7 @@ export function BrandCVManager() {
   const [uploading, setUploading] = useState(false);
 
   const token = localStorage.getItem("token");
+  const { confirm, notifySuccess, notifyError } = useNotification();
 
   const fetchCvs = async () => {
     try {
@@ -152,15 +154,18 @@ export function BrandCVManager() {
   };
 
   const handleDelete = async (cvId) => {
-    if (!window.confirm("Bạn có chắc chắn muốn xóa CV này?")) return;
+    const ok = await confirm("Bạn có chắc chắn muốn xóa CV này?");
+    if (!ok) return;
 
     try {
       await axios.delete(`http://localhost:3000/api/brand/cv/${cvId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       await fetchCvs();
+      notifySuccess("Đã xóa CV.");
     } catch (err) {
       console.error("Delete brand CV error:", err);
+      notifyError("Xóa CV thất bại. Vui lòng thử lại.");
     }
   };
 

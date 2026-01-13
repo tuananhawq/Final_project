@@ -5,11 +5,13 @@ import {
   updateBlog,
   deleteBlog,
 } from "../services/blogService.jsx";
+import { uploadBlogImage } from "../services/uploadService.jsx";
+import { useNotification } from "../context/NotificationContext.jsx";
 
 export function BlogManagement() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [uploading, setUploading] = useState(false);
   const [blogForm, setBlogForm] = useState({
     title: "",
     content: "",
@@ -21,6 +23,7 @@ export function BlogManagement() {
     isPublished: true,
   });
   const [editingBlog, setEditingBlog] = useState(null);
+  const { notifySuccess, notifyError, confirm } = useNotification();
 
   useEffect(() => {
     loadBlogs();
@@ -31,13 +34,26 @@ export function BlogManagement() {
       const data = await getAllBlogs();
       setBlogs(data);
     } catch (error) {
-      showMessage("Lỗi khi tải blogs: " + error.message, "error");
+      notifyError("Lỗi khi tải blogs: " + error.message);
     }
   };
 
-  const showMessage = (msg, type = "success") => {
-    setMessage(msg);
-    setTimeout(() => setMessage(""), 3000);
+  const handleImageUpload = async (file) => {
+    if (!file) return;
+    
+    setUploading(true);
+    try {
+      const result = await uploadBlogImage(file);
+      setBlogForm({ ...blogForm, image: result.url });
+      notifySuccess("Upload hình ảnh thành công!");
+    } catch (error) {
+      notifyError(
+        "Lỗi khi upload: " +
+          (error.response?.data?.message || error.message)
+      );
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -53,10 +69,10 @@ export function BlogManagement() {
 
       if (editingBlog) {
         await updateBlog(editingBlog._id, formData);
-        showMessage("Cập nhật Blog thành công!");
+        notifySuccess("Cập nhật Blog thành công!");
       } else {
         await createBlog(formData);
-        showMessage("Tạo Blog thành công!");
+        notifySuccess("Tạo Blog thành công!");
       }
 
       setBlogForm({
@@ -72,7 +88,7 @@ export function BlogManagement() {
       setEditingBlog(null);
       loadBlogs();
     } catch (error) {
-      showMessage("Lỗi: " + error.message, "error");
+      notifyError("Lỗi: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -93,33 +109,20 @@ export function BlogManagement() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Bạn có chắc muốn xóa Blog này?")) return;
+    const ok = await confirm("Bạn có chắc muốn xóa Blog này?");
+    if (!ok) return;
     try {
       await deleteBlog(id);
-      showMessage("Xóa Blog thành công!");
+      notifySuccess("Xóa Blog thành công!");
       loadBlogs();
     } catch (error) {
-      showMessage("Lỗi: " + error.message, "error");
+      notifyError("Lỗi: " + error.message);
     }
   };
 
   return (
     <div style={{ padding: "20px" }}>
       <h2 style={{ marginBottom: "20px" }}>Quản lý Blog & News</h2>
-
-      {message && (
-        <div
-          style={{
-            padding: "10px",
-            marginBottom: "20px",
-            backgroundColor: message.includes("Lỗi") ? "#fee" : "#efe",
-            color: message.includes("Lỗi") ? "#c00" : "#0c0",
-            borderRadius: "4px",
-          }}
-        >
-          {message}
-        </div>
-      )}
 
       {/* Form */}
       <div style={{ marginBottom: "30px", padding: "20px", background: "#1f2937", borderRadius: "8px" }}>
@@ -146,21 +149,50 @@ export function BlogManagement() {
             <label style={{ display: "block", marginBottom: "8px", fontWeight: "500" }}>
               Hình ảnh <span style={{ color: "#c00" }}>*</span>
             </label>
-            <input
-              type="text"
-              placeholder="Nhập URL hình ảnh"
-              value={blogForm.image}
-              onChange={(e) => setBlogForm({ ...blogForm, image: e.target.value })}
-              required
-              style={{
-                padding: "10px",
-                borderRadius: "4px",
-                border: "1px solid #374151",
-                background: "#111827",
-                color: "#fff",
-                width: "100%",
-              }}
-            />
+            <div style={{ display: "flex", gap: "10px" }}>
+              <input
+                type="text"
+                placeholder="Nhập URL hình ảnh hoặc upload"
+                value={blogForm.image}
+                onChange={(e) => setBlogForm({ ...blogForm, image: e.target.value })}
+                required
+                style={{
+                  padding: "10px",
+                  borderRadius: "4px",
+                  border: "1px solid #374151",
+                  background: "#111827",
+                  color: "#fff",
+                  flex: 1,
+                }}
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    handleImageUpload(file);
+                  }
+                }}
+                style={{ display: "none" }}
+                id="blog-image-upload"
+              />
+              <label
+                htmlFor="blog-image-upload"
+                style={{
+                  padding: "10px 20px",
+                  background: uploading ? "#666" : "#111827",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: uploading ? "not-allowed" : "pointer",
+                  whiteSpace: "nowrap",
+                  fontWeight: "600",
+                }}
+              >
+                {uploading ? "Đang upload..." : "📤 Upload"}
+              </label>
+            </div>
 
             <textarea
               placeholder="Mô tả ngắn (excerpt)"

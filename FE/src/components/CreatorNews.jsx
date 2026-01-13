@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useNotification } from "../context/NotificationContext.jsx";
 
 export function CreatorNews() {
   const [posts, setPosts] = useState([]);
   const [pagination, setPagination] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [selectedPost, setSelectedPost] = useState(null);
   const [appliedPosts, setAppliedPosts] = useState(new Set()); // Track các bài đã ứng tuyển
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const { notifySuccess, notifyError, notifyInfo } = useNotification();
 
   const fetchPosts = async (page = 1) => {
     try {
@@ -47,16 +49,6 @@ export function CreatorNews() {
     }
   };
 
-  const fetchDetail = async (id) => {
-    try {
-      const res = await axios.get(
-        `http://localhost:3000/api/job-posts/${id}`
-      );
-      setSelectedPost(res.data.post);
-    } catch (err) {
-      console.error("Fetch job post detail error:", err);
-    }
-  };
 
   const handleApply = async (jobPostId) => {
     if (!token) {
@@ -74,13 +66,13 @@ export function CreatorNews() {
       );
       // Cập nhật danh sách đã ứng tuyển
       setAppliedPosts((prev) => new Set([...prev, jobPostId]));
-      alert("Ứng tuyển thành công!");
+      notifySuccess("Ứng tuyển thành công!");
     } catch (err) {
       console.error("Apply error:", err);
       if (err.response?.data?.error === "ALREADY_APPLIED") {
-        alert("Bạn đã ứng tuyển bài này rồi!");
+        notifyInfo("Bạn đã ứng tuyển bài này rồi!");
       } else {
-        alert("Có lỗi xảy ra khi ứng tuyển. Vui lòng thử lại.");
+        notifyError("Có lỗi xảy ra khi ứng tuyển. Vui lòng thử lại.");
       }
     }
   };
@@ -105,10 +97,11 @@ export function CreatorNews() {
           {posts.map((post) => {
             const isApplied = appliedPosts.has(post._id);
             return (
-              <div
+              <Link
                 key={post._id}
+                to={`/creator/news/${post._id}`}
                 className="brand-news-item"
-                onClick={() => fetchDetail(post._id)}
+                style={{ textDecoration: "none", color: "inherit" }}
               >
                 <div className="brand-news-header">
                   <span className="brand-name">{post.brandName}</span>
@@ -143,7 +136,7 @@ export function CreatorNews() {
                     ✓ Đã ứng tuyển
                   </div>
                 )}
-              </div>
+              </Link>
             );
           })}
         </div>
@@ -169,67 +162,6 @@ export function CreatorNews() {
         </div>
       )}
 
-      {selectedPost && (
-        <div
-          className="brand-modal-overlay"
-          onClick={() => setSelectedPost(null)}
-        >
-          <div
-            className="brand-modal"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <h3>{selectedPost.title}</h3>
-            <p className="brand-modal-brand">
-              {selectedPost.brandName} · {selectedPost.jobType} ·{" "}
-              {selectedPost.workTime}
-            </p>
-            <p className="brand-modal-budget">{selectedPost.budget}</p>
-            <div className="brand-modal-section">
-              <h4>Nội dung công việc</h4>
-              <p>{selectedPost.content}</p>
-            </div>
-            <div className="brand-modal-section">
-              <h4>Yêu cầu ứng viên</h4>
-              <p>{selectedPost.requirements}</p>
-            </div>
-            <div className="brand-modal-section">
-              <h4>Quyền lợi / Hỗ trợ từ Brand</h4>
-              <p>{selectedPost.benefits}</p>
-            </div>
-            <div className="brand-form-actions" style={{ marginTop: 24 }}>
-              {appliedPosts.has(selectedPost._id) ? (
-                <button
-                  className="secondary-btn"
-                  style={{ width: "100%" }}
-                  disabled
-                >
-                  ✓ Đã ứng tuyển
-                </button>
-              ) : (
-                <button
-                  className="primary-btn"
-                  style={{ width: "100%" }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleApply(selectedPost._id);
-                  }}
-                >
-                  Ứng tuyển ngay
-                </button>
-              )}
-              <button
-                className="brand-modal-close"
-                onClick={() => setSelectedPost(null)}
-                style={{ marginTop: 12 }}
-              >
-                Đóng
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

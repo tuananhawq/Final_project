@@ -7,6 +7,10 @@ const creatorSchema = new mongoose.Schema({
     required: true,
     unique: true, // 1 user chỉ có 1 profile creator
   },
+  name: {
+    type: String,
+    required: true,
+  },
   description: {
     type: String,
     required: true,

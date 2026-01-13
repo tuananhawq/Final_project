@@ -9,6 +9,7 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../styles/register.css";
+import { useNotification } from "../context/NotificationContext.jsx";
 
 export default function Register() {
     const [form, setForm] = useState({
@@ -25,6 +26,7 @@ export default function Register() {
     const [error, setError] = useState("");
 
     const navigate = useNavigate();
+    const { notifySuccess } = useNotification();
 
     const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -85,9 +87,8 @@ export default function Register() {
                 password: form.password
             });
 
-            alert("Đăng ký thành công!");
-            navigate("/login");
-
+        notifySuccess("Đăng ký thành công!");
+        navigate("/login");
         } catch (err) {
             const code = err.response?.data?.error;
 

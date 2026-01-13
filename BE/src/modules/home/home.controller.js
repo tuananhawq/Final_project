@@ -63,6 +63,18 @@ export const getAgencies = async (req, res) => {
   }
 };
 
+export const getAgencyById = async (req, res) => {
+  try {
+    const agency = await Agency.findById(req.params.id);
+    if (!agency) {
+      return res.status(404).json({ error: "Agency not found" });
+    }
+    res.json(agency);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export const getAllAgencies = async (req, res) => {
   try {
     const agencies = await Agency.find().sort({ order: 1 });
@@ -106,6 +118,18 @@ export const getCreators = async (req, res) => {
   try {
     const creators = await Creator.find({ isActive: true }).sort({ order: 1 }).limit(6);
     res.json(creators);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getCreatorById = async (req, res) => {
+  try {
+    const creator = await Creator.findById(req.params.id);
+    if (!creator) {
+      return res.status(404).json({ error: "Creator not found" });
+    }
+    res.json(creator);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -159,6 +183,18 @@ export const getTopics = async (req, res) => {
   }
 };
 
+export const getTopicById = async (req, res) => {
+  try {
+    const topic = await Topic.findById(req.params.id);
+    if (!topic) {
+      return res.status(404).json({ error: "Topic not found" });
+    }
+    res.json(topic);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export const getAllTopics = async (req, res) => {
   try {
     const topics = await Topic.find().sort({ order: 1 });
@@ -202,6 +238,18 @@ export const getTestimonials = async (req, res) => {
   try {
     const testimonials = await Testimonial.find({ isActive: true }).sort({ order: 1 }).limit(3);
     res.json(testimonials);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getTestimonialById = async (req, res) => {
+  try {
+    const testimonial = await Testimonial.findById(req.params.id);
+    if (!testimonial) {
+      return res.status(404).json({ error: "Testimonial not found" });
+    }
+    res.json(testimonial);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

@@ -12,6 +12,7 @@ import {
 import { FaHeart, FaStar, FaEye, FaCalendarAlt, FaUser } from "react-icons/fa";
 import { jwtDecode } from "jwt-decode";
 import "../styles/blog/blog-detail.css";
+import { useNotification } from "../context/NotificationContext.jsx";
 
 export default function BlogDetail() {
   const { id } = useParams();
@@ -23,6 +24,7 @@ export default function BlogDetail() {
   const [commentContent, setCommentContent] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [user, setUser] = useState(null);
+  const { confirm, notifyError } = useNotification();
 
   useEffect(() => {
     loadBlog();
@@ -174,7 +176,8 @@ export default function BlogDetail() {
   };
 
   const handleDeleteComment = async (commentId) => {
-    if (!window.confirm("Bạn có chắc muốn xóa bình luận này?")) return;
+    const ok = await confirm("Bạn có chắc muốn xóa bình luận này?");
+    if (!ok) return;
 
     try {
       await deleteComment(id, commentId);
@@ -184,6 +187,7 @@ export default function BlogDetail() {
       }));
     } catch (error) {
       console.error("Error deleting comment:", error);
+      notifyError("Xóa bình luận thất bại. Vui lòng thử lại.");
     }
   };
 

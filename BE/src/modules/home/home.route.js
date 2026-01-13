@@ -8,24 +8,28 @@ import {
   deleteHero,
   // Agency
   getAgencies,
+  getAgencyById,
   getAllAgencies,
   createAgency,
   updateAgency,
   deleteAgency,
   // Creator
   getCreators,
+  getCreatorById,
   getAllCreators,
   createCreator,
   updateCreator,
   deleteCreator,
   // Topic
   getTopics,
+  getTopicById,
   getAllTopics,
   createTopic,
   updateTopic,
   deleteTopic,
   // Testimonial
   getTestimonials,
+  getTestimonialById,
   getAllTestimonials,
   createTestimonial,
   updateTestimonial,
@@ -43,12 +47,16 @@ const router = express.Router();
 router.get('/heroes', getHeroes);
 // Agency
 router.get('/agencies', getAgencies);
+router.get('/agencies/:id', getAgencyById);
 // Creator
 router.get('/creators', getCreators);
+router.get('/creators/:id', getCreatorById);
 // Topic
 router.get('/topics', getTopics);
+router.get('/topics/:id', getTopicById);
 // Testimonial
 router.get('/testimonials', getTestimonials);
+router.get('/testimonials/:id', getTestimonialById);
 // Footer
 router.get('/footer', getFooter);
 

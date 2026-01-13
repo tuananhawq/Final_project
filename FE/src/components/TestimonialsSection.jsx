@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getTestimonials } from "../services/homeService.jsx";
 import "../styles/home/home-testimonials.css";
 
@@ -44,7 +45,12 @@ export function TestimonialsSection() {
         {/* Testimonials Grid */}
         <div className="home-testimonials__grid">
           {testimonials.map((testimonial) => (
-            <div key={testimonial._id} className="home-testimonials__card">
+            <Link
+              key={testimonial._id}
+              to={`/testimonial/${testimonial._id}`}
+              className="home-testimonials__card"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
               <div className="home-testimonials__card-header">
                 <div className="home-testimonials__avatar-wrapper">
                   <div className="home-testimonials__avatar-border">
@@ -63,7 +69,7 @@ export function TestimonialsSection() {
                 </div>
               </div>
               <p className="home-testimonials__content">{testimonial.content}</p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNotification } from "../context/NotificationContext.jsx";
 
 export function ApplicationManagement({ jobPostId }) {
   const [applications, setApplications] = useState([]);
@@ -8,6 +9,7 @@ export function ApplicationManagement({ jobPostId }) {
   const [statusModal, setStatusModal] = useState(null); // { applicationId, status }
   const [statusMessage, setStatusMessage] = useState("");
   const token = localStorage.getItem("token");
+  const { notifySuccess, notifyError } = useNotification();
 
   const fetchApplications = async () => {
     try {
@@ -47,13 +49,13 @@ export function ApplicationManagement({ jobPostId }) {
     // Thêm message tương ứng
     if (status === "approved") {
       if (!statusMessage.trim()) {
-        alert("Vui lòng nhập thông tin liên hệ!");
+        notifyError("Vui lòng nhập thông tin liên hệ!");
         return;
       }
       payload.approvalMessage = statusMessage;
     } else if (status === "rejected") {
       if (!statusMessage.trim()) {
-        alert("Vui lòng nhập lý do từ chối!");
+        notifyError("Vui lòng nhập lý do từ chối!");
         return;
       }
       payload.rejectionReason = statusMessage;
@@ -70,14 +72,14 @@ export function ApplicationManagement({ jobPostId }) {
       await fetchApplications();
       setStatusModal(null);
       setStatusMessage("");
-      alert(
+      notifySuccess(
         status === "approved"
           ? "Đã phê duyệt ứng viên!"
           : "Đã từ chối ứng viên!"
       );
     } catch (err) {
       console.error("Update application status error:", err);
-      alert("Có lỗi xảy ra. Vui lòng thử lại.");
+      notifyError("Có lỗi xảy ra. Vui lòng thử lại.");
     }
   };
 

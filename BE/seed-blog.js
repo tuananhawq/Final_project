@@ -193,27 +193,38 @@ async function seedBlog() {
 
     const staffUser = await User.findOne({ email: "staff@gmail.com" });
     if (!staffUser) {
-      console.log("❌ Không tìm thấy staff user. Vui lòng chạy npm run seed trước!");
+      console.log("❌ Không tìm thấy staff user. Vui lòng chạy lệnh tạo user trước!");
       process.exit(1);
     }
 
     console.log("Đang làm sạch dữ liệu cũ...");
     await Blog.deleteMany({});
 
-    console.log("Đang chuẩn bị 20 bài viết mới...");
-    const blogsToSeed = rawBlogs.map((blog, index) => ({
-      ...blog,
-      author: staffUser._id,
-      authorName: staffUser.username || "Staff",
-      // Tạo link ảnh ngẫu nhiên từ Unsplash dựa trên category
-      image: `https://loremflickr.com/800/600/${blog.category.toLowerCase()}`,
-      isPublished: true,
-      createdAt: new Date(Date.now() - index * 3600000 * 24), // Mỗi bài cách nhau 1 ngày
-    }));
+    // 1. Cố định thời gian bắt đầu
+    const BASE_DATE = new Date("2024-01-01T08:00:00Z");
+
+    console.log("Đang chuẩn bị 20 bài viết cố định...");
+    const blogsToSeed = rawBlogs.map((blog, index) => {
+      // 2. Cố định ngày tạo: Mỗi bài cách nhau đúng 1 ngày từ mốc BASE_DATE
+      const createdAt = new Date(BASE_DATE);
+      createdAt.setDate(BASE_DATE.getDate() + index);
+
+      return {
+        ...blog,
+        author: staffUser._id,
+        authorName: staffUser.username || "Staff",
+        // 3. Cố định hình ảnh: Sử dụng ảnh theo ID cố định (từ id 1 đến 20)
+        // Điều này giúp trình duyệt cache ảnh và không bị load lại ngẫu nhiên
+        image: `https://picsum.photos/id/${index + 10}/800/600`,
+        isPublished: true,
+        createdAt: createdAt,
+        updatedAt: createdAt,
+      };
+    });
 
     await Blog.insertMany(blogsToSeed);
 
-    console.log(`✅ Thành công: Đã seed ${blogsToSeed.length} bài viết!`);
+    console.log(`✅ Thành công: Đã seed ${blogsToSeed.length} bài viết cố định!`);
     process.exit(0);
   } catch (error) {
     console.error("❌ Lỗi khi seed:", error);

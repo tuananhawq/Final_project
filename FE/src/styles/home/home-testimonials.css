@@ -98,6 +98,9 @@
 .home-testimonials__card {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
   backdrop-filter: blur(10px);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
   border-radius: 1.5rem;
   padding: 2rem;
   box-shadow: 

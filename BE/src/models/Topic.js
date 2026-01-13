@@ -9,6 +9,10 @@ const topicSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  description: {
+    type: String,
+    default: "",
+  },
   position: {
     type: String,
     enum: ["left", "center", "right"],

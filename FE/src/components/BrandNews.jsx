@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 export function BrandNews() {
@@ -6,8 +7,6 @@ export function BrandNews() {
   const [pagination, setPagination] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [selectedPost, setSelectedPost] = useState(null);
-
   const fetchPosts = async (page = 1) => {
     try {
       setLoading(true);
@@ -24,16 +23,6 @@ export function BrandNews() {
     }
   };
 
-  const fetchDetail = async (id) => {
-    try {
-      const res = await axios.get(
-        `http://localhost:3000/api/job-posts/${id}`
-      );
-      setSelectedPost(res.data.post);
-    } catch (err) {
-      console.error("Fetch job post detail error:", err);
-    }
-  };
 
   useEffect(() => {
     fetchPosts(1);
@@ -52,10 +41,11 @@ export function BrandNews() {
       ) : (
         <div className="brand-news-list">
           {posts.map((post) => (
-            <div
+            <Link
               key={post._id}
+              to={`/brand/news/${post._id}`}
               className="brand-news-item"
-              onClick={() => fetchDetail(post._id)}
+              style={{ textDecoration: "none", color: "inherit" }}
             >
               <div className="brand-news-header">
                 <span className="brand-name">{post.brandName}</span>
@@ -75,7 +65,7 @@ export function BrandNews() {
                 <span className="budget">{post.budget}</span>
                 <span className="work-time">{post.workTime}</span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}
@@ -100,44 +90,6 @@ export function BrandNews() {
         </div>
       )}
 
-      {selectedPost && (
-        <div
-          className="brand-modal-overlay"
-          onClick={() => setSelectedPost(null)}
-        >
-          <div
-            className="brand-modal"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <h3>{selectedPost.title}</h3>
-            <p className="brand-modal-brand">
-              {selectedPost.brandName} · {selectedPost.jobType} ·{" "}
-              {selectedPost.workTime}
-            </p>
-            <p className="brand-modal-budget">{selectedPost.budget}</p>
-            <div className="brand-modal-section">
-              <h4>Nội dung công việc</h4>
-              <p>{selectedPost.content}</p>
-            </div>
-            <div className="brand-modal-section">
-              <h4>Yêu cầu ứng viên</h4>
-              <p>{selectedPost.requirements}</p>
-            </div>
-            <div className="brand-modal-section">
-              <h4>Quyền lợi / Hỗ trợ từ Brand</h4>
-              <p>{selectedPost.benefits}</p>
-            </div>
-            <button
-              className="brand-modal-close"
-              onClick={() => setSelectedPost(null)}
-            >
-              Đóng
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

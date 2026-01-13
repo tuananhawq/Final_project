@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 export function CreatorApplications() {
@@ -86,7 +87,14 @@ export function CreatorApplications() {
             return (
               <div key={app._id} className="brand-job-card">
                 <div className="brand-job-header">
-                  <h3>{app.jobPost.title}</h3>
+                  <Link
+                    to={`/creator/news/${app.jobPost._id}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <h3 style={{ cursor: "pointer", display: "inline-block" }}>
+                      {app.jobPost.title}
+                    </h3>
+                  </Link>
                   <span className="job-type">{app.jobPost.jobType}</span>
                 </div>
                 <div className="brand-job-meta">

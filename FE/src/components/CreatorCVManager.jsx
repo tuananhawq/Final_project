@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNotification } from "../context/NotificationContext.jsx";
 
 export function CreatorCVManager() {
   const [cv, setCv] = useState(null);
@@ -20,6 +21,7 @@ export function CreatorCVManager() {
   const [uploading, setUploading] = useState(false);
 
   const token = localStorage.getItem("token");
+  const { confirm, notifySuccess, notifyError } = useNotification();
 
   const fetchCv = async () => {
     try {
@@ -177,15 +179,18 @@ export function CreatorCVManager() {
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Bạn có chắc chắn muốn xóa CV này?")) return;
+    const ok = await confirm("Bạn có chắc chắn muốn xóa CV này?");
+    if (!ok) return;
 
     try {
       await axios.delete("http://localhost:3000/api/creator/cv", {
         headers: { Authorization: `Bearer ${token}` },
       });
       await fetchCv();
+      notifySuccess("Đã xóa CV.");
     } catch (err) {
       console.error("Delete creator CV error:", err);
+      notifyError("Xóa CV thất bại. Vui lòng thử lại.");
     }
   };
 

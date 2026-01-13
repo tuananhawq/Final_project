@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 export function RecommendedCV() {
   const [cvs, setCvs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCv, setSelectedCv] = useState(null);
-
   const fetchCvs = async () => {
     try {
       setLoading(true);
@@ -99,86 +98,18 @@ export function RecommendedCV() {
                 </div>
               )}
 
-              <button
+              <Link
+                to={`/brand/recommended/${cv._id}`}
                 className="cv-detail-btn"
-                onClick={() => setSelectedCv(cv)}
+                style={{ textDecoration: "none", display: "block", textAlign: "center" }}
               >
                 Xem CV chi tiết
-              </button>
+              </Link>
             </div>
           ))}
         </div>
       )}
 
-      {selectedCv && (
-        <div
-          className="brand-modal-overlay"
-          onClick={() => setSelectedCv(null)}
-        >
-          <div
-            className="brand-modal"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <h3>{selectedCv.fullName}</h3>
-            <p className="cv-title">{selectedCv.title}</p>
-
-            <div className="brand-modal-section">
-              <h4>Kỹ năng chính</h4>
-              <p>
-                {selectedCv.mainSkills && selectedCv.mainSkills.length > 0
-                  ? selectedCv.mainSkills.join(", ")
-                  : "Đang cập nhật"}
-              </p>
-            </div>
-
-            <div className="brand-modal-section">
-              <h4>Kinh nghiệm</h4>
-              <p>
-                {selectedCv.experienceYears
-                  ? `${selectedCv.experienceYears}+ năm`
-                  : "Chưa cập nhật số năm"}
-              </p>
-              {selectedCv.experienceDetail && (
-                <p>{selectedCv.experienceDetail}</p>
-              )}
-            </div>
-
-            {selectedCv.tags && selectedCv.tags.length > 0 && (
-              <div className="brand-modal-section">
-                <h4>Tags</h4>
-                <p>{selectedCv.tags.join(", ")}</p>
-              </div>
-            )}
-
-            {/* Hiển thị ảnh CV trong modal nếu có */}
-            {selectedCv.cvFileUrl && selectedCv.cvFileType === "image" && (
-              <div className="brand-modal-section">
-                <h4>Hình ảnh CV</h4>
-                <img
-                  src={selectedCv.cvFileUrl}
-                  alt="CV"
-                  style={{
-                    width: "100%",
-                    maxHeight: "400px",
-                    objectFit: "contain",
-                    borderRadius: 12,
-                    marginTop: 8,
-                  }}
-                />
-              </div>
-            )}
-
-            <button
-              className="brand-modal-close"
-              onClick={() => setSelectedCv(null)}
-            >
-              Đóng
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FaLock, FaKey, FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import "../styles/reset-password.css";
+import { useNotification } from "../context/NotificationContext.jsx";
 
 export default function ResetPassword() {
   const location = useLocation();
@@ -22,6 +23,7 @@ export default function ResetPassword() {
 
   const [countdown, setCountdown] = useState(30);
   const [canResend, setCanResend] = useState(false);
+  const { notifySuccess } = useNotification();
 
   /* ================= COUNTDOWN ================= */
   useEffect(() => {
@@ -72,7 +74,7 @@ export default function ResetPassword() {
         newPassword: password,
       });
 
-      alert("Đổi mật khẩu thành công");
+      notifySuccess("Đổi mật khẩu thành công");
       navigate("/login");
     } catch (err) {
       setError(err.response?.data?.error || "Reset failed");

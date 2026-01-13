@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNotification } from "../context/NotificationContext.jsx";
 import {
   getAllUsers,
   createUser,
@@ -33,6 +34,7 @@ export function UserManagement() {
   });
   const [editingUser, setEditingUser] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+  const { confirm } = useNotification();
 
   useEffect(() => {
     loadUsers();
@@ -129,7 +131,8 @@ export function UserManagement() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Bạn có chắc muốn xóa user này?")) return;
+    const ok = await confirm("Bạn có chắc muốn xóa user này?");
+    if (!ok) return;
     try {
       await deleteUser(id);
       showMessage("Xóa user thành công!");

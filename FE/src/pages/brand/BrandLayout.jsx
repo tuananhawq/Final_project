@@ -44,7 +44,16 @@ export default function BrandLayout() {
   }, [navigate]);
 
   if (loading) {
-    return <div className="loading">Đang tải...</div>;
+    return (
+      <div className="brand-page">
+        <Header />
+        <div className="brand-loading-container">
+          <div className="brand-loading-spinner"></div>
+          <p className="brand-loading-text">Đang tải...</p>
+        </div>
+        <Footer />
+      </div>
+    );
   }
 
   const isBrand = user?.roles?.includes("brand") || false;
