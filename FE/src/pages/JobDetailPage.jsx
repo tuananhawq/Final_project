@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { EmployerSidebar } from "../components/EmployerSidebar";
@@ -21,11 +22,11 @@ export default function JobDetailPage() {
       return;
     }
 
-    axios.get("http://localhost:3000/api/auth/me", {
+    axios.get(`${API_URLS.AUTH}/me`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => setUser(res.data.user));
 
-    axios.get(`http://localhost:3000/api/jobs/${id}`)
+    axios.get(`${API_URLS.JOB}/${id}`)
       .then(res => {
         setJob(res.data.job);
         setLoading(false);

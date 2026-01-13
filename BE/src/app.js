@@ -29,6 +29,8 @@ import cvRoute from "./modules/cv/cv.route.js";
 import brandCvRoute from "./modules/brandCv/brandCv.route.js";
 import creatorCvRoute from "./modules/creatorCv/creatorCv.route.js";
 import applicationRoute from "./modules/application/application.route.js";
+import paymentRoute from "./modules/payment/payment.route.js";
+import dashboardRoute from "./modules/dashboard/dashboard.route.js";
 import { setupSwagger } from './config/swagger.js';
 import "./config/passport.js";
 
@@ -38,8 +40,21 @@ connectDB();
 const app = express();
 
 // ✅ CORS PHẢI ĐẶT TRƯỚC ROUTES
+const allowedOrigins = process.env.FRONTEND_URL 
+  ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
+  : ['http://localhost:5173'];
+
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: function (origin, callback) {
+    // Cho phép requests không có origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
@@ -60,6 +75,8 @@ app.use("/api", cvRoute);
 app.use("/api", brandCvRoute);
 app.use("/api", creatorCvRoute);
 app.use("/api", applicationRoute);
+app.use("/api/payment", paymentRoute);
+app.use("/api/dashboard", dashboardRoute);
 // swagger
 setupSwagger(app);
 

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 import { Header } from "../components/Header";
 import { EmployerSidebar } from "../components/EmployerSidebar";
 import { Footer } from "../components/Footer";
@@ -24,12 +25,12 @@ export default function JobOffersPage() {
         return;
       }
 
-      const userRes = await axios.get("http://localhost:3000/api/auth/me", {
+      const userRes = await axios.get(`${API_URLS.AUTH}/me`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUser(userRes.data.user);
 
-      const jobRes = await axios.get(`http://localhost:3000/api/jobs?page=${page}&limit=4`);
+      const jobRes = await axios.get(`${API_URLS.JOB}?page=${page}&limit=4`);
       setJobs(jobRes.data.jobs || []);
       setPagination(jobRes.data.pagination || {});
       setCurrentPage(page);

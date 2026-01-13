@@ -3,6 +3,7 @@ import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { API_URLS } from "../config/api.js";
 import "../styles/login.css";
 
 
@@ -61,7 +62,7 @@ export default function Login() {
       setLoading(true);
 
       const res = await axios.post(
-        "http://localhost:3000/api/auth/login",
+        `${API_URLS.AUTH}/login`,
         { email, password }
       );
 
@@ -93,10 +94,10 @@ export default function Login() {
    * Google Login
    */
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:3000/api/auth/google";
+    window.location.href = `${API_URLS.AUTH}/google`;
   };
   const handleFacebookLogin = () => {
-    window.location.href = "http://localhost:3000/api/auth/facebook";
+    window.location.href = `${API_URLS.AUTH}/facebook`;
   };
 
   return (

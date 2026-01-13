@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 import { useNotification } from "../context/NotificationContext.jsx";
 
 export function ApplicationManagement({ jobPostId }) {
@@ -15,7 +16,7 @@ export function ApplicationManagement({ jobPostId }) {
     try {
       setLoading(true);
       const res = await axios.get(
-        `http://localhost:3000/api/brand/job-post/${jobPostId}/applications`,
+        `${API_URLS.BRAND}/job-post/${jobPostId}/applications`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -63,7 +64,7 @@ export function ApplicationManagement({ jobPostId }) {
 
     try {
       await axios.put(
-        `http://localhost:3000/api/brand/job-post/${jobPostId}/applications/${applicationId}`,
+        `${API_URLS.BRAND}/job-post/${jobPostId}/applications/${applicationId}`,
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import axios from "axios";
+import { API_URLS } from "../../config/api.js";
 import { Header } from "../../components/Header";
 import { Footer } from "../../components/Footer";
 import "../../styles/brand/brand-page.css";
@@ -21,7 +22,7 @@ export default function BrandLayout() {
     }
 
     axios
-      .get("http://localhost:3000/api/auth/me", {
+      .get(`${API_URLS.AUTH}/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

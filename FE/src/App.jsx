@@ -30,6 +30,7 @@ import TestimonialDetailPage from "./pages/TestimonialDetailPage.jsx";
 import JobPostDetailPage from "./pages/JobPostDetailPage.jsx";
 import CVDetailPage from "./pages/CVDetailPage.jsx";
 import BrandDetailPage from "./pages/BrandDetailPage.jsx";
+import Pricing from "./pages/Pricing.jsx";
 
 export default function App() {
   return (
@@ -47,6 +48,8 @@ export default function App() {
       {/* User pages */}
       <Route path="/home" element={<Home />} />
       <Route path="/about" element={<About />} />
+      <Route path="/pricing" element={<Pricing />} />
+      <Route path="/services" element={<Pricing />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/highlight/:id" element={<HighlightDetail />} />
       <Route path="/agency/:id" element={<AgencyDetailPage />} />

@@ -1,6 +1,8 @@
+import { API_URLS } from "../config/api.js";
+
 // src/services/bannerService.js
 export const getBanners = async () => {
-  const res = await fetch("http://localhost:3000/api/banners");
+  const res = await fetch(`${API_URLS.BANNER}/banners`);
 
   if (!res.ok) {
     throw new Error("Không thể tải banners");
@@ -10,7 +12,7 @@ export const getBanners = async () => {
   return data.banners;
 };
 export const getBannerDetail = async (id) => {
-  const res = await fetch(`http://localhost:3000/api/banners/detail/${id}`);
+  const res = await fetch(`${API_URLS.BANNER}/banners/detail/${id}`);
   if (!res.ok) throw new Error("Không tải được");
   const data = await res.json();
   return data.banner;

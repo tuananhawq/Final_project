@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import "../styles/agency-detail.css";
@@ -15,7 +16,7 @@ export default function TestimonialDetailPage() {
     const fetchTestimonial = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/home/testimonials/${id}`
+          `${API_URLS.HOME}/testimonials/${id}`
         );
         setTestimonial(res.data);
       } catch (error) {

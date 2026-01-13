@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 
 export function BrandNews() {
   const [posts, setPosts] = useState([]);
@@ -11,7 +12,7 @@ export function BrandNews() {
     try {
       setLoading(true);
       const res = await axios.get(
-        `http://localhost:3000/api/job-posts?page=${page}&limit=8`
+        `${API_URLS.JOB_POST}/job-posts?page=${page}&limit=8`
       );
       setPosts(res.data.posts || []);
       setPagination(res.data.pagination || {});

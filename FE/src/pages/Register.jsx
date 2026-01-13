@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_URLS } from "../config/api.js";
 import "../styles/register.css";
 import { useNotification } from "../context/NotificationContext.jsx";
 
@@ -81,7 +82,7 @@ export default function Register() {
         try {
             setLoading(true);
 
-            await axios.post("http://localhost:3000/api/auth/register", {
+            await axios.post(`${API_URLS.AUTH}/register`, {
                 username: form.name,   // ✅ đúng schema
                 email: form.email,
                 password: form.password

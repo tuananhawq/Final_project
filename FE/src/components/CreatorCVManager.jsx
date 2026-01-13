@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 import { useNotification } from "../context/NotificationContext.jsx";
 
 export function CreatorCVManager() {
@@ -31,7 +32,7 @@ export function CreatorCVManager() {
         return;
       }
 
-      const res = await axios.get("http://localhost:3000/api/creator/cv", {
+      const res = await axios.get(`${API_URLS.CREATOR_CV}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCv(res.data.cv);
@@ -105,7 +106,7 @@ export function CreatorCVManager() {
       fd.append("file", file);
 
       const res = await axios.post(
-        "http://localhost:3000/api/upload/cv",
+        `${API_URLS.UPLOAD}/cv`,
         fd,
         {
           headers: {
@@ -165,9 +166,9 @@ export function CreatorCVManager() {
       };
 
       if (cv) {
-        await axios.put("http://localhost:3000/api/creator/cv", payload, config);
+        await axios.put(`${API_URLS.CREATOR_CV}`, payload, config);
       } else {
-        await axios.post("http://localhost:3000/api/creator/cv", payload, config);
+        await axios.post(`${API_URLS.CREATOR_CV}`, payload, config);
       }
 
       setShowModal(false);
@@ -183,7 +184,7 @@ export function CreatorCVManager() {
     if (!ok) return;
 
     try {
-      await axios.delete("http://localhost:3000/api/creator/cv", {
+      await axios.delete(`${API_URLS.CREATOR_CV}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       await fetchCv();

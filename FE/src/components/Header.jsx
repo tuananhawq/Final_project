@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaSearch, FaMapMarkerAlt, FaBars, FaTimes } from "react-icons/fa";
+import { API_URLS } from "../config/api.js";
 // import { jwtDecode } from "jwt-decode";
 import "../styles/home/home-header.css";
 
@@ -20,7 +21,7 @@ export function Header() {
     }
 
     try {
-      const res = await fetch("http://localhost:3000/api/auth/me", {
+      const res = await fetch(`${API_URLS.AUTH}/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

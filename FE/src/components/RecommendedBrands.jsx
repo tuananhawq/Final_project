@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 
 export function RecommendedBrands() {
   const [brands, setBrands] = useState([]);
@@ -8,7 +9,7 @@ export function RecommendedBrands() {
   const fetchBrands = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:3000/api/brands");
+      const res = await axios.get(`${API_URLS.BRAND}/brands`);
       setBrands(res.data.brands || []);
     } catch (err) {
       console.error("Fetch brands error:", err);

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 import { CreateJobPostModal } from "./CreateJobPostModal";
 import { ApplicationManagement } from "./ApplicationManagement";
 import { useNotification } from "../context/NotificationContext.jsx";
@@ -24,7 +25,7 @@ export function MyJobPosts() {
         return;
       }
       const res = await axios.get(
-        "http://localhost:3000/api/brand/job-post",
+        `${API_URLS.BRAND}/job-post`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -37,7 +38,7 @@ export function MyJobPosts() {
       for (const post of postsData) {
         try {
           const appRes = await axios.get(
-            `http://localhost:3000/api/brand/job-post/${post._id}/applications`,
+            `${API_URLS.BRAND}/job-post/${post._id}/applications`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }
@@ -75,7 +76,7 @@ export function MyJobPosts() {
     if (!ok) return;
     try {
       await axios.delete(
-        `http://localhost:3000/api/brand/job-post/${id}`,
+        `${API_URLS.BRAND}/job-post/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

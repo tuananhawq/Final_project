@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaLock, FaKey, FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 import "../styles/reset-password.css";
 import { useNotification } from "../context/NotificationContext.jsx";
 
@@ -68,7 +69,7 @@ export default function ResetPassword() {
       setLoading(true);
       setError("");
 
-      await axios.post("http://localhost:3000/api/auth/reset-password", {
+      await axios.post(`${API_URLS.AUTH}/reset-password`, {
         email,
         otp,
         newPassword: password,
@@ -90,7 +91,7 @@ export default function ResetPassword() {
       setCanResend(false);
       setCountdown(30);
 
-      await axios.post("http://localhost:3000/api/auth/forgot-password", {
+      await axios.post(`${API_URLS.AUTH}/forgot-password`, {
         email,
       });
     } catch {

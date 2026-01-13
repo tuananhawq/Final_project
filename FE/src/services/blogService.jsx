@@ -1,6 +1,7 @@
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 
-const API_URL = "http://localhost:3000/api/blog";
+const API_URL = API_URLS.BLOG;
 
 // Get token từ localStorage
 const getAuthHeaders = () => {

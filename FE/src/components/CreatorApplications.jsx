@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 
 export function CreatorApplications() {
   const [applications, setApplications] = useState([]);
@@ -16,7 +17,7 @@ export function CreatorApplications() {
       }
 
       const res = await axios.get(
-        "http://localhost:3000/api/creator/applications",
+        `${API_URLS.CREATOR}/applications`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

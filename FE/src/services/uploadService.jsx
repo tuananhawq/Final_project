@@ -1,6 +1,7 @@
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 
-const API_URL = "http://localhost:3000/api/upload";
+const API_URL = API_URLS.UPLOAD;
 
 // Get token từ localStorage
 const getAuthHeaders = () => {
@@ -82,6 +83,18 @@ export const uploadBrandLogo = async (file) => {
   formData.append("logo", file);
   
   const res = await axios.post(`${API_URL}/brand/logo`, formData, {
+    headers: getAuthHeaders(),
+  });
+  return res.data;
+};
+
+// ==================== PAYMENT QR CODE UPLOAD ====================
+
+export const uploadPaymentQRCode = async (file) => {
+  const formData = new FormData();
+  formData.append("qrcode", file);
+  
+  const res = await axios.post(`${API_URL}/payment/qrcode`, formData, {
     headers: getAuthHeaders(),
   });
   return res.data;

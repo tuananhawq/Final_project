@@ -73,6 +73,17 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ["free", "premium"],
     default: "free"
+  },
+
+  memberType: {
+    type: String,
+    enum: ["free", "creator", "brand"],
+    default: "free"
+  },
+
+  premiumExpiredAt: {
+    type: Date,
+    default: null
   }
 }, {
   timestamps: true

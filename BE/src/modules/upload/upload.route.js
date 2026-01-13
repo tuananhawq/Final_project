@@ -10,6 +10,7 @@ import {
   uploadTestimonialAvatar,
   uploadBlogImage,
   uploadBrandLogo,
+  uploadPaymentQRCode,
   getAllImages,
   deleteImage,
   getImageStats,
@@ -164,6 +165,18 @@ router.delete(
   authGuard,
   roleGuard("staff", "admin"),
   deleteImage
+);
+
+/**
+ * POST /api/upload/payment/qrcode
+ * Upload QR Code cho thanh toán (Staff/Admin only)
+ */
+router.post(
+  "/payment/qrcode",
+  authGuard,
+  roleGuard("staff", "admin"),
+  upload.single("qrcode"),
+  uploadPaymentQRCode
 );
 
 export default router;

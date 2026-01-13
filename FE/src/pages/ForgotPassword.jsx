@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEnvelope } from "react-icons/fa";
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 import "../styles/forgot-password.css";
 
 export default function ForgotPassword() {
@@ -41,7 +42,7 @@ export default function ForgotPassword() {
       setMsg("");
 
       const res = await axios.post(
-        "http://localhost:3000/api/auth/forgot-password",
+        `${API_URLS.AUTH}/forgot-password`,
         { email }
       );
 

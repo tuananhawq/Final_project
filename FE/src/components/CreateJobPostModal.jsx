@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 
 export function CreateJobPostModal({ open, onClose, onSaved, initialData }) {
   const [form, setForm] = useState({
@@ -87,13 +88,13 @@ export function CreateJobPostModal({ open, onClose, onSaved, initialData }) {
 
       if (isEdit) {
         await axios.put(
-          `http://localhost:3000/api/brand/job-post/${initialData._id}`,
+          `${API_URLS.BRAND}/job-post/${initialData._id}`,
           form,
           config
         );
       } else {
         await axios.post(
-          "http://localhost:3000/api/brand/job-post",
+          `${API_URLS.BRAND}/job-post`,
           form,
           config
         );

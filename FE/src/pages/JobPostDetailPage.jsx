@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 import "../styles/brand/brand-page.css";
 import { useNotification } from "../context/NotificationContext.jsx";
 
@@ -31,7 +32,7 @@ export default function JobPostDetailPage() {
     const fetchPost = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/job-posts/${id}`
+          `${API_URLS.JOB_POST}/job-posts/${id}`
         );
         setPost(res.data.post);
       } catch (error) {
@@ -44,7 +45,7 @@ export default function JobPostDetailPage() {
     const fetchMe = async () => {
       if (!token) return;
       try {
-        const res = await axios.get("http://localhost:3000/api/auth/me", {
+        const res = await axios.get(`${API_URLS.AUTH}/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(res.data.user);
@@ -58,7 +59,7 @@ export default function JobPostDetailPage() {
       if (!token) return;
       try {
         const res = await axios.get(
-          "http://localhost:3000/api/creator/applications",
+          `${API_URLS.CREATOR}/applications`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -96,7 +97,7 @@ export default function JobPostDetailPage() {
     setApplying(true);
     try {
       await axios.post(
-        "http://localhost:3000/api/creator/apply",
+        `${API_URLS.CREATOR}/apply`,
         { jobPostId: id, message: applyMessage },
         {
           headers: { Authorization: `Bearer ${token}` },

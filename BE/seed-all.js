@@ -15,6 +15,9 @@ import Creator from "./src/models/Creator.js";
 import Topic from "./src/models/Topic.js";
 import Testimonial from "./src/models/Testimonial.js";
 import Footer from "./src/models/Footer.js";
+import Transaction from "./src/models/Transaction.js";
+import PaymentConfig from "./src/models/PaymentConfig.js";
+import Blog from "./src/models/Blog.js";
 
 // 👉 fix cho ESM + Windows
 const __filename = fileURLToPath(import.meta.url);
@@ -41,6 +44,9 @@ async function seedAll() {
 
     // ==================== XÓA DỮ LIỆU CŨ ====================
     console.log("🧹 Đang xóa dữ liệu cũ...");
+    await Transaction.deleteMany({});
+    await PaymentConfig.deleteMany({});
+    await Blog.deleteMany({});
     await Application.deleteMany({});
     await BrandCv.deleteMany({});
     await JobPost.deleteMany({});
@@ -65,6 +71,24 @@ async function seedAll() {
       "creator4@revlive.com",
       "creator5@revlive.com",
       "creator6@revlive.com",
+      "creator7@revlive.com",
+      "creator8@revlive.com",
+      "brand5@revlive.com",
+      "brand6@revlive.com",
+      "brand7@revlive.com",
+      "brand8@revlive.com",
+      "brand9@revlive.com",
+      "brand10@revlive.com",
+      "creator9@revlive.com",
+      "creator10@revlive.com",
+      "creator11@revlive.com",
+      "creator12@revlive.com",
+      "creator13@revlive.com",
+      "creator14@revlive.com",
+      "creator15@revlive.com",
+      "creator16@revlive.com",
+      "creator17@revlive.com",
+      "creator18@revlive.com",
     ];
     await User.deleteMany({ email: { $in: emailsToDelete } });
     console.log("✅ Đã xóa dữ liệu cũ\n");
@@ -130,6 +154,8 @@ async function seedAll() {
         isActive: true,
         isDeleted: false,
         premiumStatus: "premium",
+        memberType: "brand",
+        premiumExpiredAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 ngày từ bây giờ
         avatar: "https://logos-world.net/wp-content/uploads/2020/04/Coca-Cola-Logo.png",
       },
       {
@@ -142,6 +168,8 @@ async function seedAll() {
         isActive: true,
         isDeleted: false,
         premiumStatus: "premium",
+        memberType: "brand",
+        premiumExpiredAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000), // 15 ngày từ bây giờ
         avatar: "https://logos-world.net/wp-content/uploads/2020/04/Pepsi-Logo.png",
       },
       {
@@ -154,6 +182,8 @@ async function seedAll() {
         isActive: true,
         isDeleted: false,
         premiumStatus: "free",
+        memberType: "free",
+        premiumExpiredAt: null,
         avatar: "https://logos-world.net/wp-content/uploads/2020/06/Samsung-Logo.png",
       },
       {
@@ -166,6 +196,8 @@ async function seedAll() {
         isActive: true,
         isDeleted: false,
         premiumStatus: "premium",
+        memberType: "brand",
+        premiumExpiredAt: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000), // 45 ngày từ bây giờ
         avatar: "https://logos-world.net/wp-content/uploads/2020/04/Nike-Logo.png",
       },
     ]);
@@ -293,10 +325,372 @@ async function seedAll() {
         isActive: true,
       },
     ]);
-    console.log(`✅ Đã tạo ${jobPosts.length} JobPosts\n`);
+    
+    // Thêm nhiều Brands hơn trước khi tạo JobPosts
+    console.log("🏢 Đang tạo thêm Brand users và profiles...");
+    const additionalBrandUsers = await User.insertMany([
+      {
+        email: "brand5@revlive.com",
+        username: "adidas_brand",
+        passwordHash: brandPassword,
+        provider: "local",
+        roles: ["brand", "user"],
+        isVerified: true,
+        isActive: true,
+        isDeleted: false,
+        premiumStatus: "premium",
+        memberType: "brand",
+        premiumExpiredAt: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000),
+        avatar: "https://logos-world.net/wp-content/uploads/2020/04/Adidas-Logo.png",
+      },
+      {
+        email: "brand6@revlive.com",
+        username: "apple_brand",
+        passwordHash: brandPassword,
+        provider: "local",
+        roles: ["brand", "user"],
+        isVerified: true,
+        isActive: true,
+        isDeleted: false,
+        premiumStatus: "premium",
+        memberType: "brand",
+        premiumExpiredAt: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
+        avatar: "https://logos-world.net/wp-content/uploads/2020/04/Apple-Logo.png",
+      },
+      {
+        email: "brand7@revlive.com",
+        username: "mcdonalds_brand",
+        passwordHash: brandPassword,
+        provider: "local",
+        roles: ["brand", "user"],
+        isVerified: true,
+        isActive: true,
+        isDeleted: false,
+        premiumStatus: "free",
+        memberType: "free",
+        premiumExpiredAt: null,
+        avatar: "https://logos-world.net/wp-content/uploads/2020/04/McDonalds-Logo.png",
+      },
+      {
+        email: "brand8@revlive.com",
+        username: "starbucks_brand",
+        passwordHash: brandPassword,
+        provider: "local",
+        roles: ["brand", "user"],
+        isVerified: true,
+        isActive: true,
+        isDeleted: false,
+        premiumStatus: "premium",
+        memberType: "brand",
+        premiumExpiredAt: new Date(Date.now() + 35 * 24 * 60 * 60 * 1000),
+        avatar: "https://logos-world.net/wp-content/uploads/2020/04/Starbucks-Logo.png",
+      },
+      {
+        email: "brand9@revlive.com",
+        username: "unilever_brand",
+        passwordHash: brandPassword,
+        provider: "local",
+        roles: ["brand", "user"],
+        isVerified: true,
+        isActive: true,
+        isDeleted: false,
+        premiumStatus: "premium",
+        memberType: "brand",
+        premiumExpiredAt: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000),
+        avatar: "https://logos-world.net/wp-content/uploads/2020/04/Unilever-Logo.png",
+      },
+      {
+        email: "brand10@revlive.com",
+        username: "loreal_brand",
+        passwordHash: brandPassword,
+        provider: "local",
+        roles: ["brand", "user"],
+        isVerified: true,
+        isActive: true,
+        isDeleted: false,
+        premiumStatus: "premium",
+        memberType: "brand",
+        premiumExpiredAt: new Date(Date.now() + 40 * 24 * 60 * 60 * 1000),
+        avatar: "https://logos-world.net/wp-content/uploads/2020/04/Loreal-Logo.png",
+      },
+    ]);
+
+    const additionalBrands = await Brand.insertMany([
+      {
+        user: additionalBrandUsers[0]._id,
+        companyName: "Adidas Vietnam",
+        description: "Thương hiệu thể thao hàng đầu thế giới, tìm kiếm các Creator thể thao và lifestyle.",
+        logo: "https://logos-world.net/wp-content/uploads/2020/04/Adidas-Logo.png",
+        website: "https://www.adidas.com.vn",
+        industry: "Thời trang - Thể thao",
+        followers: "900K",
+        isActive: true,
+        order: 5,
+      },
+      {
+        user: additionalBrandUsers[1]._id,
+        companyName: "Apple Vietnam",
+        description: "Công ty công nghệ hàng đầu thế giới, cần Creator để review và giới thiệu sản phẩm Apple.",
+        logo: "https://logos-world.net/wp-content/uploads/2020/04/Apple-Logo.png",
+        website: "https://www.apple.com/vn",
+        industry: "Công nghệ - Điện tử",
+        followers: "2.5M",
+        isActive: true,
+        order: 6,
+      },
+      {
+        user: additionalBrandUsers[2]._id,
+        companyName: "McDonald's Vietnam",
+        description: "Chuỗi nhà hàng thức ăn nhanh hàng đầu, tìm kiếm Creator cho các chiến dịch marketing.",
+        logo: "https://logos-world.net/wp-content/uploads/2020/04/McDonalds-Logo.png",
+        website: "https://www.mcdonalds.com.vn",
+        industry: "F&B - Nhà hàng",
+        followers: "1.5M",
+        isActive: true,
+        order: 7,
+      },
+      {
+        user: additionalBrandUsers[3]._id,
+        companyName: "Starbucks Vietnam",
+        description: "Thương hiệu cà phê hàng đầu thế giới, hợp tác với Creator để lan tỏa văn hóa cà phê.",
+        logo: "https://logos-world.net/wp-content/uploads/2020/04/Starbucks-Logo.png",
+        website: "https://www.starbucks.com.vn",
+        industry: "F&B - Cà phê",
+        followers: "800K",
+        isActive: true,
+        order: 8,
+      },
+      {
+        user: additionalBrandUsers[4]._id,
+        companyName: "Unilever Vietnam",
+        description: "Tập đoàn hàng tiêu dùng hàng đầu, tìm kiếm Creator cho các sản phẩm chăm sóc cá nhân và gia đình.",
+        logo: "https://logos-world.net/wp-content/uploads/2020/04/Unilever-Logo.png",
+        website: "https://www.unilever.com.vn",
+        industry: "FMCG - Hàng tiêu dùng",
+        followers: "600K",
+        isActive: true,
+        order: 9,
+      },
+      {
+        user: additionalBrandUsers[5]._id,
+        companyName: "L'Oréal Vietnam",
+        description: "Thương hiệu mỹ phẩm hàng đầu thế giới, hợp tác với Beauty Influencer để quảng bá sản phẩm.",
+        logo: "https://logos-world.net/wp-content/uploads/2020/04/Loreal-Logo.png",
+        website: "https://www.loreal.com.vn",
+        industry: "Mỹ phẩm - Làm đẹp",
+        followers: "1.8M",
+        isActive: true,
+        order: 10,
+      },
+    ]);
+    console.log(`✅ Đã tạo thêm ${additionalBrandUsers.length} Brand users và ${additionalBrands.length} Brand profiles\n`);
+
+    // Merge với brands array
+    const allBrands = [...brands, ...additionalBrands];
+    const allBrandUsers = [...brandUsers, ...additionalBrandUsers];
+    
+    // Thêm nhiều JobPosts hơn từ các brands mới
+    const additionalJobPosts = await JobPost.insertMany([
+      {
+        brand: allBrands[4]._id,
+        brandName: allBrands[4].companyName,
+        title: "Tuyển Creator cho chiến dịch Adidas Originals",
+        jobType: "Lifestyle Creator",
+        workTime: "Part-time",
+        content: "Tìm kiếm Creator có phong cách streetwear và lifestyle để quảng bá dòng Adidas Originals. Tạo nội dung về fashion, sneaker culture và urban lifestyle.",
+        budget: "30,000,000 - 60,000,000 VNĐ/tháng",
+        requirements: "Từ 50K followers, có nội dung về streetwear/fashion, có phong cách riêng biệt và độc đáo.",
+        benefits: "Nhận sản phẩm Adidas miễn phí, tham gia các sự kiện độc quyền, hợp tác với các nghệ sĩ và influencer lớn.",
+        isActive: true,
+      },
+      {
+        brand: allBrands[5]._id,
+        brandName: allBrands[5].companyName,
+        title: "Tuyển Tech Reviewer cho iPhone mới",
+        jobType: "Tech Reviewer",
+        workTime: "Part-time",
+        content: "Cần Creator chuyên về công nghệ để review iPhone mới nhất. Bao gồm camera test, performance review, và so sánh với các flagship khác.",
+        budget: "50,000,000 - 100,000,000 VNĐ/video",
+        requirements: "Kênh YouTube/TikTok về công nghệ từ 100K followers, có kiến thức sâu về Apple ecosystem.",
+        benefits: "Được dùng thử sản phẩm trước khi ra mắt, hợp tác với Apple Vietnam, cơ hội tham gia các sự kiện công nghệ lớn.",
+        isActive: true,
+      },
+      {
+        brand: allBrands[6]._id,
+        brandName: allBrands[6].companyName,
+        title: "Tuyển Food Creator cho chiến dịch McDonald's",
+        jobType: "Food Content Creator",
+        workTime: "Part-time",
+        content: "Tìm kiếm Creator chuyên về food để review và quảng bá các món ăn mới của McDonald's. Tạo nội dung về trải nghiệm ẩm thực và văn hóa fast food.",
+        budget: "20,000,000 - 40,000,000 VNĐ/tháng",
+        requirements: "Từ 30K followers, có nội dung về food/restaurant review, có khả năng tạo video hấp dẫn.",
+        benefits: "Nhận voucher McDonald's miễn phí, tham gia các sự kiện ra mắt sản phẩm mới, hợp tác với team marketing chuyên nghiệp.",
+        isActive: true,
+      },
+      {
+        brand: allBrands[7]._id,
+        brandName: allBrands[7].companyName,
+        title: "Tuyển Lifestyle Creator cho Starbucks",
+        jobType: "Lifestyle Influencer",
+        workTime: "Part-time",
+        content: "Tìm kiếm Creator có phong cách sống hiện đại để quảng bá văn hóa cà phê Starbucks. Tạo nội dung về coffee culture, workspace lifestyle và moments.",
+        budget: "25,000,000 - 45,000,000 VNĐ/tháng",
+        requirements: "Từ 40K followers, có nội dung về lifestyle/coffee culture, có aesthetic đẹp và nhất quán.",
+        benefits: "Nhận Starbucks card miễn phí, tham gia các workshop về cà phê, hợp tác với các barista chuyên nghiệp.",
+        isActive: true,
+      },
+      {
+        brand: allBrands[8]._id,
+        brandName: allBrands[8].companyName,
+        title: "Tuyển Beauty Creator cho Unilever",
+        jobType: "Beauty Influencer",
+        workTime: "Part-time",
+        content: "Tìm kiếm Creator chuyên về beauty để review và quảng bá các sản phẩm chăm sóc cá nhân của Unilever. Tạo nội dung về skincare, haircare và personal care.",
+        budget: "22,000,000 - 42,000,000 VNĐ/tháng",
+        requirements: "Từ 35K followers, có nội dung về beauty/skincare, có kiến thức về các sản phẩm chăm sóc cá nhân.",
+        benefits: "Nhận sản phẩm Unilever miễn phí, tham gia các workshop về skincare, hợp tác với các chuyên gia làm đẹp.",
+        isActive: true,
+      },
+      {
+        brand: allBrands[9]._id,
+        brandName: allBrands[9].companyName,
+        title: "Tuyển Makeup Artist cho L'Oréal",
+        jobType: "Makeup Artist",
+        workTime: "Part-time",
+        content: "Tìm kiếm Makeup Artist chuyên nghiệp để tạo tutorial và review các sản phẩm mỹ phẩm L'Oréal. Tạo nội dung về makeup techniques và product reviews.",
+        budget: "35,000,000 - 65,000,000 VNĐ/tháng",
+        requirements: "Professional makeup artist, từ 50K followers, có portfolio đẹp và chuyên nghiệp.",
+        benefits: "Nhận bộ sưu tập mỹ phẩm L'Oréal miễn phí, tham gia các sự kiện beauty lớn, hợp tác với các makeup artist hàng đầu.",
+        isActive: true,
+      },
+      {
+        brand: brands[0]._id,
+        brandName: brands[0].companyName,
+        title: "Tuyển Creator cho chiến dịch Coca-Cola Zero",
+        jobType: "Content Creator",
+        workTime: "Part-time",
+        content: "Tìm kiếm Creator để quảng bá Coca-Cola Zero - sản phẩm không đường mới. Tạo nội dung về healthy lifestyle và zero sugar trend.",
+        budget: "18,000,000 - 35,000,000 VNĐ/tháng",
+        requirements: "Từ 25K followers, có nội dung về lifestyle/health, có khả năng tạo video sáng tạo.",
+        benefits: "Nhận sản phẩm Coca-Cola Zero miễn phí, tham gia các sự kiện healthy lifestyle, hợp tác với các thương hiệu khác.",
+        isActive: true,
+      },
+      {
+        brand: brands[1]._id,
+        brandName: brands[1].companyName,
+        title: "Tuyển Creator cho chiến dịch Pepsi Max",
+        jobType: "Influencer Marketing",
+        workTime: "Part-time",
+        content: "Tìm kiếm Creator để quảng bá Pepsi Max - phiên bản không đường. Tạo nội dung về energy và bold taste.",
+        budget: "20,000,000 - 38,000,000 VNĐ/tháng",
+        requirements: "Từ 30K followers, có nội dung về lifestyle/entertainment, có engagement rate cao.",
+        benefits: "Nhận sản phẩm Pepsi Max miễn phí, tham gia các sự kiện giải trí, hợp tác với các thương hiệu lớn.",
+        isActive: true,
+      },
+      {
+        brand: brands[2]._id,
+        brandName: brands[2].companyName,
+        title: "Tuyển Creator cho dòng Galaxy Watch",
+        jobType: "Tech Reviewer",
+        workTime: "Part-time",
+        content: "Cần Creator để review Galaxy Watch mới nhất. Bao gồm fitness tracking, health monitoring và smart features.",
+        budget: "40,000,000 - 70,000,000 VNĐ/video",
+        requirements: "Kênh về công nghệ từ 40K followers, có kiến thức về smartwatch và wearable tech.",
+        benefits: "Được dùng thử Galaxy Watch trước khi ra mắt, hợp tác với Samsung Vietnam, cơ hội review các sản phẩm công nghệ khác.",
+        isActive: true,
+      },
+      {
+        brand: brands[3]._id,
+        brandName: brands[3].companyName,
+        title: "Tuyển Creator cho dòng Nike Air Max",
+        jobType: "Fashion Influencer",
+        workTime: "Part-time",
+        content: "Tìm kiếm Creator để quảng bá dòng giày Nike Air Max. Tạo nội dung về sneaker culture và street style.",
+        budget: "28,000,000 - 48,000,000 VNĐ/tháng",
+        requirements: "Từ 35K followers, có nội dung về fashion/sneakers, có phong cách streetwear.",
+        benefits: "Nhận giày Nike Air Max miễn phí, tham gia các sự kiện sneaker culture, hợp tác với các thương hiệu streetwear.",
+        isActive: true,
+      },
+      {
+        brand: allBrands[4]._id,
+        brandName: allBrands[4].companyName,
+        title: "Tuyển Creator cho chiến dịch Adidas Sportswear",
+        jobType: "Sports Influencer",
+        workTime: "Part-time",
+        content: "Tìm kiếm Creator chuyên về thể thao để quảng bá dòng Adidas Sportswear. Tạo nội dung về training, sports performance và athletic lifestyle.",
+        budget: "32,000,000 - 55,000,000 VNĐ/tháng",
+        requirements: "Từ 45K followers, có nội dung về sports/fitness, có kinh nghiệm trong thể thao.",
+        benefits: "Nhận trang phục thể thao Adidas miễn phí, tham gia các giải đấu được tài trợ, hợp tác với các vận động viên chuyên nghiệp.",
+        isActive: true,
+      },
+      {
+        brand: allBrands[5]._id,
+        brandName: allBrands[5].companyName,
+        title: "Tuyển Creator cho iPad Pro",
+        jobType: "Tech Content Creator",
+        workTime: "Part-time",
+        content: "Cần Creator để review iPad Pro mới nhất. Bao gồm productivity features, creative capabilities và Apple Pencil experience.",
+        budget: "45,000,000 - 85,000,000 VNĐ/video",
+        requirements: "Kênh về công nghệ từ 60K followers, có kiến thức về tablet và creative workflows.",
+        benefits: "Được dùng thử iPad Pro trước khi ra mắt, hợp tác với Apple Vietnam, cơ hội review các sản phẩm Apple khác.",
+        isActive: true,
+      },
+      {
+        brand: allBrands[6]._id,
+        brandName: allBrands[6].companyName,
+        title: "Tuyển Creator cho chiến dịch Big Mac",
+        jobType: "Food Content Creator",
+        workTime: "Part-time",
+        content: "Tìm kiếm Creator để quảng bá Big Mac - biểu tượng của McDonald's. Tạo nội dung về iconic burger và fast food culture.",
+        budget: "24,000,000 - 44,000,000 VNĐ/tháng",
+        requirements: "Từ 40K followers, có nội dung về food/restaurant, có khả năng tạo video hấp dẫn về ẩm thực.",
+        benefits: "Nhận voucher McDonald's miễn phí, tham gia các sự kiện đặc biệt, hợp tác với các food creator khác.",
+        isActive: true,
+      },
+      {
+        brand: allBrands[7]._id,
+        brandName: allBrands[7].companyName,
+        title: "Tuyển Creator cho Starbucks Reserve",
+        jobType: "Coffee Content Creator",
+        workTime: "Part-time",
+        content: "Tìm kiếm Creator để quảng bá Starbucks Reserve - dòng cà phê cao cấp. Tạo nội dung về specialty coffee và coffee tasting experience.",
+        budget: "26,000,000 - 46,000,000 VNĐ/tháng",
+        requirements: "Từ 35K followers, có nội dung về coffee/lifestyle, có kiến thức về specialty coffee.",
+        benefits: "Nhận Starbucks Reserve miễn phí, tham gia các cuộc thi cà phê, hợp tác với các barista chuyên nghiệp.",
+        isActive: true,
+      },
+      {
+        brand: allBrands[8]._id,
+        brandName: allBrands[8].companyName,
+        title: "Tuyển Creator cho Dove",
+        jobType: "Beauty Influencer",
+        workTime: "Part-time",
+        content: "Tìm kiếm Creator để quảng bá Dove - sản phẩm chăm sóc da. Tạo nội dung về real beauty và body positivity.",
+        budget: "23,000,000 - 43,000,000 VNĐ/tháng",
+        requirements: "Từ 30K followers, có nội dung về beauty/skincare, có thông điệp tích cực về body image.",
+        benefits: "Nhận sản phẩm Dove miễn phí, tham gia các chiến dịch body positivity, hợp tác với các beauty influencer.",
+        isActive: true,
+      },
+      {
+        brand: allBrands[9]._id,
+        brandName: allBrands[9].companyName,
+        title: "Tuyển Creator cho Maybelline",
+        jobType: "Makeup Influencer",
+        workTime: "Part-time",
+        content: "Tìm kiếm Creator để quảng bá Maybelline - thương hiệu mỹ phẩm giá cả phải chăng. Tạo tutorial makeup và product reviews.",
+        budget: "30,000,000 - 50,000,000 VNĐ/tháng",
+        requirements: "Từ 40K followers, có nội dung về makeup/beauty, có khả năng tạo tutorial chuyên nghiệp.",
+        benefits: "Nhận bộ sưu tập Maybelline miễn phí, tham gia các sự kiện beauty, hợp tác với các makeup artist.",
+        isActive: true,
+      },
+    ]);
+    
+    const allJobPosts = [...jobPosts, ...additionalJobPosts];
+    console.log(`✅ Đã tạo ${allJobPosts.length} JobPosts (${jobPosts.length} ban đầu + ${additionalJobPosts.length} thêm)\n`);
 
     // ==================== USERS - CREATOR ====================
     console.log("👤 Đang tạo Creator users...");
+    const nowForUsers = new Date();
     const creatorUsers = await User.insertMany([
       {
         email: "creator1@revlive.com",
@@ -308,6 +702,8 @@ async function seedAll() {
         isActive: true,
         isDeleted: false,
         premiumStatus: "premium",
+        memberType: "creator",
+        premiumExpiredAt: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000), // 25 ngày từ bây giờ
         avatar: "https://i.pravatar.cc/150?img=1",
       },
       {
@@ -320,6 +716,8 @@ async function seedAll() {
         isActive: true,
         isDeleted: false,
         premiumStatus: "premium",
+        memberType: "creator",
+        premiumExpiredAt: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000), // 20 ngày từ bây giờ
         avatar: "https://i.pravatar.cc/150?img=5",
       },
       {
@@ -332,6 +730,8 @@ async function seedAll() {
         isActive: true,
         isDeleted: false,
         premiumStatus: "free",
+        memberType: "free",
+        premiumExpiredAt: null,
         avatar: "https://i.pravatar.cc/150?img=12",
       },
       {
@@ -344,6 +744,8 @@ async function seedAll() {
         isActive: true,
         isDeleted: false,
         premiumStatus: "premium",
+        memberType: "creator",
+        premiumExpiredAt: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), // 10 ngày từ bây giờ
         avatar: "https://i.pravatar.cc/150?img=20",
       },
       {
@@ -356,6 +758,8 @@ async function seedAll() {
         isActive: true,
         isDeleted: false,
         premiumStatus: "free",
+        memberType: "free",
+        premiumExpiredAt: null,
         avatar: "https://i.pravatar.cc/150?img=33",
       },
       {
@@ -368,10 +772,171 @@ async function seedAll() {
         isActive: true,
         isDeleted: false,
         premiumStatus: "premium",
+        memberType: "creator",
+        premiumExpiredAt: new Date(Date.now() + 35 * 24 * 60 * 60 * 1000), // 35 ngày từ bây giờ
         avatar: "https://i.pravatar.cc/150?img=47",
       },
     ]);
     console.log(`✅ Đã tạo ${creatorUsers.length} Creator users\n`);
+
+    // Thêm nhiều Creator users hơn
+    console.log("👤 Đang tạo thêm Creator users...");
+    const additionalCreatorUsers = await User.insertMany([
+      {
+        email: "creator9@revlive.com",
+        username: "gaming_streamer",
+        passwordHash: creatorPassword,
+        provider: "local",
+        roles: ["creator", "user"],
+        isVerified: true,
+        isActive: true,
+        isDeleted: false,
+        premiumStatus: "premium",
+        memberType: "creator",
+        premiumExpiredAt: new Date(nowForUsers.getTime() + 18 * 24 * 60 * 60 * 1000),
+        avatar: "https://i.pravatar.cc/150?img=53",
+        createdAt: new Date(nowForUsers.getTime() - 12 * 24 * 60 * 60 * 1000),
+      },
+      {
+        email: "creator10@revlive.com",
+        username: "music_producer",
+        passwordHash: creatorPassword,
+        provider: "local",
+        roles: ["creator", "user"],
+        isVerified: true,
+        isActive: true,
+        isDeleted: false,
+        premiumStatus: "free",
+        memberType: "free",
+        premiumExpiredAt: null,
+        avatar: "https://i.pravatar.cc/150?img=54",
+        createdAt: new Date(nowForUsers.getTime() - 4 * 24 * 60 * 60 * 1000), // 4 ngày trước (khách hàng mới)
+      },
+      {
+        email: "creator11@revlive.com",
+        username: "fashion_stylist",
+        passwordHash: creatorPassword,
+        provider: "local",
+        roles: ["creator", "user"],
+        isVerified: true,
+        isActive: true,
+        isDeleted: false,
+        premiumStatus: "premium",
+        memberType: "creator",
+        premiumExpiredAt: new Date(nowForUsers.getTime() + 22 * 24 * 60 * 60 * 1000),
+        avatar: "https://i.pravatar.cc/150?img=55",
+        createdAt: new Date(nowForUsers.getTime() - 18 * 24 * 60 * 60 * 1000),
+      },
+      {
+        email: "creator12@revlive.com",
+        username: "pet_content",
+        passwordHash: creatorPassword,
+        provider: "local",
+        roles: ["creator", "user"],
+        isVerified: true,
+        isActive: true,
+        isDeleted: false,
+        premiumStatus: "free",
+        memberType: "free",
+        premiumExpiredAt: null,
+        avatar: "https://i.pravatar.cc/150?img=56",
+        createdAt: new Date(nowForUsers.getTime() - 6 * 24 * 60 * 60 * 1000), // 6 ngày trước (khách hàng mới)
+      },
+      {
+        email: "creator13@revlive.com",
+        username: "comedy_creator",
+        passwordHash: creatorPassword,
+        provider: "local",
+        roles: ["creator", "user"],
+        isVerified: true,
+        isActive: true,
+        isDeleted: false,
+        premiumStatus: "premium",
+        memberType: "creator",
+        premiumExpiredAt: new Date(nowForUsers.getTime() + 28 * 24 * 60 * 60 * 1000),
+        avatar: "https://i.pravatar.cc/150?img=57",
+        createdAt: new Date(nowForUsers.getTime() - 22 * 24 * 60 * 60 * 1000),
+      },
+      {
+        email: "creator14@revlive.com",
+        username: "education_content",
+        passwordHash: creatorPassword,
+        provider: "local",
+        roles: ["creator", "user"],
+        isVerified: true,
+        isActive: true,
+        isDeleted: false,
+        premiumStatus: "free",
+        memberType: "free",
+        premiumExpiredAt: null,
+        avatar: "https://i.pravatar.cc/150?img=58",
+        createdAt: new Date(nowForUsers.getTime() - 7 * 24 * 60 * 60 * 1000), // 7 ngày trước (khách hàng mới)
+      },
+      {
+        email: "creator15@revlive.com",
+        username: "diy_crafts",
+        passwordHash: creatorPassword,
+        provider: "local",
+        roles: ["creator", "user"],
+        isVerified: true,
+        isActive: true,
+        isDeleted: false,
+        premiumStatus: "premium",
+        memberType: "creator",
+        premiumExpiredAt: new Date(nowForUsers.getTime() + 15 * 24 * 60 * 60 * 1000),
+        avatar: "https://i.pravatar.cc/150?img=59",
+        createdAt: new Date(nowForUsers.getTime() - 14 * 24 * 60 * 60 * 1000),
+      },
+      {
+        email: "creator16@revlive.com",
+        username: "travel_vlogger",
+        passwordHash: creatorPassword,
+        provider: "local",
+        roles: ["creator", "user"],
+        isVerified: true,
+        isActive: true,
+        isDeleted: false,
+        premiumStatus: "premium",
+        memberType: "creator",
+        premiumExpiredAt: new Date(nowForUsers.getTime() + 30 * 24 * 60 * 60 * 1000),
+        avatar: "https://i.pravatar.cc/150?img=60",
+        createdAt: new Date(nowForUsers.getTime() - 28 * 24 * 60 * 60 * 1000),
+      },
+      {
+        email: "creator17@revlive.com",
+        username: "sports_analyst",
+        passwordHash: creatorPassword,
+        provider: "local",
+        roles: ["creator", "user"],
+        isVerified: true,
+        isActive: true,
+        isDeleted: false,
+        premiumStatus: "free",
+        memberType: "free",
+        premiumExpiredAt: null,
+        avatar: "https://i.pravatar.cc/150?img=61",
+        createdAt: new Date(nowForUsers.getTime() - 8 * 24 * 60 * 60 * 1000), // 8 ngày trước (khách hàng mới)
+      },
+      {
+        email: "creator18@revlive.com",
+        username: "parenting_tips",
+        passwordHash: creatorPassword,
+        provider: "local",
+        roles: ["creator", "user"],
+        isVerified: true,
+        isActive: true,
+        isDeleted: false,
+        premiumStatus: "premium",
+        memberType: "creator",
+        premiumExpiredAt: new Date(nowForUsers.getTime() + 12 * 24 * 60 * 60 * 1000),
+        avatar: "https://i.pravatar.cc/150?img=62",
+        createdAt: new Date(nowForUsers.getTime() - 16 * 24 * 60 * 60 * 1000),
+      },
+    ]);
+    console.log(`✅ Đã tạo thêm ${additionalCreatorUsers.length} Creator users\n`);
+
+    // Merge với creatorUsers array
+    const allCreatorUsers = [...creatorUsers, ...additionalCreatorUsers];
 
     // ==================== HOME - CREATORS ====================
     console.log("⭐ Đang tạo Creators (Home)...");
@@ -541,7 +1106,132 @@ async function seedAll() {
         rejectionReason: "Cảm ơn bạn đã quan tâm. Tuy nhiên, chúng tôi đang tìm kiếm Creator có lượng followers lớn hơn (từ 50K) cho chiến dịch này. Mong được hợp tác trong các dự án phù hợp hơn trong tương lai.",
       },
     ]);
-    console.log(`✅ Đã tạo ${applications.length} Applications\n`);
+    
+    // Thêm nhiều Applications hơn
+    const additionalApplications = await Application.insertMany([
+      {
+        jobPost: allJobPosts[4]._id,
+        creator: allCreatorUsers[6]._id,
+        cv: cvs[0]._id,
+        status: "pending",
+        message: "Tôi rất quan tâm đến chiến dịch Adidas Originals và có kinh nghiệm với streetwear content.",
+      },
+      {
+        jobPost: allJobPosts[5]._id,
+        creator: allCreatorUsers[2]._id,
+        cv: cvs[2]._id,
+        status: "approved",
+        message: "Tôi chuyên review công nghệ và rất muốn được review iPhone mới.",
+        approvalMessage: "Chúng tôi rất vui được hợp tác! Vui lòng liên hệ: Email: creator@apple.com.vn, SĐT: 0909876543.",
+      },
+      {
+        jobPost: allJobPosts[6]._id,
+        creator: allCreatorUsers[4]._id,
+        cv: cvs[4]._id,
+        status: "pending",
+        message: "Tôi là food vlogger và rất muốn hợp tác với McDonald's.",
+      },
+      {
+        jobPost: allJobPosts[7]._id,
+        creator: allCreatorUsers[0]._id,
+        cv: cvs[0]._id,
+        status: "approved",
+        message: "Tôi có phong cách lifestyle phù hợp với Starbucks.",
+        approvalMessage: "Chào mừng bạn! Liên hệ: Email: creator@starbucks.vn, SĐT: 0911111111.",
+      },
+      {
+        jobPost: allJobPosts[8]._id,
+        creator: allCreatorUsers[5]._id,
+        cv: cvs[5]._id,
+        status: "pending",
+        message: "Tôi là beauty influencer và rất muốn hợp tác với Unilever.",
+      },
+      {
+        jobPost: allJobPosts[9]._id,
+        creator: allCreatorUsers[5]._id,
+        cv: cvs[5]._id,
+        status: "approved",
+        message: "Tôi là makeup artist chuyên nghiệp và rất muốn hợp tác với L'Oréal.",
+        approvalMessage: "Chúng tôi rất vui được hợp tác! Liên hệ: Email: creator@loreal.vn, SĐT: 0922222222.",
+      },
+      {
+        jobPost: allJobPosts[10]._id,
+        creator: allCreatorUsers[1]._id,
+        cv: cvs[1]._id,
+        status: "pending",
+        message: "Tôi muốn tham gia chiến dịch Coca-Cola Zero.",
+      },
+      {
+        jobPost: allJobPosts[11]._id,
+        creator: allCreatorUsers[3]._id,
+        cv: cvs[3]._id,
+        status: "rejected",
+        message: "Tôi muốn hợp tác với Pepsi Max.",
+        rejectionReason: "Cảm ơn bạn đã quan tâm. Chúng tôi đang tìm kiếm Creator có lượng followers lớn hơn cho chiến dịch này.",
+      },
+      {
+        jobPost: allJobPosts[12]._id,
+        creator: allCreatorUsers[2]._id,
+        cv: cvs[2]._id,
+        status: "pending",
+        message: "Tôi chuyên review công nghệ và muốn review Galaxy Watch.",
+      },
+      {
+        jobPost: allJobPosts[13]._id,
+        creator: allCreatorUsers[3]._id,
+        cv: cvs[3]._id,
+        status: "approved",
+        message: "Tôi là fitness creator và rất phù hợp với Nike Air Max.",
+        approvalMessage: "Chào mừng bạn! Liên hệ: Email: creator@nike.vn, SĐT: 0933333333.",
+      },
+      {
+        jobPost: allJobPosts[14]._id,
+        creator: allCreatorUsers[3]._id,
+        cv: cvs[3]._id,
+        status: "pending",
+        message: "Tôi muốn hợp tác với Adidas Sportswear.",
+      },
+      {
+        jobPost: allJobPosts[15]._id,
+        creator: allCreatorUsers[2]._id,
+        cv: cvs[2]._id,
+        status: "pending",
+        message: "Tôi muốn review iPad Pro.",
+      },
+      {
+        jobPost: allJobPosts[16]._id,
+        creator: allCreatorUsers[4]._id,
+        cv: cvs[4]._id,
+        status: "approved",
+        message: "Tôi là food creator và muốn hợp tác với McDonald's Big Mac.",
+        approvalMessage: "Chúng tôi rất vui được hợp tác! Liên hệ: Email: creator@mcdonalds.vn, SĐT: 0944444444.",
+      },
+      {
+        jobPost: allJobPosts[17]._id,
+        creator: allCreatorUsers[0]._id,
+        cv: cvs[0]._id,
+        status: "pending",
+        message: "Tôi muốn hợp tác với Starbucks Reserve.",
+      },
+      {
+        jobPost: allJobPosts[18]._id,
+        creator: allCreatorUsers[5]._id,
+        cv: cvs[5]._id,
+        status: "pending",
+        message: "Tôi muốn hợp tác với Dove.",
+      },
+      {
+        jobPost: allJobPosts[19]._id,
+        creator: allCreatorUsers[5]._id,
+        cv: cvs[5]._id,
+        status: "approved",
+        message: "Tôi muốn hợp tác với Maybelline.",
+        approvalMessage: "Chào mừng bạn! Liên hệ: Email: creator@maybelline.vn, SĐT: 0955555555.",
+      },
+    ]);
+    
+    const allApplications = [...applications, ...additionalApplications];
+    console.log(`✅ Đã tạo ${allApplications.length} Applications (${applications.length} ban đầu + ${additionalApplications.length} thêm)\n`);
 
     // ==================== HOME - TOPICS ====================
     console.log("🎯 Đang tạo Topics...");
@@ -623,6 +1313,724 @@ async function seedAll() {
     });
     console.log(`✅ Đã tạo Footer\n`);
 
+    // ==================== BLOG POSTS ====================
+    console.log("📰 Đang tạo Blog posts...");
+    const blogs = await Blog.insertMany([
+      {
+        title: "10 Tips để trở thành Creator thành công trong năm 2025",
+        content: "Năm 2025 mang đến nhiều cơ hội mới cho các Creator. Trong bài viết này, chúng tôi sẽ chia sẻ 10 tips quan trọng để bạn có thể phát triển sự nghiệp Creator một cách hiệu quả...",
+        excerpt: "Khám phá những bí quyết vàng để trở thành Creator thành công trong năm 2025",
+        author: allCreatorUsers[0]._id,
+        authorName: "Nguyễn Văn Minh",
+        image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800",
+        featured: true,
+        category: "Tips & Tricks",
+        tags: ["creator", "tips", "success", "2025"],
+        views: 1250,
+        isPublished: true,
+        publishedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+      },
+      {
+        title: "Cách Brand và Creator hợp tác hiệu quả",
+        content: "Hợp tác giữa Brand và Creator là một trong những xu hướng marketing quan trọng nhất hiện nay. Bài viết này sẽ hướng dẫn cách cả hai bên có thể làm việc cùng nhau một cách hiệu quả...",
+        excerpt: "Hướng dẫn chi tiết về cách Brand và Creator có thể hợp tác thành công",
+        author: allCreatorUsers[1]._id,
+        authorName: "Trần Thị Linh",
+        image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800",
+        featured: true,
+        category: "Collaboration",
+        tags: ["brand", "creator", "collaboration", "marketing"],
+        views: 980,
+        isPublished: true,
+        publishedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
+      },
+      {
+        title: "Xu hướng Content Creation năm 2025",
+        content: "Năm 2025 chứng kiến sự phát triển mạnh mẽ của các xu hướng content creation mới. Từ AI-generated content đến short-form video, hãy cùng khám phá những xu hướng đang định hình ngành công nghiệp này...",
+        excerpt: "Tổng hợp các xu hướng content creation nổi bật trong năm 2025",
+        author: allCreatorUsers[2]._id,
+        authorName: "Lê Hoàng Anh",
+        image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800",
+        featured: false,
+        category: "Trends",
+        tags: ["trends", "content", "2025", "ai"],
+        views: 750,
+        isPublished: true,
+        publishedAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000),
+      },
+      {
+        title: "Hướng dẫn tạo CV Creator chuyên nghiệp",
+        content: "CV Creator là công cụ quan trọng để bạn giới thiệu bản thân với các Brand. Trong bài viết này, chúng tôi sẽ hướng dẫn bạn cách tạo một CV Creator chuyên nghiệp và thu hút...",
+        excerpt: "Bí quyết tạo CV Creator ấn tượng và chuyên nghiệp",
+        author: allCreatorUsers[3]._id,
+        authorName: "Phạm Thị Hương",
+        image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800",
+        featured: false,
+        category: "Guide",
+        tags: ["cv", "guide", "professional", "tips"],
+        views: 650,
+        isPublished: true,
+        publishedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
+      },
+      {
+        title: "5 Lý do Brand nên hợp tác với Creator",
+        content: "Hợp tác với Creator đang trở thành một phần không thể thiếu trong chiến lược marketing của các Brand. Hãy cùng khám phá 5 lý do tại sao Brand nên đầu tư vào Creator partnerships...",
+        excerpt: "Tại sao Brand nên hợp tác với Creator trong chiến lược marketing",
+        author: allCreatorUsers[1]._id,
+        authorName: "Trần Thị Linh",
+        image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800",
+        featured: false,
+        category: "Marketing",
+        tags: ["brand", "marketing", "partnership", "creator"],
+        views: 890,
+        isPublished: true,
+        publishedAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000),
+      },
+      {
+        title: "Cách tính giá hợp lý cho Creator Content",
+        content: "Định giá content là một trong những thách thức lớn nhất đối với Creator. Bài viết này sẽ giúp bạn hiểu cách tính giá hợp lý dựa trên các yếu tố như followers, engagement rate, và loại content...",
+        excerpt: "Hướng dẫn chi tiết về cách định giá content cho Creator",
+        author: allCreatorUsers[0]._id,
+        authorName: "Nguyễn Văn Minh",
+        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800",
+        featured: false,
+        category: "Business",
+        tags: ["pricing", "business", "creator", "money"],
+        views: 1120,
+        isPublished: true,
+        publishedAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000),
+      },
+      {
+        title: "Top 10 Creator Tools không thể thiếu",
+        content: "Công cụ phù hợp có thể giúp Creator làm việc hiệu quả hơn. Dưới đây là danh sách 10 công cụ không thể thiếu cho mọi Creator, từ video editing đến analytics...",
+        excerpt: "Danh sách các công cụ hữu ích nhất cho Creator",
+        author: allCreatorUsers[2]._id,
+        authorName: "Lê Hoàng Anh",
+        image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800",
+        featured: false,
+        category: "Tools",
+        tags: ["tools", "software", "productivity", "creator"],
+        views: 540,
+        isPublished: true,
+        publishedAt: new Date(Date.now() - 22 * 24 * 60 * 60 * 1000),
+      },
+      {
+        title: "Case Study: Chiến dịch Creator Marketing thành công",
+        content: "Khám phá một case study thực tế về chiến dịch creator marketing thành công. Chúng tôi sẽ phân tích chi tiết cách một Brand đã hợp tác với Creator để đạt được kết quả ấn tượng...",
+        excerpt: "Phân tích chi tiết một chiến dịch creator marketing thành công",
+        author: allCreatorUsers[5]._id,
+        authorName: "Đỗ Thị Mai",
+        image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800",
+        featured: true,
+        category: "Case Study",
+        tags: ["case study", "success", "marketing", "campaign"],
+        views: 1340,
+        isPublished: true,
+        publishedAt: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000),
+      },
+      {
+        title: "Cách xây dựng Personal Brand cho Creator",
+        content: "Personal brand là yếu tố quan trọng giúp Creator nổi bật trong thị trường cạnh tranh. Bài viết này sẽ hướng dẫn bạn cách xây dựng và phát triển personal brand một cách hiệu quả...",
+        excerpt: "Hướng dẫn xây dựng personal brand cho Creator",
+        author: allCreatorUsers[4]._id,
+        authorName: "Võ Đức Thành",
+        image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800",
+        featured: false,
+        category: "Branding",
+        tags: ["personal brand", "branding", "identity", "creator"],
+        views: 720,
+        isPublished: true,
+        publishedAt: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000),
+      },
+      {
+        title: "Tương lai của Creator Economy",
+        content: "Creator Economy đang phát triển với tốc độ chóng mặt. Hãy cùng khám phá những xu hướng và dự đoán về tương lai của ngành công nghiệp này trong những năm tới...",
+        excerpt: "Dự đoán về tương lai của Creator Economy",
+        author: allCreatorUsers[0]._id,
+        authorName: "Nguyễn Văn Minh",
+        image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800",
+        featured: true,
+        category: "Future",
+        tags: ["future", "economy", "trends", "prediction"],
+        views: 1560,
+        isPublished: true,
+        publishedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+      },
+    ]);
+    console.log(`✅ Đã tạo ${blogs.length} Blog posts\n`);
+
+    // ==================== PAYMENT CONFIG ====================
+    console.log("⚙️ Đang tạo Payment Config...");
+    const paymentConfig = await PaymentConfig.create({
+      qrCodeUrl: "", // Staff sẽ upload QR code sau
+      bankName: "Vietcombank",
+      accountNumber: "1234567890",
+      accountName: "CÔNG TY TNHH REVLIVE",
+    });
+    console.log(`✅ Đã tạo Payment Config\n`);
+
+    // ==================== TRANSACTIONS ====================
+    console.log("💳 Đang tạo Transactions...");
+    const now = new Date();
+    
+    // Helper function để tạo date với giờ cụ thể
+    const createDate = (daysAgo, hours = 12, minutes = 0) => {
+      const date = new Date(now);
+      date.setDate(date.getDate() - daysAgo);
+      date.setHours(hours, minutes, 0, 0);
+      return date;
+    };
+
+    const transactions = await Transaction.insertMany([
+      // ========== HÔM NAY (completed) ==========
+      {
+        user: creatorUsers[0]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${creatorUsers[0].username} Creator VIP 1`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(0, 10, 30), // Hôm nay 10:30
+        approvedAt: createDate(0, 10, 35),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: brandUsers[0]._id,
+        plan: "brand",
+        amount: 199000,
+        originalAmount: 299000,
+        transferContent: `REVLIVE ${brandUsers[0].username} Brand VIP 2`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(0, 14, 15), // Hôm nay 14:15
+        approvedAt: createDate(0, 14, 20),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: creatorUsers[1]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${creatorUsers[1].username} Creator VIP 1`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(0, 16, 45), // Hôm nay 16:45
+        approvedAt: createDate(0, 16, 50),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      
+      // ========== HÔM QUA (completed) ==========
+      {
+        user: brandUsers[1]._id,
+        plan: "brand",
+        amount: 199000,
+        originalAmount: 299000,
+        transferContent: `REVLIVE ${brandUsers[1].username} Brand VIP 2`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(1, 9, 0), // Hôm qua 9:00
+        approvedAt: createDate(1, 9, 5),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: creatorUsers[3]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${creatorUsers[3].username} Creator VIP 1`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(1, 11, 30), // Hôm qua 11:30
+        approvedAt: createDate(1, 11, 35),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: creatorUsers[5]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${creatorUsers[5].username} Creator VIP 1`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(1, 15, 20), // Hôm qua 15:20
+        approvedAt: createDate(1, 15, 25),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      
+      // ========== 2 NGÀY TRƯỚC ==========
+      {
+        user: brandUsers[3]._id,
+        plan: "brand",
+        amount: 199000,
+        originalAmount: 299000,
+        transferContent: `REVLIVE ${brandUsers[3].username} Brand VIP 2`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(2, 10, 0),
+        approvedAt: createDate(2, 10, 5),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: creatorUsers[0]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${creatorUsers[0].username} Creator VIP 1`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(2, 14, 30),
+        approvedAt: createDate(2, 14, 35),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      
+      // ========== 3 NGÀY TRƯỚC ==========
+      {
+        user: creatorUsers[1]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${creatorUsers[1].username} Creator VIP 1`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(3, 9, 15),
+        approvedAt: createDate(3, 9, 20),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: brandUsers[0]._id,
+        plan: "brand",
+        amount: 199000,
+        originalAmount: 299000,
+        transferContent: `REVLIVE ${brandUsers[0].username} Brand VIP 2`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(3, 13, 45),
+        approvedAt: createDate(3, 13, 50),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      
+      // ========== 4 NGÀY TRƯỚC ==========
+      {
+        user: creatorUsers[3]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${creatorUsers[3].username} Creator VIP 1`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(4, 11, 0),
+        approvedAt: createDate(4, 11, 5),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      
+      // ========== 5 NGÀY TRƯỚC ==========
+      {
+        user: brandUsers[1]._id,
+        plan: "brand",
+        amount: 199000,
+        originalAmount: 299000,
+        transferContent: `REVLIVE ${brandUsers[1].username} Brand VIP 2`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(5, 10, 30),
+        approvedAt: createDate(5, 10, 35),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: creatorUsers[5]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${creatorUsers[5].username} Creator VIP 1`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(5, 16, 0),
+        approvedAt: createDate(5, 16, 5),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      
+      // ========== 6 NGÀY TRƯỚC ==========
+      {
+        user: brandUsers[3]._id,
+        plan: "brand",
+        amount: 199000,
+        originalAmount: 299000,
+        transferContent: `REVLIVE ${brandUsers[3].username} Brand VIP 2`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(6, 9, 45),
+        approvedAt: createDate(6, 9, 50),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      
+      // ========== TRANSACTIONS PENDING (hôm nay và hôm qua) ==========
+      {
+        user: creatorUsers[2]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${creatorUsers[2].username} Creator VIP 1`,
+        status: "pending",
+        qrCodeUrl: "",
+        createdAt: createDate(0, 8, 0), // Hôm nay 8:00
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: brandUsers[2]._id,
+        plan: "brand",
+        amount: 199000,
+        originalAmount: 299000,
+        transferContent: `REVLIVE ${brandUsers[2].username} Brand VIP 2`,
+        status: "pending",
+        qrCodeUrl: "",
+        createdAt: createDate(0, 12, 30), // Hôm nay 12:30
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: creatorUsers[4]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${creatorUsers[4].username} Creator VIP 1`,
+        status: "pending",
+        qrCodeUrl: "",
+        createdAt: createDate(1, 17, 0), // Hôm qua 17:00
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      
+      // ========== TRANSACTIONS CANCELLED (trong 30 ngày) ==========
+      {
+        user: creatorUsers[2]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${creatorUsers[2].username} Creator VIP 1`,
+        status: "cancelled",
+        qrCodeUrl: "",
+        cancelReason: "Người dùng yêu cầu hủy",
+        createdAt: createDate(3, 15, 0),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: brandUsers[2]._id,
+        plan: "brand",
+        amount: 199000,
+        originalAmount: 299000,
+        transferContent: `REVLIVE ${brandUsers[2].username} Brand VIP 2`,
+        status: "cancelled",
+        qrCodeUrl: "",
+        cancelReason: "Không đủ thông tin thanh toán",
+        createdAt: createDate(10, 10, 0),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: creatorUsers[4]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${creatorUsers[4].username} Creator VIP 1`,
+        status: "cancelled",
+        qrCodeUrl: "",
+        cancelReason: "Người dùng không muốn tiếp tục",
+        createdAt: createDate(15, 14, 0),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+    ]);
+    
+    // Thêm nhiều Transactions hơn từ các users mới
+    const additionalTransactions = await Transaction.insertMany([
+      // Transactions từ các creators mới
+      {
+        user: allCreatorUsers[6]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${allCreatorUsers[6].username} Creator VIP 1`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(1, 13, 0),
+        approvedAt: createDate(1, 13, 5),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: allCreatorUsers[7]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${allCreatorUsers[7].username} Creator VIP 1`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(2, 10, 0),
+        approvedAt: createDate(2, 10, 5),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: allCreatorUsers[8]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${allCreatorUsers[8].username} Creator VIP 1`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(3, 14, 0),
+        approvedAt: createDate(3, 14, 5),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: allCreatorUsers[9]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${allCreatorUsers[9].username} Creator VIP 1`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(4, 9, 0),
+        approvedAt: createDate(4, 9, 5),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: allCreatorUsers[10]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${allCreatorUsers[10].username} Creator VIP 1`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(5, 11, 0),
+        approvedAt: createDate(5, 11, 5),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: allCreatorUsers[11]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${allCreatorUsers[11].username} Creator VIP 1`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(6, 15, 0),
+        approvedAt: createDate(6, 15, 5),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      // Transactions từ các brands mới
+      {
+        user: allBrandUsers[4]._id,
+        plan: "brand",
+        amount: 199000,
+        originalAmount: 299000,
+        transferContent: `REVLIVE ${allBrandUsers[4].username} Brand VIP 2`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(1, 16, 0),
+        approvedAt: createDate(1, 16, 5),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: allBrandUsers[5]._id,
+        plan: "brand",
+        amount: 199000,
+        originalAmount: 299000,
+        transferContent: `REVLIVE ${allBrandUsers[5].username} Brand VIP 2`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(2, 14, 0),
+        approvedAt: createDate(2, 14, 5),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: allBrandUsers[6]._id,
+        plan: "brand",
+        amount: 199000,
+        originalAmount: 299000,
+        transferContent: `REVLIVE ${allBrandUsers[6].username} Brand VIP 2`,
+        status: "pending",
+        qrCodeUrl: "",
+        createdAt: createDate(0, 9, 0),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: allBrandUsers[7]._id,
+        plan: "brand",
+        amount: 199000,
+        originalAmount: 299000,
+        transferContent: `REVLIVE ${allBrandUsers[7].username} Brand VIP 2`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(3, 12, 0),
+        approvedAt: createDate(3, 12, 5),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: allBrandUsers[8]._id,
+        plan: "brand",
+        amount: 199000,
+        originalAmount: 299000,
+        transferContent: `REVLIVE ${allBrandUsers[8].username} Brand VIP 2`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(4, 13, 0),
+        approvedAt: createDate(4, 13, 5),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: allBrandUsers[9]._id,
+        plan: "brand",
+        amount: 199000,
+        originalAmount: 299000,
+        transferContent: `REVLIVE ${allBrandUsers[9].username} Brand VIP 2`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(5, 15, 0),
+        approvedAt: createDate(5, 15, 5),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      // Thêm một số transactions pending và cancelled
+      {
+        user: allCreatorUsers[12]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${allCreatorUsers[12].username} Creator VIP 1`,
+        status: "pending",
+        qrCodeUrl: "",
+        createdAt: createDate(0, 11, 0),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: allCreatorUsers[13]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${allCreatorUsers[13].username} Creator VIP 1`,
+        status: "cancelled",
+        qrCodeUrl: "",
+        cancelReason: "Người dùng không muốn tiếp tục",
+        createdAt: createDate(7, 10, 0),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+      {
+        user: allCreatorUsers[14]._id,
+        plan: "creator",
+        amount: 99000,
+        originalAmount: 199000,
+        transferContent: `REVLIVE ${allCreatorUsers[14].username} Creator VIP 1`,
+        status: "completed",
+        qrCodeUrl: "",
+        createdAt: createDate(1, 17, 0),
+        approvedAt: createDate(1, 17, 5),
+        beforeUpgrade: {
+          memberType: "free",
+          premiumExpiredAt: null,
+        },
+      },
+    ]);
+    
+    const allTransactions = [...transactions, ...additionalTransactions];
+    console.log(`✅ Đã tạo ${allTransactions.length} Transactions (${transactions.length} ban đầu + ${additionalTransactions.length} thêm)\n`);
+
     // ==================== TÓM TẮT ====================
     console.log("\n🎉 Seed tất cả dữ liệu thành công!\n");
     console.log("📊 TÓM TẮT:");
@@ -645,12 +2053,16 @@ async function seedAll() {
     console.log(`    - ${cvs.length} Creator CVs`);
     console.log(`  📝 APPLICATIONS:`);
     console.log(`    - ${applications.length} Applications`);
+    console.log(`  💳 PAYMENT:`);
+    console.log(`    - 1 Payment Config`);
+    console.log(`    - ${transactions.length} Transactions (${transactions.filter(t => t.status === "completed").length} completed, ${transactions.filter(t => t.status === "pending").length} pending, ${transactions.filter(t => t.status === "cancelled").length} cancelled)`);
     console.log(`\n🔑 THÔNG TIN ĐĂNG NHẬP BRAND:`);
-    brandUsers.forEach((user, index) => {
-      console.log(`  ${index + 1}. Email: ${user.email} | Password: Brand123! | Brand: ${brands[index].companyName}`);
+    allBrandUsers.forEach((user, index) => {
+      const brand = allBrands.find(b => b.user.toString() === user._id.toString());
+      console.log(`  ${index + 1}. Email: ${user.email} | Password: Brand123! | Brand: ${brand?.companyName || "N/A"}`);
     });
     console.log(`\n🔑 THÔNG TIN ĐĂNG NHẬP CREATOR:`);
-    creatorUsers.forEach((user, index) => {
+    allCreatorUsers.forEach((user, index) => {
       console.log(`  ${index + 1}. Email: ${user.email} | Password: Creator123! | Username: ${user.username}`);
     });
     console.log("\n✨ Tất cả dữ liệu đã sẵn sàng để test!\n");

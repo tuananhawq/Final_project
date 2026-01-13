@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_URLS } from "../config/api.js";
 import { useNotification } from "../context/NotificationContext.jsx";
 
 export function CreatorNews() {
@@ -18,7 +19,7 @@ export function CreatorNews() {
     try {
       setLoading(true);
       const res = await axios.get(
-        `http://localhost:3000/api/job-posts?page=${page}&limit=8`
+        `${API_URLS.JOB_POST}/job-posts?page=${page}&limit=8`
       );
       setPosts(res.data.posts || []);
       setPagination(res.data.pagination || {});
@@ -27,7 +28,7 @@ export function CreatorNews() {
       if (token) {
         try {
           const appliedRes = await axios.get(
-            "http://localhost:3000/api/creator/applications",
+            `${API_URLS.CREATOR}/applications`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }
@@ -58,7 +59,7 @@ export function CreatorNews() {
 
     try {
       await axios.post(
-        "http://localhost:3000/api/creator/apply",
+        `${API_URLS.CREATOR}/apply`,
         { jobPostId },
         {
           headers: { Authorization: `Bearer ${token}` },

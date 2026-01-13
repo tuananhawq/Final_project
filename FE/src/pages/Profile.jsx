@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaHome, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Header } from "../components/Header";
+import { checkPaymentStatus } from "../services/paymentService";
+import { useNotification } from "../context/NotificationContext";
+import { API_URLS } from "../config/api.js";
 import axios from "axios";
 import "../styles/profile.css";
 
@@ -19,23 +22,53 @@ export default function Profile() {
     const [showOldPass, setShowOldPass] = useState(false);
     const [showNewPass, setShowNewPass] = useState(false);
     const [showConfirmPass, setShowConfirmPass] = useState(false);
+    const [paymentStatus, setPaymentStatus] = useState(null);
+    const [loadingPaymentStatus, setLoadingPaymentStatus] = useState(false);
 
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
+    const { notifyError } = useNotification();
 
     /* ===== LOAD PROFILE ===== */
     useEffect(() => {
-        axios.get("http://localhost:3000/api/auth/me", {
-            headers: {
-                Authorization: `Bearer ${token}`
+        const fetchProfile = async () => {
+            try {
+                const res = await axios.get(`${API_URLS.AUTH}/me`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                const u = res.data.user;
+                setProfile(u);
+                setUsername(u.username || "");
+                setBio(u.bio || "");
+            } catch (error) {
+                console.error("Error fetching profile:", error);
             }
-        }).then(res => {
-            const u = res.data.user;
-            setProfile(u);
-            setUsername(u.username || "");
-            setBio(u.bio || "");
-        });
+        };
+
+        fetchProfile();
     }, []);
+
+    /* ===== LOAD PAYMENT STATUS ===== */
+    useEffect(() => {
+        const fetchPaymentStatus = async () => {
+            try {
+                setLoadingPaymentStatus(true);
+                const data = await checkPaymentStatus();
+                setPaymentStatus(data);
+            } catch (error) {
+                console.error("Error fetching payment status:", error);
+                // Không hiển thị error nếu user chưa có transaction
+            } finally {
+                setLoadingPaymentStatus(false);
+            }
+        };
+
+        if (token) {
+            fetchPaymentStatus();
+        }
+    }, [token]);
 
     if (!profile) return <p>Loading profile...</p>;
 
@@ -64,7 +97,7 @@ export default function Profile() {
                             const formData = new FormData();
                             formData.append("image", file);
                             const uploadRes = await axios.post(
-                                "http://localhost:3000/api/upload/image",
+                                `${API_URLS.UPLOAD}/image`,
                                 formData,
                                 {
                                     headers: {
@@ -75,7 +108,7 @@ export default function Profile() {
                             );
                             const { url, publicId } = uploadRes.data;
                             const res = await axios.put(
-                                "http://localhost:3000/api/auth/me",
+                                `${API_URLS.AUTH}/me`,
                                 { avatar: url, avatarPublicId: publicId },
                                 { headers: { Authorization: `Bearer ${token}` } }
                             );
@@ -109,6 +142,80 @@ export default function Profile() {
                 <span className={`profile-premium-status ${profile.premiumStatus}`}><b>Trạng thái:</b> {profile.premiumStatus.toUpperCase()}</span>
             </div>
 
+            {/* PAYMENT STATUS SECTION */}
+            {paymentStatus && (
+                <div className="payment-status-section">
+                    <h3 className="payment-status-title">💳 Thông tin Gói Dịch vụ</h3>
+                    <div className="payment-status-grid">
+                        <div className="payment-status-card">
+                            <div className="payment-status-label">Loại gói</div>
+                            <div className="payment-status-value">
+                                {paymentStatus.user.memberType === "free" 
+                                    ? "Miễn phí" 
+                                    : paymentStatus.user.memberType === "creator" 
+                                        ? "Creator VIP 1" 
+                                        : "Brand VIP 2"}
+                            </div>
+                        </div>
+                        <div className="payment-status-card">
+                            <div className="payment-status-label">Trạng thái</div>
+                            <div className={`payment-status-value ${paymentStatus.status.isActive ? "active" : "inactive"}`}>
+                                {paymentStatus.status.isActive ? "✓ Đang hoạt động" : "✗ Chưa kích hoạt"}
+                            </div>
+                        </div>
+                        {paymentStatus.user.premiumExpiredAt && (
+                            <>
+                                <div className="payment-status-card">
+                                    <div className="payment-status-label">Ngày hết hạn</div>
+                                    <div className="payment-status-value">
+                                        {new Date(paymentStatus.user.premiumExpiredAt).toLocaleDateString("vi-VN", {
+                                            year: "numeric",
+                                            month: "long",
+                                            day: "numeric"
+                                        })}
+                                    </div>
+                                </div>
+                                <div className="payment-status-card">
+                                    <div className="payment-status-label">Còn lại</div>
+                                    <div className={`payment-status-value ${paymentStatus.status.daysRemaining > 7 ? "success" : paymentStatus.status.daysRemaining > 0 ? "warning" : "danger"}`}>
+                                        {paymentStatus.status.daysRemaining > 0 
+                                            ? `${paymentStatus.status.daysRemaining} ngày` 
+                                            : "Đã hết hạn"}
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                    {paymentStatus.latestTransaction && (
+                        <div className="latest-transaction-info">
+                            <h4>Giao dịch gần nhất</h4>
+                            <div className="transaction-details">
+                                <p><strong>Gói:</strong> {paymentStatus.latestTransaction.plan === "creator" ? "Creator VIP 1" : "Brand VIP 2"}</p>
+                                <p><strong>Số tiền:</strong> {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(paymentStatus.latestTransaction.amount)}</p>
+                                <p><strong>Trạng thái:</strong> 
+                                    <span className={`transaction-status ${paymentStatus.latestTransaction.status}`}>
+                                        {paymentStatus.latestTransaction.status === "pending" ? "Chờ duyệt" : 
+                                         paymentStatus.latestTransaction.status === "completed" ? "Đã duyệt" : "Đã hủy"}
+                                    </span>
+                                </p>
+                                <p><strong>Ngày:</strong> {new Date(paymentStatus.latestTransaction.createdAt).toLocaleDateString("vi-VN")}</p>
+                            </div>
+                        </div>
+                    )}
+                    {!paymentStatus.status.isActive && (
+                        <div className="upgrade-prompt">
+                            <p>Bạn chưa có gói dịch vụ hoặc gói đã hết hạn.</p>
+                            <button 
+                                className="upgrade-btn"
+                                onClick={() => navigate("/services")}
+                            >
+                                Nâng cấp ngay →
+                            </button>
+                        </div>
+                    )}
+                </div>
+            )}
+
             {/* EDIT FORM */}
             <div className="profile-form-group">
                 <label className="profile-label">Username</label>
@@ -139,7 +246,7 @@ export default function Profile() {
                     onClick={async () => {
                         setLoading(true);
                         const res = await axios.put(
-                            "http://localhost:3000/api/auth/me",
+                            `${API_URLS.AUTH}/me`,
                             { name: username, bio },
                             {
                                 headers: { Authorization: `Bearer ${token}` }
@@ -217,7 +324,7 @@ export default function Profile() {
                                 }
                                 try {
                                     await axios.post(
-                                        "http://localhost:3000/api/auth/change-password",
+                                        `${API_URLS.AUTH}/change-password`,
                                         { oldPassword, newPassword },
                                         { headers: { Authorization: `Bearer ${token}` } }
                                     );

@@ -250,7 +250,7 @@ export default function BlogDetail() {
           {/* Featured Image */}
           <div className="blog-detail__image-wrapper">
             <img
-              src={blog.image || "http://localhost:3000/uploads/default.jpg"}
+              src={blog.image || "/default.jpg"}
               alt={blog.title}
               className="blog-detail__image"
               onError={(e) => {

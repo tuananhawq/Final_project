@@ -513,3 +513,40 @@ export const uploadBrandLogo = async (req, res) => {
     });
   }
 };
+
+// ==================== PAYMENT QR CODE UPLOAD ====================
+
+// Upload QR Code cho thanh toán (Staff/Admin only)
+export const uploadPaymentQRCode = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "NO_FILE" });
+    }
+
+    if (!req.file.mimetype.startsWith("image/")) {
+      return res.status(400).json({ 
+        error: "INVALID_FILE_TYPE",
+        message: "Chỉ chấp nhận file hình ảnh"
+      });
+    }
+
+    const result = await cloudinary.uploader.upload(
+      `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`,
+      {
+        folder: "payment/qrcode",
+        resource_type: "image",
+      }
+    );
+
+    res.json({
+      url: result.secure_url,
+      publicId: result.public_id,
+    });
+  } catch (err) {
+    console.error("UPLOAD PAYMENT QR CODE ERROR:", err);
+    res.status(500).json({ 
+      error: "UPLOAD_FAILED",
+      message: err.message || "Không thể upload QR code. Vui lòng thử lại."
+    });
+  }
+};

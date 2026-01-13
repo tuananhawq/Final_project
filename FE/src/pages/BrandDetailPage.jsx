@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 import "../styles/brand/brand-page.css";
 
 export default function BrandDetailPage() {
@@ -15,7 +16,7 @@ export default function BrandDetailPage() {
   useEffect(() => {
     const fetchBrand = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/brands/${id}`);
+        const res = await axios.get(`${API_URLS.BRAND}/brands/${id}`);
         setBrand(res.data.brand);
       } catch (error) {
         console.error("Fetch brand detail error:", error);

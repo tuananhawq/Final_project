@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 import "../styles/brand/brand-page.css";
 
 export default function CVDetailPage() {
@@ -23,7 +24,7 @@ export default function CVDetailPage() {
 
         // Get all CVs and find the one with matching ID
         const res = await axios.get(
-          "http://localhost:3000/api/cv/recommended",
+          `${API_URLS.CV}/recommended`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

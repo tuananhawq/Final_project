@@ -14,6 +14,7 @@ dotenv.config({
 
 const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/myapp_db";
 
+// Chỉ giữ lại 10 bài viết (các bài đầu tiên trong danh sách gốc)
 const rawBlogs = [
   {
     title: "10 Xu Hướng Lập Trình Web Cần Chú Ý Trong Năm 2026",
@@ -22,7 +23,7 @@ const rawBlogs = [
     category: "Technology",
     tags: ["Programming", "Web", "2026", "AI"],
     views: 1200,
-    featured: true,
+    featured: true, // nổi bật
   },
   {
     title: "Bí Quyết Quản Lý Tài Chính Cá Nhân Cho Gen Z",
@@ -31,6 +32,7 @@ const rawBlogs = [
     category: "Finance",
     tags: ["Money", "GenZ", "Investment"],
     views: 850,
+    featured: false,
   },
   {
     title: "Cách Xây Dựng Thương Hiệu Cá Nhân Trên LinkedIn",
@@ -39,7 +41,7 @@ const rawBlogs = [
     category: "Business",
     tags: ["LinkedIn", "Career", "Branding"],
     views: 2100,
-    featured: true,
+    featured: true, // nổi bật
   },
   {
     title: "Tương Lai Của Năng Lượng Tái Tạo",
@@ -48,6 +50,7 @@ const rawBlogs = [
     category: "Environment",
     tags: ["Green Energy", "Future", "Solar"],
     views: 560,
+    featured: false,
   },
   {
     title: "5 Công Thức Nấu Ăn Eat Clean Cho Người Bận Rộn",
@@ -56,7 +59,7 @@ const rawBlogs = [
     category: "Lifestyle",
     tags: ["Health", "Food", "EatClean"],
     views: 3200,
-    featured: true,
+    featured: true, // nổi bật
   },
   {
     title: "Sự Trỗi Dậy Của Thương Mại Điện Tử Xuyên Biên Giới",
@@ -65,6 +68,7 @@ const rawBlogs = [
     category: "Business",
     tags: ["E-commerce", "Global", "Sales"],
     views: 1450,
+    featured: false,
   },
   {
     title: "Hiểu Về Tâm Lý Học Người Tiêu Dùng Năm 2026",
@@ -73,6 +77,7 @@ const rawBlogs = [
     category: "Marketing",
     tags: ["Psychology", "Consumer", "Insight"],
     views: 980,
+    featured: false,
   },
   {
     title: "Top 5 Thành Phố Đáng Ghé Thăm Tại Đông Nam Á",
@@ -81,7 +86,7 @@ const rawBlogs = [
     category: "Travel",
     tags: ["Travel", "Asia", "Summer"],
     views: 4100,
-    featured: true,
+    featured: false,
   },
   {
     title: "Ứng Dụng Blockchain Ngoài Tiền Điện Tử",
@@ -90,6 +95,7 @@ const rawBlogs = [
     category: "Technology",
     tags: ["Blockchain", "Tech", "SupplyChain"],
     views: 720,
+    featured: false,
   },
   {
     title: "Nghệ Thuật Quản Lý Thời Gian Với Phương Pháp Deep Work",
@@ -98,90 +104,7 @@ const rawBlogs = [
     category: "Productivity",
     tags: ["Work", "Focus", "Success"],
     views: 2800,
-    featured: true,
-  },
-  {
-    title: "Tại Sao Bạn Nên Học Một Ngôn Ngữ Mới?",
-    content: "<h2>Mở rộng tư duy qua ngôn ngữ</h2><p>Học ngoại ngữ giúp cải thiện trí nhớ và mở ra cơ hội việc làm toàn cầu...</p>",
-    excerpt: "Những lợi ích kinh ngạc của việc thông thạo từ 2 ngôn ngữ trở lên.",
-    category: "Education",
-    tags: ["Language", "Learning", "Skills"],
-    views: 650,
-  },
-  {
-    title: "Cybersecurity: Bảo Vệ Bản Thân Trên Không Gian Mạng",
-    content: "<h2>Cách tạo mật khẩu mạnh và bảo mật 2 lớp</h2><p>Đừng để dữ liệu cá nhân bị đánh cắp bởi những thủ đoạn đơn giản...</p>",
-    excerpt: "Cẩm nang an toàn thông tin dành cho người dùng không chuyên về kỹ thuật.",
-    category: "Security",
-    tags: ["Cyber", "Privacy", "Internet"],
-    views: 1100,
-  },
-  {
-    title: "Xu Hướng Thời Trang Bền Vững (Sustainable Fashion)",
-    content: "<h2>Nói không với Fast Fashion</h2><p>Sử dụng chất liệu tái chế và ủng hộ các thương hiệu địa phương...</p>",
-    excerpt: "Làm thế nào để mặc đẹp mà vẫn góp phần bảo vệ hành tinh.",
-    category: "Fashion",
-    tags: ["Sustainable", "Style", "Green"],
-    views: 1300,
-  },
-  {
-    title: "Lợi Ích Của Việc Thiền Định Mỗi Ngày",
-    content: "<h2>10 phút tĩnh lặng cho tâm hồn</h2><p>Giảm stress và lo âu hiệu quả chỉ bằng hơi thở...</p>",
-    excerpt: "Hướng dẫn thực hành thiền đơn giản cho người mới bắt đầu.",
-    category: "Health",
-    tags: ["Meditation", "MentalHealth", "Peace"],
-    views: 2200,
-    featured: true,
-  },
-  {
-    title: "Khám Phá Vũ Trụ: Những Nhiệm Vụ Sao Hỏa Sắp Tới",
-    content: "<h2>Tham vọng định cư trên Sao Hỏa của SpaceX</h2><p>Những bước tiến mới trong công nghệ tên lửa đẩy tái sử dụng...</p>",
-    excerpt: "Cập nhật những tin tức mới nhất về cuộc đua vào không gian của các cường quốc.",
-    category: "Science",
-    tags: ["Space", "Mars", "NASA"],
-    views: 3500,
-    featured: true,
-  },
-  {
-    title: "Cách Viết Nội Dung Chuẩn SEO Năm 2026",
-    content: "<h2>Ưu tiên trải nghiệm người dùng (EEAT)</h2><p>Google đánh giá cao những bài viết có chuyên môn và độ tin cậy cao...</p>",
-    excerpt: "Kỹ thuật viết bài giúp blog của bạn luôn đứng top tìm kiếm.",
-    category: "Marketing",
-    tags: ["SEO", "Content", "Google"],
-    views: 1950,
-  },
-  {
-    title: "Sức Mạnh Của Podcast Trong Truyền Thông",
-    content: "<h2>Tại sao mọi người thích nghe Podcast?</h2><p>Sự tiện lợi khi vừa có thể lái xe, tập gym vừa học hỏi kiến thức...</p>",
-    excerpt: "Cách xây dựng một kênh Podcast cá nhân thu hút hàng ngàn lượt nghe.",
-    category: "Media",
-    tags: ["Podcast", "Audio", "Trend"],
-    views: 1200,
-  },
-  {
-    title: "Phát Triển Tư Duy Phản Biện (Critical Thinking)",
-    content: "<h2>Đặt câu hỏi trước mọi thông tin</h2><p>Kỹ năng quan trọng nhất trong thời đại tin giả tràn lan...</p>",
-    excerpt: "Rèn luyện tư duy sắc bén để đưa ra những quyết định đúng đắn.",
-    category: "Education",
-    tags: ["Thinking", "Mindset", "Logic"],
-    views: 890,
-  },
-  {
-    title: "Làm Chủ Kỹ Năng Thuyết Trình Trước Đám Đông",
-    content: "<h2>Vượt qua nỗi sợ đứng trước ống kính</h2><p>Cấu trúc bài thuyết trình đỉnh cao theo phong cách TED Talks...</p>",
-    excerpt: "Biến những buổi thuyết trình nhàm chán thành những màn trình diễn đầy cảm hứng.",
-    category: "Skills",
-    tags: ["Presentation", "PublicSpeaking", "Confidence"],
-    views: 1550,
-    featured: true,
-  },
-  {
-    title: "Tương Lai Của Công Việc Remote (Làm Việc Từ Xa)",
-    content: "<h2>Mô hình Hybrid Work lên ngôi</h2><p>Sự cân bằng giữa cuộc sống và công việc khi không còn phải đến văn phòng...</p>",
-    excerpt: "Các công cụ và văn hóa cần thiết để quản lý đội ngũ làm việc từ xa hiệu quả.",
-    category: "Business",
-    tags: ["Remote", "WorkLife", "DigitalNomad"],
-    views: 2300,
+    featured: false,
   },
 ];
 
@@ -200,12 +123,12 @@ async function seedBlog() {
     console.log("Đang làm sạch dữ liệu cũ...");
     await Blog.deleteMany({});
 
-    // 1. Cố định thời gian bắt đầu
+    // Cố định thời gian bắt đầu
     const BASE_DATE = new Date("2024-01-01T08:00:00Z");
+    console.log("Đang chuẩn bị 10 bài viết cố định...");
 
-    console.log("Đang chuẩn bị 20 bài viết cố định...");
     const blogsToSeed = rawBlogs.map((blog, index) => {
-      // 2. Cố định ngày tạo: Mỗi bài cách nhau đúng 1 ngày từ mốc BASE_DATE
+      // Ngày tạo cố định: mỗi bài cách nhau 1 ngày
       const createdAt = new Date(BASE_DATE);
       createdAt.setDate(BASE_DATE.getDate() + index);
 
@@ -213,8 +136,7 @@ async function seedBlog() {
         ...blog,
         author: staffUser._id,
         authorName: staffUser.username || "Staff",
-        // 3. Cố định hình ảnh: Sử dụng ảnh theo ID cố định (từ id 1 đến 20)
-        // Điều này giúp trình duyệt cache ảnh và không bị load lại ngẫu nhiên
+        // Ảnh cố định, không random (dùng id từ 10 → 19)
         image: `https://picsum.photos/id/${index + 10}/800/600`,
         isPublished: true,
         createdAt: createdAt,
@@ -225,6 +147,11 @@ async function seedBlog() {
     await Blog.insertMany(blogsToSeed);
 
     console.log(`✅ Thành công: Đã seed ${blogsToSeed.length} bài viết cố định!`);
+    console.log("→ 3 bài nổi bật (featured):");
+    console.log("  1. " + rawBlogs[0].title);
+    console.log("  2. " + rawBlogs[2].title);
+    console.log("  3. " + rawBlogs[4].title);
+
     process.exit(0);
   } catch (error) {
     console.error("❌ Lỗi khi seed:", error);

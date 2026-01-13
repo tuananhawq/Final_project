@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URLS } from "../config/api.js";
 import { useNotification } from "../context/NotificationContext.jsx";
 
 export function BrandCVManager() {
@@ -27,7 +28,7 @@ export function BrandCVManager() {
         return;
       }
 
-      const res = await axios.get("http://localhost:3000/api/brand/cv", {
+      const res = await axios.get(`${API_URLS.BRAND_CV}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCvs(res.data.cvs || []);
@@ -87,7 +88,7 @@ export function BrandCVManager() {
       fd.append("file", file);
 
       const res = await axios.post(
-        "http://localhost:3000/api/upload/cv",
+        `${API_URLS.UPLOAD}/cv`,
         fd,
         {
           headers: {
@@ -133,13 +134,13 @@ export function BrandCVManager() {
 
       if (editingCv) {
         await axios.put(
-          `http://localhost:3000/api/brand/cv/${editingCv._id}`,
+          `${API_URLS.BRAND_CV}/${editingCv._id}`,
           form,
           config
         );
       } else {
         await axios.post(
-          "http://localhost:3000/api/brand/cv",
+          `${API_URLS.BRAND_CV}`,
           form,
           config
         );
@@ -158,7 +159,7 @@ export function BrandCVManager() {
     if (!ok) return;
 
     try {
-      await axios.delete(`http://localhost:3000/api/brand/cv/${cvId}`, {
+      await axios.delete(`${API_URLS.BRAND_CV}/${cvId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       await fetchCvs();
