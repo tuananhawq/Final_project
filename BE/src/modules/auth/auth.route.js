@@ -12,6 +12,13 @@ import {
   updateUser,
   deleteUser
 } from './userManagement.controller.js';
+import {
+  getAllStaff,
+  getStaffById,
+  createStaff,
+  updateStaff,
+  deleteStaff
+} from './staffManagement.controller.js';
 
 const router = express.Router();
 
@@ -90,5 +97,12 @@ router.get("/admin/users/:id", authGuard, roleGuard("staff", "admin"), getUserBy
 router.post("/admin/users", authGuard, roleGuard("staff", "admin"), createUser);
 router.put("/admin/users/:id", authGuard, roleGuard("staff", "admin"), updateUser);
 router.delete("/admin/users/:id", authGuard, roleGuard("staff", "admin"), deleteUser);
+
+// Staff Management Routes (Admin only)
+router.get("/admin/staff", authGuard, roleGuard("admin"), getAllStaff);
+router.get("/admin/staff/:id", authGuard, roleGuard("admin"), getStaffById);
+router.post("/admin/staff", authGuard, roleGuard("admin"), createStaff);
+router.put("/admin/staff/:id", authGuard, roleGuard("admin"), updateStaff);
+router.delete("/admin/staff/:id", authGuard, roleGuard("admin"), deleteStaff);
 
 export default router;

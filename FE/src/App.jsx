@@ -5,6 +5,7 @@ import Home from "./pages/Home.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import Admin from "./pages/Admin.jsx";
 import BlogList from "./pages/BlogList.jsx";
 import BlogDetail from "./pages/BlogDetail.jsx";
 import Profile from "./pages/Profile.jsx";
@@ -51,6 +52,7 @@ export default function App() {
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/services" element={<Pricing />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/admin" element={<Admin />} />
       <Route path="/highlight/:id" element={<HighlightDetail />} />
       <Route path="/agency/:id" element={<AgencyDetailPage />} />
       <Route path="/creator-detail/:id" element={<CreatorDetailPage />} />

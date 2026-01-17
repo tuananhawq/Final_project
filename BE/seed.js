@@ -25,19 +25,35 @@ async function seed() {
 
     // Hash passwords
     console.log("Đang hash passwords...");
+    const adminPassword = await bcrypt.hash("Admin123!", 10);
     const staffPassword = await bcrypt.hash("Staff123!", 10);
     const userPassword = await bcrypt.hash("A123123123", 10);
 
     // Xóa users cũ nếu đã tồn tại (optional - để tránh duplicate)
     console.log("Đang kiểm tra users cũ...");
     await User.deleteMany({
-      email: { $in: ["staff@gmail.com", "minhanh27082004@gmail.com"] }
+      $or: [
+        { email: { $in: ["admin@gmail.com", "staff@gmail.com", "minhanh27082004@gmail.com"] } },
+        { username: { $in: ["admin", "staff", "minhanh27082004"] } }
+      ]
     });
     console.log("✅ Đã xóa users cũ (nếu có)");
 
     // Insert vào DB
     console.log("Đang insert users...");
     const users = await User.insertMany([
+      {
+        email: "admin@gmail.com",
+        username: "admin",
+        passwordHash: adminPassword,
+        provider: "local",
+        roles: ["admin"],
+        isVerified: true,
+        isActive: true,
+        isDeleted: false,
+        premiumStatus: "free",
+        bio: "Administrator account",
+      },
       {
         email: "staff@gmail.com",
         username: "staff",
