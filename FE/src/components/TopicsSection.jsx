@@ -5,7 +5,7 @@ import "../styles/home/home-topics.css";
 
 const positions = ["left", "center", "right"];
 
-export function TopicsSection() {
+export function TopicsSection({ searchQuery = "" }) {
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,16 +23,23 @@ export function TopicsSection() {
     fetchTopics();
   }, []);
 
+  const normalizedSearch = searchQuery.trim().toLowerCase();
+  const filteredTopics = normalizedSearch
+    ? topics.filter((topic) =>
+        topic.title?.toLowerCase().includes(normalizedSearch)
+      )
+    : topics;
+
   if (loading) {
     return <div className="home-topics">Loading...</div>;
   }
 
-  if (topics.length === 0) {
+  if (filteredTopics.length === 0) {
     return null;
   }
 
   return (
-    <section className="home-topics">
+    <section id="section-topics" className="home-topics">
       <div className="home-topics__container">
         {/* Title with decorative lines */}
         <div className="home-topics__title-wrapper">
@@ -45,7 +52,7 @@ export function TopicsSection() {
 
         {/* Topics Images with Overlapping Effect */}
         <div className="home-topics__grid">
-          {topics.map((topic, index) => {
+          {filteredTopics.map((topic, index) => {
             const position = topic.position || positions[index % 3];
             return (
               <Link

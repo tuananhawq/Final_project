@@ -36,7 +36,7 @@ export function Footer() {
           {/* Logo & Subscribe Section */}
           <div className="home-footer__section home-footer__section--logo">
             <img
-              src="/src/assets/logo-revlive.png"
+              src="/logo-revlive.png"
               alt="REVLIVE Logo"
               className="home-footer__logo"
             />
@@ -72,6 +72,11 @@ export function Footer() {
                   <li className="home-footer__list-item">
                     <a href="/about" className="home-footer__link">
                       Giới thiệu
+                    </a>
+                  </li>
+                  <li className="home-footer__list-item">
+                    <a href="/legal" className="home-footer__link">
+                      Điều khoản & Chính sách
                     </a>
                   </li>
                   <li className="home-footer__list-item">

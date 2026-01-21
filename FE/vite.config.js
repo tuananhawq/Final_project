@@ -17,7 +17,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false, // Tắt sourcemap trong production để giảm kích thước
-    minify: 'terser',
+    minify: 'esbuild',
     rollupOptions: {
       output: {
         manualChunks: {

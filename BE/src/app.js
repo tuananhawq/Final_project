@@ -31,6 +31,7 @@ import creatorCvRoute from "./modules/creatorCv/creatorCv.route.js";
 import applicationRoute from "./modules/application/application.route.js";
 import paymentRoute from "./modules/payment/payment.route.js";
 import dashboardRoute from "./modules/dashboard/dashboard.route.js";
+import legalRoute from "./modules/legal/legal.route.js";
 import { setupSwagger } from './config/swagger.js';
 import "./config/passport.js";
 
@@ -77,11 +78,19 @@ app.use("/api", creatorCvRoute);
 app.use("/api", applicationRoute);
 app.use("/api/payment", paymentRoute);
 app.use("/api/dashboard", dashboardRoute);
+app.use("/api/legal", legalRoute);
 // swagger
 setupSwagger(app);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Swagger: http://localhost:${PORT}/api-docs`);
-});
+
+// Chỉ listen khi chạy local, không phải trên Vercel
+if (process.env.VERCEL !== '1') {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Swagger: http://localhost:${PORT}/api-docs`);
+  });
+}
+
+// Export cho Vercel serverless
+export default app;

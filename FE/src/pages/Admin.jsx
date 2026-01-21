@@ -7,6 +7,7 @@ import { UserManagement } from "../components/UserManagement.jsx";
 import { ImageManagement } from "../components/ImageManagement.jsx";
 import TransactionManagement from "../components/TransactionManagement.jsx";
 import PaymentConfigManagement from "../components/PaymentConfigManagement.jsx";
+import LegalConfigManagement from "../components/LegalConfigManagement.jsx";
 import { StaffManagement } from "../components/StaffManagement.jsx";
 import DashboardStats from "../components/DashboardStats.jsx";
 import "../styles/dashboard.css";
@@ -131,6 +132,13 @@ export default function Admin() {
             >
               <span>⚙️</span> Cấu hình Thanh toán
             </div>
+            <div
+              className={`nav-item ${activeMenu === "legal-config" ? "active" : ""}`}
+              onClick={() => handleMenuClick("legal-config")}
+              style={{ cursor: "pointer" }}
+            >
+              <span>📄</span> Điều khoản & Chính sách
+            </div>
             <div className="nav-item">
               <span>📈</span> Reports
             </div>
@@ -179,6 +187,8 @@ export default function Admin() {
               <TransactionManagement />
             ) : activeMenu === "payment-config" ? (
               <PaymentConfigManagement />
+            ) : activeMenu === "legal-config" ? (
+              <LegalConfigManagement />
             ) : (
               <DashboardStats />
             )}

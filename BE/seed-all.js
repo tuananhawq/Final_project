@@ -114,7 +114,7 @@ async function seedAll() {
       {
         name: "Coca-Cola Vietnam",
         rank: "TOP 1",
-        image: "https://logos-world.net/wp-content/uploads/2020/04/Coca-Cola-Logo.png",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/800px-Coca-Cola_logo.svg.png",
         description: "Coca-Cola Vietnam là thương hiệu nước giải khát hàng đầu thế giới, luôn tìm kiếm các Creator sáng tạo để quảng bá sản phẩm. Với hơn 130 năm kinh nghiệm, chúng tôi cam kết mang đến những trải nghiệm tuyệt vời cho người tiêu dùng và đối tác. Chúng tôi tự hào hợp tác với các Creator tài năng để lan tỏa thông điệp tích cực và tạo ra những nội dung ý nghĩa.",
         size: "large",
         isActive: true,
@@ -123,7 +123,7 @@ async function seedAll() {
       {
         name: "Samsung Electronics",
         rank: "TOP 2",
-        image: "https://logos-world.net/wp-content/uploads/2020/06/Samsung-Logo.png",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Samsung_Logo.svg/800px-Samsung_Logo.svg.png",
         description: "Samsung Electronics Vietnam là nhà sản xuất điện tử hàng đầu, cần Creator để review và giới thiệu sản phẩm công nghệ mới nhất. Với sứ mệnh 'Inspire the World, Create the Future', chúng tôi không ngừng đổi mới và tạo ra những sản phẩm công nghệ tiên tiến. Chúng tôi tìm kiếm các Creator có đam mê công nghệ để chia sẻ những trải nghiệm thực tế và giá trị của sản phẩm Samsung đến với người tiêu dùng.",
         size: "small",
         isActive: true,
@@ -132,7 +132,7 @@ async function seedAll() {
       {
         name: "Nike Vietnam",
         rank: "TOP 3",
-        image: "https://logos-world.net/wp-content/uploads/2020/04/Nike-Logo.png",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/800px-Logo_NIKE.svg.png",
         description: "Nike Vietnam là thương hiệu thể thao toàn cầu, hợp tác với các Creator thể thao và lifestyle để truyền cảm hứng. Với triết lý 'Just Do It', chúng tôi tin rằng mọi người đều có thể vượt qua giới hạn của chính mình. Chúng tôi tìm kiếm các Creator có đam mê thể thao, có câu chuyện truyền cảm hứng và khả năng lan tỏa năng lượng tích cực đến cộng đồng.",
         size: "small",
         isActive: true,
@@ -156,7 +156,7 @@ async function seedAll() {
         premiumStatus: "premium",
         memberType: "brand",
         premiumExpiredAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 ngày từ bây giờ
-        avatar: "https://logos-world.net/wp-content/uploads/2020/04/Coca-Cola-Logo.png",
+        avatar: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/800px-Coca-Cola_logo.svg.png",
       },
       {
         email: "brand2@revlive.com",
@@ -170,7 +170,7 @@ async function seedAll() {
         premiumStatus: "premium",
         memberType: "brand",
         premiumExpiredAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000), // 15 ngày từ bây giờ
-        avatar: "https://logos-world.net/wp-content/uploads/2020/04/Pepsi-Logo.png",
+        avatar: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Pepsi_logo_2014.svg/800px-Pepsi_logo_2014.svg.png",
       },
       {
         email: "brand3@revlive.com",
@@ -184,7 +184,7 @@ async function seedAll() {
         premiumStatus: "free",
         memberType: "free",
         premiumExpiredAt: null,
-        avatar: "https://logos-world.net/wp-content/uploads/2020/06/Samsung-Logo.png",
+        avatar: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Samsung_Logo.svg/800px-Samsung_Logo.svg.png",
       },
       {
         email: "brand4@revlive.com",
@@ -198,7 +198,7 @@ async function seedAll() {
         premiumStatus: "premium",
         memberType: "brand",
         premiumExpiredAt: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000), // 45 ngày từ bây giờ
-        avatar: "https://logos-world.net/wp-content/uploads/2020/04/Nike-Logo.png",
+        avatar: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/800px-Logo_NIKE.svg.png",
       },
     ]);
     console.log(`✅ Đã tạo ${brandUsers.length} Brand users\n`);
@@ -210,7 +210,7 @@ async function seedAll() {
         user: brandUsers[0]._id,
         companyName: "Coca-Cola Vietnam",
         description: "Thương hiệu nước giải khát hàng đầu thế giới, luôn tìm kiếm các Creator sáng tạo để quảng bá sản phẩm.",
-        logo: "https://logos-world.net/wp-content/uploads/2020/04/Coca-Cola-Logo.png",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/800px-Coca-Cola_logo.svg.png",
         website: "https://www.coca-cola.com.vn",
         industry: "FMCG - Nước giải khát",
         followers: "500K",
@@ -221,7 +221,7 @@ async function seedAll() {
         user: brandUsers[1]._id,
         companyName: "PepsiCo Vietnam",
         description: "Tập đoàn đa quốc gia về thực phẩm và đồ uống, tìm kiếm đối tác Creator cho các chiến dịch marketing.",
-        logo: "https://logos-world.net/wp-content/uploads/2020/04/Pepsi-Logo.png",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Pepsi_logo_2014.svg/800px-Pepsi_logo_2014.svg.png",
         website: "https://www.pepsico.com.vn",
         industry: "FMCG - Nước giải khát",
         followers: "300K",
@@ -232,7 +232,7 @@ async function seedAll() {
         user: brandUsers[2]._id,
         companyName: "Samsung Electronics Vietnam",
         description: "Nhà sản xuất điện tử hàng đầu, cần Creator để review và giới thiệu sản phẩm công nghệ mới nhất.",
-        logo: "https://logos-world.net/wp-content/uploads/2020/06/Samsung-Logo.png",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Samsung_Logo.svg/800px-Samsung_Logo.svg.png",
         website: "https://www.samsung.com/vn",
         industry: "Công nghệ - Điện tử",
         followers: "1.2M",
@@ -243,7 +243,7 @@ async function seedAll() {
         user: brandUsers[3]._id,
         companyName: "Nike Vietnam",
         description: "Thương hiệu thể thao toàn cầu, hợp tác với các Creator thể thao và lifestyle để truyền cảm hứng.",
-        logo: "https://logos-world.net/wp-content/uploads/2020/04/Nike-Logo.png",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/800px-Logo_NIKE.svg.png",
         website: "https://www.nike.com/vn",
         industry: "Thời trang - Thể thao",
         followers: "800K",
@@ -355,7 +355,7 @@ async function seedAll() {
         premiumStatus: "premium",
         memberType: "brand",
         premiumExpiredAt: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000),
-        avatar: "https://logos-world.net/wp-content/uploads/2020/04/Adidas-Logo.png",
+        avatar: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/800px-Adidas_Logo.svg.png",
       },
       {
         email: "brand6@revlive.com",
@@ -369,7 +369,7 @@ async function seedAll() {
         premiumStatus: "premium",
         memberType: "brand",
         premiumExpiredAt: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
-        avatar: "https://logos-world.net/wp-content/uploads/2020/04/Apple-Logo.png",
+        avatar: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/800px-Apple_logo_black.svg.png",
       },
       {
         email: "brand7@revlive.com",
@@ -383,7 +383,7 @@ async function seedAll() {
         premiumStatus: "free",
         memberType: "free",
         premiumExpiredAt: null,
-        avatar: "https://logos-world.net/wp-content/uploads/2020/04/McDonalds-Logo.png",
+        avatar: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/McDonald%27s_Golden_Arches.svg/800px-McDonald%27s_Golden_Arches.svg.png",
       },
       {
         email: "brand8@revlive.com",
@@ -397,7 +397,7 @@ async function seedAll() {
         premiumStatus: "premium",
         memberType: "brand",
         premiumExpiredAt: new Date(Date.now() + 35 * 24 * 60 * 60 * 1000),
-        avatar: "https://logos-world.net/wp-content/uploads/2020/04/Starbucks-Logo.png",
+        avatar: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/800px-Starbucks_Corporation_Logo_2011.svg.png",
       },
       {
         email: "brand9@revlive.com",
@@ -411,7 +411,7 @@ async function seedAll() {
         premiumStatus: "premium",
         memberType: "brand",
         premiumExpiredAt: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000),
-        avatar: "https://logos-world.net/wp-content/uploads/2020/04/Unilever-Logo.png",
+        avatar: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Unilever_Logo.svg/800px-Unilever_Logo.svg.png",
       },
       {
         email: "brand10@revlive.com",
@@ -425,7 +425,7 @@ async function seedAll() {
         premiumStatus: "premium",
         memberType: "brand",
         premiumExpiredAt: new Date(Date.now() + 40 * 24 * 60 * 60 * 1000),
-        avatar: "https://logos-world.net/wp-content/uploads/2020/04/Loreal-Logo.png",
+        avatar: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/L%27Or%C3%A9al_logo.svg/800px-L%27Or%C3%A9al_logo.svg.png",
       },
     ]);
 
@@ -434,7 +434,7 @@ async function seedAll() {
         user: additionalBrandUsers[0]._id,
         companyName: "Adidas Vietnam",
         description: "Thương hiệu thể thao hàng đầu thế giới, tìm kiếm các Creator thể thao và lifestyle.",
-        logo: "https://logos-world.net/wp-content/uploads/2020/04/Adidas-Logo.png",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/800px-Adidas_Logo.svg.png",
         website: "https://www.adidas.com.vn",
         industry: "Thời trang - Thể thao",
         followers: "900K",
@@ -445,7 +445,7 @@ async function seedAll() {
         user: additionalBrandUsers[1]._id,
         companyName: "Apple Vietnam",
         description: "Công ty công nghệ hàng đầu thế giới, cần Creator để review và giới thiệu sản phẩm Apple.",
-        logo: "https://logos-world.net/wp-content/uploads/2020/04/Apple-Logo.png",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/800px-Apple_logo_black.svg.png",
         website: "https://www.apple.com/vn",
         industry: "Công nghệ - Điện tử",
         followers: "2.5M",
@@ -456,7 +456,7 @@ async function seedAll() {
         user: additionalBrandUsers[2]._id,
         companyName: "McDonald's Vietnam",
         description: "Chuỗi nhà hàng thức ăn nhanh hàng đầu, tìm kiếm Creator cho các chiến dịch marketing.",
-        logo: "https://logos-world.net/wp-content/uploads/2020/04/McDonalds-Logo.png",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/McDonald%27s_Golden_Arches.svg/800px-McDonald%27s_Golden_Arches.svg.png",
         website: "https://www.mcdonalds.com.vn",
         industry: "F&B - Nhà hàng",
         followers: "1.5M",
@@ -467,7 +467,7 @@ async function seedAll() {
         user: additionalBrandUsers[3]._id,
         companyName: "Starbucks Vietnam",
         description: "Thương hiệu cà phê hàng đầu thế giới, hợp tác với Creator để lan tỏa văn hóa cà phê.",
-        logo: "https://logos-world.net/wp-content/uploads/2020/04/Starbucks-Logo.png",
+        logo: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/800px-Starbucks_Corporation_Logo_2011.svg.png",
         website: "https://www.starbucks.com.vn",
         industry: "F&B - Cà phê",
         followers: "800K",
@@ -478,7 +478,7 @@ async function seedAll() {
         user: additionalBrandUsers[4]._id,
         companyName: "Unilever Vietnam",
         description: "Tập đoàn hàng tiêu dùng hàng đầu, tìm kiếm Creator cho các sản phẩm chăm sóc cá nhân và gia đình.",
-        logo: "https://logos-world.net/wp-content/uploads/2020/04/Unilever-Logo.png",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Unilever_Logo.svg/800px-Unilever_Logo.svg.png",
         website: "https://www.unilever.com.vn",
         industry: "FMCG - Hàng tiêu dùng",
         followers: "600K",
@@ -489,7 +489,7 @@ async function seedAll() {
         user: additionalBrandUsers[5]._id,
         companyName: "L'Oréal Vietnam",
         description: "Thương hiệu mỹ phẩm hàng đầu thế giới, hợp tác với Beauty Influencer để quảng bá sản phẩm.",
-        logo: "https://logos-world.net/wp-content/uploads/2020/04/Loreal-Logo.png",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/L%27Or%C3%A9al_logo.svg/800px-L%27Or%C3%A9al_logo.svg.png",
         website: "https://www.loreal.com.vn",
         industry: "Mỹ phẩm - Làm đẹp",
         followers: "1.8M",

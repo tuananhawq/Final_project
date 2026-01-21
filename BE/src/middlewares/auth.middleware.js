@@ -39,7 +39,6 @@ export const authGuard = (req, res, next) => {
 export const roleGuard = (...allowedRoles) => {
   return (req, res, next) => {
     const userRoles = req.user?.roles || [];
-
     const hasPermission = allowedRoles.some(role =>
       userRoles.includes(role)
     );

@@ -32,19 +32,19 @@ export default function Login() {
    * /login?token=xxxxx
    */
   useEffect(() => {
-  const token = new URLSearchParams(location.search).get("token");
+    const token = new URLSearchParams(location.search).get("token");
 
-  if (token) {
-    localStorage.setItem("token", token);
+    if (token) {
+      localStorage.setItem("token", token);
 
-    const decoded = jwtDecode(token);
-    const roles = decoded.roles || [];
+      const decoded = jwtDecode(token);
+      const roles = decoded.roles || [];
 
-    if (roles.includes("admin")) navigate("/admin");
-    else if (roles.includes("staff")) navigate("/dashboard");
-    else navigate("/home");
-  }
-}, []);
+      if (roles.includes("admin")) navigate("/admin");
+      else if (roles.includes("staff")) navigate("/dashboard");
+      else navigate("/home");
+    }
+  }, []);
 
 
   /**
@@ -96,9 +96,7 @@ export default function Login() {
   const handleGoogleLogin = () => {
     window.location.href = `${API_URLS.AUTH}/google`;
   };
-  const handleFacebookLogin = () => {
-    window.location.href = `${API_URLS.AUTH}/facebook`;
-  };
+
 
   return (
     <div className="login-container">
@@ -160,9 +158,7 @@ export default function Login() {
           <button className="google" onClick={handleGoogleLogin}>
             GOOGLE
           </button>
-          <button className="facebook" onClick={handleFacebookLogin}>
-            FACEBOOK
-          </button>
+
 
         </div>
 
@@ -177,7 +173,7 @@ export default function Login() {
       {/* RIGHT */}
       <div className="login-right">
         <img
-          src="/src/assets/logo-revlive.png"
+          src="/logo-revlive.png"
           alt="Revlive Logo"
           className="login-logo"
         />

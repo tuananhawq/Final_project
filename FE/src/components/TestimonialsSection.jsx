@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { getTestimonials } from "../services/homeService.jsx";
 import "../styles/home/home-testimonials.css";
 
-export function TestimonialsSection() {
+export function TestimonialsSection({ searchQuery = "" }) {
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,16 +21,25 @@ export function TestimonialsSection() {
     fetchTestimonials();
   }, []);
 
+  const normalizedSearch = searchQuery.trim().toLowerCase();
+  const filteredTestimonials = normalizedSearch
+    ? testimonials.filter((testimonial) =>
+        (testimonial.name || "")
+          .toLowerCase()
+          .includes(normalizedSearch)
+      )
+    : testimonials;
+
   if (loading) {
     return <div className="home-testimonials">Loading...</div>;
   }
 
-  if (testimonials.length === 0) {
+  if (filteredTestimonials.length === 0) {
     return null;
   }
 
   return (
-    <section className="home-testimonials">
+    <section id="section-testimonials" className="home-testimonials">
       <div className="home-testimonials__container">
         {/* Title with decorative line */}
         <div className="home-testimonials__title-wrapper">
@@ -44,7 +53,7 @@ export function TestimonialsSection() {
 
         {/* Testimonials Grid */}
         <div className="home-testimonials__grid">
-          {testimonials.map((testimonial) => (
+          {filteredTestimonials.map((testimonial) => (
             <Link
               key={testimonial._id}
               to={`/testimonial/${testimonial._id}`}

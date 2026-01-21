@@ -22,17 +22,11 @@ const userSchema = new mongoose.Schema({
   // 🔥 THÊM CHO OAUTH
   provider: {
     type: String,
-    enum: ["local", "google", "facebook"],
+    enum: ["local", "google"],
     default: "local"
   },
 
   googleId: {
-    type: String,
-    unique: true,
-    sparse: true
-  },
-
-  facebookId: {
     type: String,
     unique: true,
     sparse: true

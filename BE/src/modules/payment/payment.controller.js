@@ -5,6 +5,8 @@ import {
   sendTransactionNotificationEmail,
   sendUpgradeSuccessEmail,
 } from "../../utils/mailer.js";
+import { PayOS } from "@payos/node";
+import jwt from "jsonwebtoken";
 
 // Giá gốc và giá ưu đãi
 export const PRICING = {
@@ -381,6 +383,326 @@ export const updatePaymentConfig = async (req, res) => {
     });
   } catch (error) {
     console.error("updatePaymentConfig error:", error);
+    res.status(500).json({ error: "SERVER_ERROR", message: error.message });
+  }
+};
+
+// Tạo token để verify thanh toán PayOS
+const signVerifyToken = (payload) => {
+  const secret = process.env.JWT_SECRET || "default-secret";
+  return jwt.sign(payload, secret, { expiresIn: "2h" });
+};
+
+// Verify token từ PayOS callback
+const verifyToken = (token) => {
+  const secret = process.env.JWT_SECRET || "default-secret";
+  return jwt.verify(token, secret);
+};
+
+// Tạo thanh toán PayOS cho Creator
+export const checkoutCreator = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const plan = "creator";
+    const pricing = PRICING[plan];
+
+    if (!pricing) {
+      return res.status(400).json({ error: "INVALID_PLAN" });
+    }
+
+    // Lấy thông tin user
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "USER_NOT_FOUND" });
+    }
+
+    // Tạo token để verify sau khi thanh toán thành công
+    const token = signVerifyToken({
+      plan,
+      userId,
+    });
+
+    // Khởi tạo PayOS
+    const payOS = new PayOS({
+      clientId: process.env.PAYOS_CLIENT_ID,
+      apiKey: process.env.PAYOS_API_KEY,
+      checksumKey: process.env.PAYOS_CHECKSUM_KEY,
+    });
+
+    // Tạo order code từ timestamp
+    const orderCode = Number(String(Date.now()).slice(-6));
+
+    // Tạo payment request
+    const body = {
+      amount: pricing.discounted,
+      orderCode: orderCode,
+      description: `Thanh toán gói Creator`,
+      returnUrl: `${req.get("origin") || process.env.FRONTEND_URL || "http://localhost:5173"}/checkout/success?token=${token}`,
+      cancelUrl: `${req.get("origin") || process.env.FRONTEND_URL || "http://localhost:5173"}/pricing`,
+    };
+    console.log(`${req.get("origin") || process.env.FRONTEND_URL || "http://localhost:5173"}/checkout/success?token=${token}`);
+
+    try {
+      const paymentLinkResponse = await payOS.paymentRequests.create(body);
+
+      // Lưu thông tin trước khi nâng cấp
+      const beforeUpgrade = {
+        memberType: user.memberType || "free",
+        premiumExpiredAt: user.premiumExpiredAt || null,
+      };
+
+      // Tạo transaction với token
+      const transaction = await Transaction.create({
+        user: userId,
+        plan,
+        amount: pricing.discounted,
+        originalAmount: pricing.original,
+        transferContent: `REVLIVE ${user.username || user.email.split("@")[0]} Creator VIP 1`,
+        status: "pending",
+        beforeUpgrade,
+        payosToken: token,
+      });
+
+      res.json({
+        paymentLink: paymentLinkResponse.checkoutUrl,
+        amount: pricing.discounted,
+        transactionId: transaction._id,
+      });
+    } catch (error) {
+      console.error("PayOS error:", error);
+      res.status(500).json({
+        error: "PAYOS_ERROR",
+        message: error.message || "Không thể tạo đơn thanh toán PayOS",
+      });
+    }
+  } catch (error) {
+    console.error("checkoutCreator error:", error);
+    res.status(500).json({ error: "SERVER_ERROR", message: error.message });
+  }
+};
+
+// Tạo thanh toán PayOS cho Brand
+export const checkoutBrand = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const plan = "brand";
+    const pricing = PRICING[plan];
+
+    if (!pricing) {
+      return res.status(400).json({ error: "INVALID_PLAN" });
+    }
+
+    // Lấy thông tin user
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "USER_NOT_FOUND" });
+    }
+
+    // Tạo token để verify sau khi thanh toán thành công
+    const token = signVerifyToken({
+      plan,
+      userId,
+    });
+
+    // Khởi tạo PayOS
+    const payOS = new PayOS({
+      clientId: process.env.PAYOS_CLIENT_ID,
+      apiKey: process.env.PAYOS_API_KEY,
+      checksumKey: process.env.PAYOS_CHECKSUM_KEY,
+    });
+
+    // Tạo order code từ timestamp
+    const orderCode = Number(String(Date.now()).slice(-6));
+
+    // Tạo payment request
+    const body = {
+      amount: pricing.discounted,
+      orderCode: orderCode,
+      description: `Thanh toán gói Brand VIP`,
+      returnUrl: `${req.get("origin") || process.env.FRONTEND_URL || "http://localhost:5173"}/checkout/success?token=${token}`,
+      cancelUrl: `${req.get("origin") || process.env.FRONTEND_URL || "http://localhost:5173"}/pricing`,
+    };
+    console.log(`${req.get("origin") || process.env.FRONTEND_URL || "http://localhost:5173"}/checkout/success?token=${token}`);
+    try {
+      const paymentLinkResponse = await payOS.paymentRequests.create(body);
+
+      // Lưu thông tin trước khi nâng cấp
+      const beforeUpgrade = {
+        memberType: user.memberType || "free",
+        premiumExpiredAt: user.premiumExpiredAt || null,
+      };
+
+      // Tạo transaction với token
+      const transaction = await Transaction.create({
+        user: userId,
+        plan,
+        amount: pricing.discounted,
+        originalAmount: pricing.original,
+        transferContent: `REVLIVE ${user.username || user.email.split("@")[0]} Brand VIP 2`,
+        status: "pending",
+        beforeUpgrade,
+        payosToken: token,
+      });
+
+      res.json({
+        paymentLink: paymentLinkResponse.checkoutUrl,
+        amount: pricing.discounted,
+        transactionId: transaction._id,
+      });
+    } catch (error) {
+      console.error("PayOS error:", error);
+      res.status(500).json({
+        error: "PAYOS_ERROR",
+        message: error.message || "Không thể tạo đơn thanh toán PayOS",
+      });
+    }
+  } catch (error) {
+    console.error("checkoutBrand error:", error);
+    res.status(500).json({ error: "SERVER_ERROR", message: error.message });
+  }
+};
+
+// Xử lý callback từ PayOS sau khi thanh toán thành công
+export const checkoutSuccess = async (req, res) => {
+  try {
+    const { token } = req.query;
+
+    if (!token) {
+      return res.status(400).json({
+        error: "MISSING_TOKEN",
+        message: "Token không được cung cấp",
+      });
+    }
+
+    // Verify token
+    let payload;
+    try {
+      payload = verifyToken(token);
+    } catch (error) {
+      return res.status(400).json({
+        error: "INVALID_TOKEN",
+        message: "Token không hợp lệ hoặc đã hết hạn",
+      });
+    }
+
+    const { plan, userId } = payload;
+
+    if (!plan || !userId) {
+      return res.status(400).json({
+        error: "INVALID_PAYLOAD",
+        message: "Thông tin thanh toán không hợp lệ",
+      });
+    }
+
+    // Tìm transaction với token này
+    const transaction = await Transaction.findOne({
+      payosToken: token,
+      user: userId,
+      plan,
+    }).populate("user");
+
+    if (!transaction) {
+      return res.status(404).json({
+        error: "TRANSACTION_NOT_FOUND",
+        message: "Không tìm thấy đơn hàng",
+      });
+    }
+
+    // Kiểm tra xem transaction đã được xử lý chưa
+    if (transaction.status === "completed") {
+      return res.json({
+        message: "Giao dịch đã được xử lý trước đó",
+        alreadyProcessed: true,
+        transaction: {
+          _id: transaction._id,
+          status: transaction.status,
+          plan: transaction.plan,
+          afterUpgrade: transaction.afterUpgrade,
+        },
+        user: {
+          _id: transaction.user._id,
+          memberType: transaction.user.memberType,
+          premiumExpiredAt: transaction.user.premiumExpiredAt,
+        },
+      });
+    }
+
+    // Nếu transaction đã bị hủy, không xử lý
+    if (transaction.status === "cancelled") {
+      return res.status(400).json({
+        error: "TRANSACTION_CANCELLED",
+        message: "Giao dịch đã bị hủy",
+      });
+    }
+
+    const user = transaction.user;
+    const now = new Date();
+    const currentExpiredAt = user.premiumExpiredAt || null;
+
+    // Tính toán ngày hết hạn mới: max(Now, CurrentExpiredAt) + 30 ngày
+    const baseDate =
+      currentExpiredAt && currentExpiredAt > now ? currentExpiredAt : now;
+    const newExpiredAt = new Date(baseDate);
+    newExpiredAt.setDate(newExpiredAt.getDate() + 30);
+
+    // Cập nhật memberType và premiumExpiredAt
+    const newMemberType = plan; // "creator" hoặc "brand"
+
+    // Cập nhật user
+    user.memberType = newMemberType;
+    user.premiumExpiredAt = newExpiredAt;
+    user.premiumStatus = "premium";
+
+    // Thêm role nếu chưa có
+    if (!user.roles.includes(newMemberType)) {
+      user.roles.push(newMemberType);
+    }
+
+    await user.save();
+
+    // Lưu thông tin sau khi nâng cấp
+    const afterUpgrade = {
+      memberType: newMemberType,
+      premiumExpiredAt: newExpiredAt,
+    };
+
+    // Cập nhật transaction
+    transaction.status = "completed";
+    transaction.approvedAt = now;
+    transaction.afterUpgrade = afterUpgrade;
+    await transaction.save();
+
+    // Gửi email thông báo nâng cấp thành công cho user (bất đồng bộ)
+    try {
+      await sendUpgradeSuccessEmail(user.email, {
+        username: user.username || user.email.split("@")[0],
+        plan: transaction.plan,
+        amount: transaction.amount,
+        newMemberType,
+        expiredAt: newExpiredAt,
+        approvedAt: now,
+      });
+    } catch (emailError) {
+      console.error("Failed to send upgrade success email:", emailError);
+      // Không throw error để không ảnh hưởng đến response
+    }
+
+    res.json({
+      message: "Thanh toán thành công",
+      transaction: {
+        _id: transaction._id,
+        status: transaction.status,
+        plan: transaction.plan,
+        afterUpgrade,
+      },
+      user: {
+        _id: user._id,
+        memberType: user.memberType,
+        premiumExpiredAt: user.premiumExpiredAt,
+      },
+    });
+  } catch (error) {
+    console.error("checkoutSuccess error:", error);
     res.status(500).json({ error: "SERVER_ERROR", message: error.message });
   }
 };

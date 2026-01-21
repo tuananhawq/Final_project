@@ -10,9 +10,11 @@
     "seed-home": "node seed-home.js",
     "seed-banners": "node seed-banners.js",
     "seed-blog": "node seed-blog.js",
-    "seed-brand": "node seed-brand.js"
+    "seed-brand": "node seed-brand.js",
+    "seed-all": "node seed-all.js"
   },
   "dependencies": {
+    "@payos/node": "^2.0.4",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^1.41.3",
     "cors": "^2.8.5",

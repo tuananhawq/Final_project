@@ -598,3 +598,133 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Checkout Success/Error Styles */
+.checkout-result {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.checkout-loading,
+.checkout-success,
+.checkout-error {
+  background: rgba(30, 30, 30, 0.9);
+  border-radius: 20px;
+  padding: 60px 40px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.loading-spinner,
+.success-icon,
+.error-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  animation: fadeInScale 0.5s ease-out;
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.success-title,
+.error-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: white;
+}
+
+.checkout-success .success-title {
+  color: #10b981;
+}
+
+.checkout-error .error-title {
+  color: #ef4444;
+}
+
+.success-message,
+.error-message {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.transaction-details {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 25px;
+  margin: 30px 0;
+  text-align: left;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.detail-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.redirect-message {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .checkout-loading,
+  .checkout-success,
+  .checkout-error {
+    padding: 40px 25px;
+  }
+
+  .success-title,
+  .error-title {
+    font-size: 1.5rem;
+  }
+
+  .loading-spinner,
+  .success-icon,
+  .error-icon {
+    font-size: 3rem;
+  }
+}

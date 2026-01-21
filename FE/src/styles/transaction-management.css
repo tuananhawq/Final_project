@@ -14,7 +14,7 @@
 .transaction-header h2 {
   margin: 0;
   font-size: 2rem;
-  color: #1f2937;
+  color: #ffffff;
 }
 
 .pending-badge {
@@ -85,6 +85,7 @@
   padding: 25px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.2s;
+  border: 1px solid #e5e7eb;
 }
 
 .transaction-card:hover {
@@ -97,7 +98,7 @@
   align-items: center;
   margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 2px solid #f3f4f6;
+  border-bottom: 2px solid #e5e7eb;
 }
 
 .transaction-info {
@@ -109,14 +110,15 @@
 .transaction-info h3 {
   margin: 0;
   font-size: 1.3rem;
-  color: #1f2937;
+  color: #000000;
+  font-weight: 800;
 }
 
 .status-badge {
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .status-pending {
@@ -157,40 +159,48 @@
 }
 
 .detail-label {
-  font-weight: 600;
-  color: #4b5563;
+  font-weight: 800;
+  color: #000000 !important;
   min-width: 150px;
+  font-size: 1rem;
 }
 
 .detail-value {
-  color: #1f2937;
+  color: #000000;
   flex: 1;
+  font-weight: 700;
+  font-size: 1rem;
 }
 
 .transfer-content {
   font-family: monospace;
-  background: #f9fafb;
+  background: #bfdbfe;
   padding: 8px 12px;
   border-radius: 6px;
-  font-weight: 600;
-  color: #0ea5e9;
+  font-weight: 800;
+  color: #0052cc;
+  border: 2px solid #60a5fa;
+  font-size: 0.95rem;
 }
 
 .price-original {
   text-decoration: line-through;
-  color: #9ca3af;
+  color: #4b5563;
   margin-right: 10px;
+  font-weight: 700;
+  font-size: 1rem;
 }
 
 .price-discounted {
-  color: #0ea5e9;
-  font-weight: 700;
-  font-size: 1.1rem;
+  color: #0052cc;
+  font-weight: 900;
+  font-size: 1.3rem;
 }
 
 .cancelled-reason {
-  color: #dc2626;
+  color: #b91c1c;
   font-style: italic;
+  font-weight: 600;
 }
 
 .upgrade-info {
@@ -201,9 +211,21 @@
   border-radius: 6px;
 }
 
+.upgrade-info .detail-label {
+  color: #000000;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.upgrade-info .detail-value {
+  color: #000000;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
 .success-text {
-  color: #059669;
-  font-weight: 600;
+  color: #047857;
+  font-weight: 700;
 }
 
 .member-type-badge {
@@ -216,21 +238,24 @@
 }
 
 .member-type-badge.free {
-  background: rgba(107, 114, 128, 0.2);
-  color: #9ca3af;
-  border: 1px solid rgba(107, 114, 128, 0.3);
+  background: rgba(107, 114, 128, 0.3);
+  color: #1f2937;
+  border: 2px solid rgba(107, 114, 128, 0.6);
+  font-weight: 800;
 }
 
 .member-type-badge.creator {
-  background: rgba(14, 165, 233, 0.2);
-  color: #0ea5e9;
-  border: 1px solid rgba(14, 165, 233, 0.3);
+  background: rgba(14, 165, 233, 0.35);
+  color: #0052cc;
+  border: 2px solid rgba(14, 165, 233, 0.5);
+  font-weight: 800;
 }
 
 .member-type-badge.brand {
-  background: rgba(139, 92, 246, 0.2);
-  color: #8b5cf6;
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  background: rgba(139, 92, 246, 0.35);
+  color: #6d28d9;
+  border: 2px solid rgba(139, 92, 246, 0.5);
+  font-weight: 800;
 }
 
 .transaction-actions {

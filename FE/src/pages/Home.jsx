@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Header } from "../components/Header";
 import { HeroSection } from "../components/HeroSection";
 import { TopAgenciesSection } from "../components/TopAgenciesSection";
@@ -13,6 +13,22 @@ import "../styles/home/index.css";
 
 export default function Home() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const searchQuery = params.get("search") || "";
+
+  // Scroll đến section khi có hash trong URL
+  useEffect(() => {
+    if (location.hash) {
+      const hash = location.hash.substring(1); // Bỏ dấu #
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 300); // Delay để đảm bảo các section đã render
+    }
+  }, [location.hash]);
 
   // useEffect(() => {
   //   // Kiểm tra token khi component mount
@@ -27,11 +43,11 @@ export default function Home() {
       <Header />
       <main className="home-page__main">
         <HeroSection />
-        <TopAgenciesSection />
-        <TopCreatorsSection />
-        <TopicsSection />
-        <HighlightFeed />
-        <TestimonialsSection />
+        <TopAgenciesSection searchQuery={searchQuery} />
+        <TopCreatorsSection searchQuery={searchQuery} />
+        <TopicsSection searchQuery={searchQuery} />
+        <HighlightFeed searchQuery={searchQuery} />
+        <TestimonialsSection searchQuery={searchQuery} />
         {/* <BannerSection /> */}
         
       </main>

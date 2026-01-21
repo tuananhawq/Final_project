@@ -38,42 +38,41 @@
 }
 
 .input-box {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: linear-gradient(
-    180deg,
-    rgba(20, 20, 50, 0.9),
-    rgba(10, 10, 30, 0.9)
-  );
-  border: 1px solid rgba(120, 120, 255, 0.35);
-  border-radius: 10px;
-  padding: 14px 18px;
-  margin-bottom: 22px;
-  transition: border 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(180deg,
+            rgba(20, 20, 50, 0.9),
+            rgba(10, 10, 30, 0.9));
+    border: 1px solid rgba(120, 120, 255, 0.35);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    transition: border 0.25s ease, box-shadow 0.25s ease;
 }
 
 .input-box:focus-within {
-  border-color: #6ecbff;
-  box-shadow: 0 0 0 2px rgba(110, 203, 255, 0.15);
+    border-color: #6ecbff;
+    box-shadow: 0 0 0 2px rgba(110, 203, 255, 0.15);
 }
 
 .input-box svg {
-  color: #9aa4ff;
+    color: #9aa4ff;
 }
 
 .input-box input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: #ffffff;
-  font-size: 15px;          /* ⬅️ tăng chữ */
-  font-weight: 500;
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    font-size: 15px;
+    /* ⬅️ tăng chữ */
+    font-weight: 500;
 }
 
 .input-box input::placeholder {
-  color: rgba(200, 200, 255, 0.45);
+    color: rgba(200, 200, 255, 0.45);
 }
 
 
@@ -144,10 +143,6 @@
     background: #db4437;
 }
 
-.facebook {
-    background: #1877f2;
-}
-
 .linkedin {
     background: #0a66c2;
 }
@@ -172,7 +167,7 @@
     background:
         linear-gradient(rgba(0, 0, 0, 0.05),
             rgba(0, 0, 0, 0.05)),
-        url("/src/assets/anhbia3x12136-jp-2200w.png");
+        url("/anhbia3x12136-jp-2200w.png");
 
     background-size: cover;
     /* 🔥 QUAN TRỌNG */
@@ -209,8 +204,8 @@
 
 /* ===== FIX INPUT WHITE BACKGROUND (CHROME AUTOFILL) ===== */
 .input-box input {
-  background-color: transparent !important;
-  color: #fff !important;
+    background-color: transparent !important;
+    color: #fff !important;
 }
 
 /* Chrome autofill fix */
@@ -218,7 +213,7 @@
 .input-box input:-webkit-autofill:hover,
 .input-box input:-webkit-autofill:focus,
 .input-box input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 1000px rgba(15, 15, 40, 0.95) inset !important;
-  -webkit-text-fill-color: #ffffff !important;
-  transition: background-color 9999s ease-in-out 0s;
+    -webkit-box-shadow: 0 0 0 1000px rgba(15, 15, 40, 0.95) inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    transition: background-color 9999s ease-in-out 0s;
 }

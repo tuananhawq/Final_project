@@ -2,16 +2,14 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
-import { getPricing, createTransaction } from "../services/paymentService";
+import { getPricing, checkoutCreator, checkoutBrand } from "../services/paymentService";
 import { useNotification } from "../context/NotificationContext";
-import PaymentModal from "../components/PaymentModal";
 import "../styles/pricing.css";
 
 export default function Pricing() {
   const [pricing, setPricing] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedPlan, setSelectedPlan] = useState(null);
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const navigate = useNavigate();
   const { notifyError, notifyInfo } = useNotification();
 
@@ -40,30 +38,41 @@ export default function Pricing() {
       return;
     }
 
+    if (processing) {
+      return; // Tránh click nhiều lần
+    }
+
+    setProcessing(true);
+
     try {
-      // Tạo transaction
-      const result = await createTransaction(plan);
-      setSelectedPlan({
-        plan,
-        transaction: result.transaction,
-      });
-      setShowPaymentModal(true);
+      // Gọi API checkout để tạo PayOS payment link
+      let result;
+      if (plan === "creator") {
+        result = await checkoutCreator();
+      } else if (plan === "brand") {
+        result = await checkoutBrand();
+      } else {
+        throw new Error("Gói dịch vụ không hợp lệ");
+      }
+
+      // Redirect đến PayOS checkout page
+      if (result.paymentLink) {
+        window.location.href = result.paymentLink;
+      } else {
+        throw new Error("Không nhận được link thanh toán");
+      }
     } catch (error) {
-      console.error("Error creating transaction:", error);
+      console.error("Error creating checkout:", error);
+      setProcessing(false);
       if (error.response?.status === 401) {
         notifyError("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại");
         navigate("/login");
       } else {
         notifyError(
-          error.response?.data?.message || "Không thể tạo đơn hàng. Vui lòng thử lại"
+          error.response?.data?.message || "Không thể tạo đơn thanh toán. Vui lòng thử lại"
         );
       }
     }
-  };
-
-  const handleCloseModal = () => {
-    setShowPaymentModal(false);
-    setSelectedPlan(null);
   };
 
   if (loading) {
@@ -175,8 +184,9 @@ export default function Pricing() {
             <button
               className="pricing-btn creator-btn"
               onClick={() => handleBuyNow("creator")}
+              disabled={processing}
             >
-              MUA NGAY
+              {processing ? "Đang xử lý..." : "MUA NGAY"}
             </button>
           </div>
 
@@ -226,8 +236,9 @@ export default function Pricing() {
             <button
               className="pricing-btn brand-btn"
               onClick={() => handleBuyNow("brand")}
+              disabled={processing}
             >
-              MUA NGAY
+              {processing ? "Đang xử lý..." : "MUA NGAY"}
             </button>
           </div>
         </div>
@@ -255,14 +266,6 @@ export default function Pricing() {
           </div>
         </div>
       </div>
-
-      {showPaymentModal && selectedPlan && (
-        <PaymentModal
-          plan={selectedPlan.plan}
-          transaction={selectedPlan.transaction}
-          onClose={handleCloseModal}
-        />
-      )}
 
       <Footer />
     </div>

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { getCreators } from "../services/homeService.jsx";
 import "../styles/home/home-creators.css";
 
-export function TopCreatorsSection() {
+export function TopCreatorsSection({ searchQuery = "" }) {
   const [creators, setCreators] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,16 +21,23 @@ export function TopCreatorsSection() {
     fetchCreators();
   }, []);
 
+  const normalizedSearch = searchQuery.trim().toLowerCase();
+  const filteredCreators = normalizedSearch
+    ? creators.filter((creator) =>
+        creator.name?.toLowerCase().includes(normalizedSearch)
+      )
+    : creators;
+
   if (loading) {
     return <div className="home-creators">Loading...</div>;
   }
 
-  if (creators.length === 0) {
+  if (filteredCreators.length === 0) {
     return null;
   }
 
   return (
-    <section className="home-creators">
+    <section id="section-creators" className="home-creators">
       <div className="home-creators__container">
         {/* Title with decorative lines */}
         <div className="home-creators__title-wrapper">
@@ -43,7 +50,7 @@ export function TopCreatorsSection() {
 
         {/* Creators Grid */}
         <div className="home-creators__grid">
-          {creators.map((creator) => (
+          {filteredCreators.map((creator) => (
             <Link
               key={creator._id}
               to={`/creator-detail/${creator._id}`}

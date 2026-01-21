@@ -13,7 +13,6 @@ dotenv.config({
 import passport from "passport";
 import bcrypt from "bcryptjs";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { Strategy as FacebookStrategy } from "passport-facebook";
 import User from "../models/User.js";
 
 /* ================= GOOGLE ================= */
@@ -41,47 +40,6 @@ passport.use(
             roles: ["user"]   // 👈 BẮT BUỘC
           });
 
-        }
-
-        done(null, user);
-      } catch (err) {
-        done(err);
-      }
-    }
-  )
-);
-
-/* ================= FACEBOOK ================= */
-passport.use(
-  new FacebookStrategy(
-    {
-      clientID: process.env.FACEBOOK_CLIENT_ID,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-      callbackURL: process.env.FACEBOOK_CALLBACK_URL,
-      profileFields: ["id", "displayName", "emails"],
-    },
-    async (_, __, profile, done) => {
-      try {
-        const email = profile.emails?.[0]?.value;
-
-        let user = await User.findOne({
-          $or: [
-            { facebookId: profile.id },
-            { email }
-          ]
-        });
-
-        if (!user) {
-          const hash = await bcrypt.hash("FACEBOOK_LOGIN", 10);
-          user = await User.create({
-            email,
-            username: profile.displayName,
-            facebookId: profile.id,
-            passwordHash: hash,
-            provider: "facebook",
-            isVerified: true,
-            roles: ["user"]
-          });
         }
 
         done(null, user);

@@ -60,29 +60,6 @@ router.get(
   }
 );
 
-router.get("/facebook",
-  passport.authenticate("facebook", {
-    scope: ["email"],
-    session: false,
-  })
-);
-
-router.get("/facebook/callback",
-  passport.authenticate("facebook", { session: false }),
-  (req, res) => {
-    const token = jwt.sign(
-      {
-        userId: req.user._id,
-        username: req.user.username,
-  
-        roles: req.user.roles,
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
-    res.redirect(`http://localhost:5173/login?token=${token}`);
-  }
-);
 router.post('/register', register);
 router.post('/login', login);
 router.post("/forgot-password", forgotPassword);

@@ -9,6 +9,9 @@ import {
   getPaymentConfig,
   updatePaymentConfig,
   checkPaymentStatus,
+  checkoutCreator,
+  checkoutBrand,
+  checkoutSuccess,
 } from "./payment.controller.js";
 import { authGuard } from "../../middlewares/auth.middleware.js";
 import { roleGuard } from "../../middlewares/auth.middleware.js";
@@ -66,5 +69,14 @@ router.patch(
   roleGuard("staff", "admin"),
   updatePaymentConfig
 );
+
+// PayOS Checkout: Tạo thanh toán cho Creator
+router.post("/checkout/creator", authGuard, checkoutCreator);
+
+// PayOS Checkout: Tạo thanh toán cho Brand
+router.post("/checkout/brand", authGuard, checkoutBrand);
+
+// PayOS Checkout: Xử lý callback sau khi thanh toán thành công (public)
+router.get("/checkout/success", checkoutSuccess);
 
 export default router;

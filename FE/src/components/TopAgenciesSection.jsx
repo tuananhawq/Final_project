@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { getAgencies } from "../services/homeService.jsx";
 import "../styles/home/home-agencies.css";
 
-export function TopAgenciesSection() {
+export function TopAgenciesSection({ searchQuery = "" }) {
   const [agencies, setAgencies] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,16 +21,24 @@ export function TopAgenciesSection() {
     fetchAgencies();
   }, []);
 
+  const normalizedSearch = searchQuery.trim().toLowerCase();
+  const filteredAgencies = normalizedSearch
+    ? agencies.filter((agency) => {
+        const text = `${agency.name || ""} ${agency.rank || ""} ${agency.description || ""}`.toLowerCase();
+        return text.includes(normalizedSearch);
+      })
+    : agencies;
+
   if (loading) {
     return <div className="home-agencies">Loading...</div>;
   }
 
-  if (agencies.length === 0) {
+  if (filteredAgencies.length === 0) {
     return null;
   }
 
   return (
-    <section className="home-agencies">
+    <section id="section-agencies" className="home-agencies">
       <div className="home-agencies__container">
         {/* Title with decorative lines */}
         <div className="home-agencies__title-wrapper">
@@ -43,7 +51,7 @@ export function TopAgenciesSection() {
 
         {/* Cards Grid */}
         <div className="home-agencies__grid">
-          {agencies.map((agency) => (
+          {filteredAgencies.map((agency) => (
             <Link
               key={agency._id}
               to={`/agency/${agency._id}`}

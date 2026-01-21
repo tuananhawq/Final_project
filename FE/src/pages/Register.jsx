@@ -30,10 +30,10 @@ export default function Register() {
     const { notifySuccess } = useNotification();
 
     const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setForm({ ...form, [name]: type === "checkbox" ? checked : value });
-    setError(""); // 🔥 clear lỗi khi nhập lại
-};
+        const { name, value, type, checked } = e.target;
+        setForm({ ...form, [name]: type === "checkbox" ? checked : value });
+        setError(""); // 🔥 clear lỗi khi nhập lại
+    };
 
 
     // thêm helper validate ở trên component
@@ -88,8 +88,8 @@ export default function Register() {
                 password: form.password
             });
 
-        notifySuccess("Đăng ký thành công!");
-        navigate("/login");
+            notifySuccess("Đăng ký thành công!");
+            navigate("/login");
         } catch (err) {
             const code = err.response?.data?.error;
 
@@ -177,8 +177,11 @@ export default function Register() {
                         onChange={handleChange}
                     />
                     <span>
-                        Tôi đã xem và đồng ý với <b>Điều khoản dịch vụ</b> và{" "}
-                        <b>Chính sách bảo mật</b> của REVLIVE
+                        Tôi đã xem và đồng ý với{" "}
+                        <a href="/legal" target="_blank" rel="noopener noreferrer">
+                            <b>Điều khoản dịch vụ</b> và <b>Chính sách bảo mật</b>
+                        </a>{" "}
+                        của REVLIVE
                     </span>
                 </div>
 
@@ -192,7 +195,6 @@ export default function Register() {
 
                 <div className="social">
                     <button className="google">GOOGLE</button>
-                    <button className="facebook">FACEBOOK</button>
 
                 </div>
 
@@ -208,7 +210,7 @@ export default function Register() {
             {/* RIGHT */}
             <div className="register-right">
                 <img
-                    src="/src/assets/logo-revlive.png"
+                    src="/logo-revlive.png"
                     alt="Revlive"
                     className="register-logo"
                 />

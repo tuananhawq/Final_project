@@ -27,11 +27,11 @@ router.post("/:id/rate", authGuard, rateBlog);
 router.post("/:id/comments", authGuard, addComment);
 router.delete("/:id/comments/:commentId", authGuard, deleteComment);
 
-// ==================== ADMIN ROUTES (staff/admin only) ====================
-router.get("/admin/all", authGuard, roleGuard("staff", "admin"), getAllBlogs);
-router.post("/admin", authGuard, roleGuard("staff", "admin"), createBlog);
-router.put("/admin/:id", authGuard, roleGuard("staff", "admin"), updateBlog);
-router.delete("/admin/:id", authGuard, roleGuard("staff", "admin"), deleteBlog);
+// ==================== BLOG MANAGEMENT ROUTES (staff/admin/creator/brand) ====================
+router.get("/admin/all", authGuard, roleGuard("staff", "admin", "creator", "brand"), getAllBlogs);
+router.post("/admin", authGuard, roleGuard("staff", "admin", "creator", "brand"), createBlog);
+router.put("/admin/:id", authGuard, roleGuard("staff", "admin", "creator", "brand"), updateBlog);
+router.delete("/admin/:id", authGuard, roleGuard("staff", "admin", "creator", "brand"), deleteBlog);
 
 export default router;
 

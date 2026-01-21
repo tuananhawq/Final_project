@@ -88,3 +88,31 @@ export const checkPaymentStatus = async () => {
   });
   return res.data;
 };
+
+// Tạo thanh toán PayOS cho Creator
+export const checkoutCreator = async () => {
+  const res = await axios.post(
+    `${API_URL}/checkout/creator`,
+    {},
+    { headers: getAuthHeaders() }
+  );
+  return res.data;
+};
+
+// Tạo thanh toán PayOS cho Brand
+export const checkoutBrand = async () => {
+  const res = await axios.post(
+    `${API_URL}/checkout/brand`,
+    {},
+    { headers: getAuthHeaders() }
+  );
+  return res.data;
+};
+
+// Xử lý callback từ PayOS sau khi thanh toán thành công
+export const checkoutSuccess = async (token) => {
+  const res = await axios.get(`${API_URL}/checkout/success`, {
+    params: { token },
+  });
+  return res.data;
+};

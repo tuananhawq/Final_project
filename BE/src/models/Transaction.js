@@ -50,6 +50,13 @@ const transactionSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    // Token từ PayOS để verify thanh toán
+    payosToken: {
+      type: String,
+      default: null,
+      sparse: true, // Cho phép null và unique chỉ khi có giá trị
+      unique: true, // Đảm bảo token unique khi có giá trị
+    },
     // Lưu thông tin trước và sau khi nâng cấp để đối soát
     beforeUpgrade: {
       memberType: {
