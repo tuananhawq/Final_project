@@ -42,7 +42,7 @@
 
 .blog-hero__subtitle {
   font-size: 1.25rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: #ffffff;
 }
 
 /* Featured Section */
@@ -153,7 +153,7 @@
 }
 
 .blog-featured__excerpt {
-  color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
   font-size: 0.875rem;
   line-height: 1.6;
   margin-bottom: 1rem;
@@ -164,7 +164,7 @@
   justify-content: space-between;
   align-items: center;
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
 }
 
 .blog-featured__author {
@@ -231,7 +231,7 @@
 }
 
 .blog-search__input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
 }
 
 .blog-search__input:focus {
@@ -254,7 +254,7 @@
 .blog-list__loading,
 .blog-list__empty {
   text-align: center;
-  color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
   font-size: 1.25rem;
   padding: 4rem 0;
 }
@@ -339,7 +339,7 @@
 }
 
 .blog-list__excerpt {
-  color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
   font-size: 0.875rem;
   line-height: 1.6;
   margin-bottom: 1rem;
@@ -350,7 +350,7 @@
   justify-content: space-between;
   align-items: center;
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
@@ -413,7 +413,7 @@
 }
 
 .blog-list__pagination-info {
-  color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
   font-weight: 600;
 }
 

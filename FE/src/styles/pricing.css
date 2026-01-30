@@ -747,7 +747,7 @@
 .success-message,
 .error-message {
   font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: #ffffff;
   margin-bottom: 30px;
   line-height: 1.6;
 }
@@ -774,7 +774,7 @@
 
 .detail-label {
   font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: ffffff;
 }
 
 .detail-value {
@@ -785,7 +785,7 @@
 
 .redirect-message {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
   margin-top: 20px;
 }
 

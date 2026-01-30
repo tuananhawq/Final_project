@@ -6,7 +6,7 @@
 .blog-detail__loading,
 .blog-detail__error {
   text-align: center;
-  color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
   font-size: 1.25rem;
   padding: 4rem 0;
 }
@@ -70,7 +70,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
   font-size: 0.875rem;
 }
 
@@ -101,7 +101,7 @@
 }
 
 .blog-detail__content {
-  color: rgba(255, 255, 255, 0.9);
+  color: #ffffff;
   font-size: 1.125rem;
   line-height: 1.8;
   margin-bottom: 3rem;
@@ -176,7 +176,7 @@
 }
 
 .blog-detail__rating-label {
-  color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
   font-weight: 600;
 }
 
@@ -205,7 +205,7 @@
 }
 
 .blog-detail__rating-value {
-  color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
   font-size: 0.875rem;
 }
 
@@ -241,7 +241,7 @@
 }
 
 .blog-detail__comment-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
 }
 
 .blog-detail__comment-input:focus {
@@ -279,7 +279,7 @@
 }
 
 .blog-detail__comment-login p {
-  color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
   margin-bottom: 1rem;
 }
 
@@ -327,7 +327,7 @@
 }
 
 .blog-detail__comment-date {
-  color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
   font-size: 0.875rem;
 }
 
@@ -348,13 +348,13 @@
 }
 
 .blog-detail__comment-content {
-  color: rgba(255, 255, 255, 0.9);
+  color: #ffffff;
   line-height: 1.6;
 }
 
 .blog-detail__no-comments {
   text-align: center;
-  color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
   padding: 2rem;
 }
 

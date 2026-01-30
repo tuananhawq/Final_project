@@ -199,7 +199,7 @@
 }
 
 .home-footer__link {
-  color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
   font-size: 1.25rem;
   text-decoration: none;
   transition: color 0.2s ease;
@@ -210,7 +210,7 @@
 }
 
 .home-footer__contact {
-  color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
   font-size: 1.25rem;
 }
 
