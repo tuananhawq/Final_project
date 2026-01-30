@@ -4,6 +4,7 @@ import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { getPricing, checkoutCreator, checkoutBrand } from "../services/paymentService";
 import { useNotification } from "../context/NotificationContext";
+import { useLanguage } from "../context/LanguageContext.jsx";
 import "../styles/pricing.css";
 
 export default function Pricing() {
@@ -12,6 +13,7 @@ export default function Pricing() {
   const [processing, setProcessing] = useState(false);
   const navigate = useNavigate();
   const { notifyError, notifyInfo } = useNotification();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchPricing = async () => {
@@ -20,7 +22,7 @@ export default function Pricing() {
         setPricing(data.pricing);
       } catch (error) {
         console.error("Error fetching pricing:", error);
-        notifyError("Không thể tải thông tin bảng giá");
+        notifyError(t("pricing.error"));
       } finally {
         setLoading(false);
       }
@@ -29,11 +31,17 @@ export default function Pricing() {
     fetchPricing();
   }, [notifyError]);
 
-  const handleBuyNow = async (plan) => {
+  const formatVnd = (value) =>
+    new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(value);
+
+  const handleBuyNow = async (plan, planLevel) => {
     // Kiểm tra đăng nhập
     const token = localStorage.getItem("token");
     if (!token) {
-      notifyInfo("Vui lòng đăng nhập để tiếp tục");
+      notifyInfo(t("pricing.loginRequired"));
       navigate("/login");
       return;
     }
@@ -50,26 +58,26 @@ export default function Pricing() {
       if (plan === "creator") {
         result = await checkoutCreator();
       } else if (plan === "brand") {
-        result = await checkoutBrand();
+        result = await checkoutBrand(planLevel || "basic");
       } else {
-        throw new Error("Gói dịch vụ không hợp lệ");
+        throw new Error(t("pricing.invalidPlan"));
       }
 
       // Redirect đến PayOS checkout page
       if (result.paymentLink) {
         window.location.href = result.paymentLink;
       } else {
-        throw new Error("Không nhận được link thanh toán");
+        throw new Error(t("pricing.paymentLinkError"));
       }
     } catch (error) {
       console.error("Error creating checkout:", error);
       setProcessing(false);
       if (error.response?.status === 401) {
-        notifyError("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại");
+        notifyError(t("pricing.sessionExpired"));
         navigate("/login");
       } else {
         notifyError(
-          error.response?.data?.message || "Không thể tạo đơn thanh toán. Vui lòng thử lại"
+          error.response?.data?.message || t("pricing.paymentError")
         );
       }
     }
@@ -80,7 +88,7 @@ export default function Pricing() {
       <div className="pricing-page">
         <Header />
         <div className="pricing-loading">
-          <p>Đang tải...</p>
+          <p>{t("pricing.loading")}</p>
         </div>
         <Footer />
       </div>
@@ -92,7 +100,7 @@ export default function Pricing() {
       <div className="pricing-page">
         <Header />
         <div className="pricing-error">
-          <p>Không thể tải thông tin bảng giá</p>
+          <p>{t("pricing.error")}</p>
         </div>
         <Footer />
       </div>
@@ -106,14 +114,14 @@ export default function Pricing() {
         {/* Hero Section */}
         <div className="pricing-hero">
           <div className="hero-icon">💎</div>
-          <h1 className="hero-title">Bảng Giá Thành Viên</h1>
+          <h1 className="hero-title">{t("pricing.heroTitle")}</h1>
           <p className="hero-subtitle">
-            Nâng cấp tài khoản của bạn để trải nghiệm đầy đủ các tính năng
+            {t("pricing.heroSubtitle")}
           </p>
           <div className="hero-badges">
-            <span className="badge-item">✨ Ưu đãi đặc biệt</span>
-            <span className="badge-item">🚀 Nâng cấp ngay</span>
-            <span className="badge-item">💳 Thanh toán dễ dàng</span>
+            <span className="badge-item">✨ {t("pricing.benefits.specialOffer")}</span>
+            <span className="badge-item">🚀 {t("pricing.benefits.upgradeNow")}</span>
+            <span className="badge-item">💳 {t("pricing.benefits.easyPayment")}</span>
           </div>
         </div>
 
@@ -121,18 +129,18 @@ export default function Pricing() {
         <div className="pricing-benefits">
           <div className="benefit-item">
             <div className="benefit-icon">🎯</div>
-            <h3>Phù hợp với nhu cầu</h3>
-            <p>Gói dịch vụ được thiết kế riêng cho Creator và Brand</p>
+            <h3>{t("pricing.benefits.suitable.title")}</h3>
+            <p>{t("pricing.benefits.suitable.desc")}</p>
           </div>
           <div className="benefit-item">
             <div className="benefit-icon">⚡</div>
-            <h3>Kích hoạt ngay lập tức</h3>
-            <p>Nâng cấp tài khoản ngay sau khi thanh toán thành công</p>
+            <h3>{t("pricing.benefits.instant.title")}</h3>
+            <p>{t("pricing.benefits.instant.desc")}</p>
           </div>
           <div className="benefit-item">
             <div className="benefit-icon">🔄</div>
-            <h3>Cộng dồn thời gian</h3>
-            <p>Thời gian sử dụng được cộng dồn khi gia hạn</p>
+            <h3>{t("pricing.benefits.accumulate.title")}</h3>
+            <p>{t("pricing.benefits.accumulate.desc")}</p>
           </div>
         </div>
 
@@ -141,44 +149,38 @@ export default function Pricing() {
           {/* Creator VIP 1 */}
           <div className="pricing-card creator-card">
             <div className="card-icon">👤</div>
-            <h2 className="pricing-title">Creator</h2>
-            <p className="card-description">Dành cho các Creator tài năng</p>
+            <h2 className="pricing-title">{t("pricing.creator")}</h2>
+            <p className="card-description">{t("pricing.plans.creator.desc")}</p>
             <div className="pricing-price">
               <span className="price-original">
-                {new Intl.NumberFormat("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                }).format(pricing.creator.original)}
+                {formatVnd(pricing.creator.original)}
               </span>
               <span className="price-discounted">
-                {new Intl.NumberFormat("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                }).format(pricing.creator.discounted)}
+                {formatVnd(pricing.creator.discounted)}
               </span>
             </div>
             <div className="pricing-duration">
-              <p>Thời gian sử dụng: <strong>01 tháng (30 ngày)</strong></p>
+              <p><strong>{t("pricing.plans.creator.duration")}</strong></p>
               <p className="pricing-note">
-                ✓ Có hỗ trợ cộng dồn thời gian
+                {t("pricing.plans.creator.note")}
               </p>
             </div>
             <ul className="pricing-features">
               <li>
                 <span className="feature-icon">📄</span>
-                <span>Tạo và quản lý CV chuyên nghiệp</span>
+                <span>{t("pricing.plans.creator.features.cv")}</span>
               </li>
               <li>
                 <span className="feature-icon">💼</span>
-                <span>Ứng tuyển vào các công việc phù hợp</span>
+                <span>{t("pricing.plans.creator.features.apply")}</span>
               </li>
               <li>
                 <span className="feature-icon">🔍</span>
-                <span>Xem thông tin chi tiết Brand</span>
+                <span>{t("pricing.plans.creator.features.viewBrand")}</span>
               </li>
               <li>
                 <span className="feature-icon">🔔</span>
-                <span>Nhận thông báo việc làm mới</span>
+                <span>{t("pricing.plans.creator.features.notification")}</span>
               </li>
             </ul>
             <button
@@ -186,82 +188,120 @@ export default function Pricing() {
               onClick={() => handleBuyNow("creator")}
               disabled={processing}
             >
-              {processing ? "Đang xử lý..." : "MUA NGAY"}
+              {processing ? t("common.processing") : t("pricing.buyNow").toUpperCase()}
             </button>
           </div>
 
-          {/* Brand VIP 2 */}
+          {/* Brand VIP 2 (Basic) */}
           <div className="pricing-card brand-card">
             <div className="card-icon">🏢</div>
-            <h2 className="pricing-title">Brand</h2>
-            <p className="card-description">Dành cho các Brand và Doanh nghiệp</p>
+            <h2 className="pricing-title">{t("pricing.brandBasic")}</h2>
+            <p className="card-description">{t("pricing.plans.brandBasic.desc")}</p>
             <div className="pricing-price">
               <span className="price-original">
-                {new Intl.NumberFormat("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                }).format(pricing.brand.original)}
+                {formatVnd(pricing.brand.basic.original)}
               </span>
               <span className="price-discounted">
-                {new Intl.NumberFormat("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                }).format(pricing.brand.discounted)}
+                {formatVnd(pricing.brand.basic.discounted)}
               </span>
             </div>
             <div className="pricing-duration">
-              <p>Thời gian sử dụng: <strong>01 tháng (30 ngày)</strong></p>
+              <p><strong>{t("pricing.plans.brandBasic.duration")}</strong></p>
               <p className="pricing-note">
-                ✓ Có hỗ trợ cộng dồn thời gian
+                {t("pricing.plans.brandBasic.note")}
               </p>
             </div>
             <ul className="pricing-features">
               <li>
                 <span className="feature-icon">📢</span>
-                <span>Đăng tin tuyển dụng không giới hạn</span>
+                <span>{t("pricing.plans.brandBasic.features.postJob")}</span>
               </li>
               <li>
                 <span className="feature-icon">📋</span>
-                <span>Xem và quản lý CV ứng viên</span>
+                <span>{t("pricing.plans.brandBasic.features.viewCv")}</span>
               </li>
               <li>
                 <span className="feature-icon">🎯</span>
-                <span>Tìm kiếm Creator phù hợp</span>
+                <span>{t("pricing.plans.brandBasic.features.findCreator")}</span>
               </li>
               <li>
                 <span className="feature-icon">⚙️</span>
-                <span>Quản lý thông tin Brand</span>
+                <span>{t("pricing.plans.brandBasic.features.manageBrand")}</span>
               </li>
             </ul>
             <button
               className="pricing-btn brand-btn"
-              onClick={() => handleBuyNow("brand")}
+              onClick={() => handleBuyNow("brand", "basic")}
               disabled={processing}
             >
-              {processing ? "Đang xử lý..." : "MUA NGAY"}
+              {processing ? t("common.processing") : t("pricing.buyNow").toUpperCase()}
+            </button>
+          </div>
+
+          {/* Brand Premium (499k) */}
+          <div className="pricing-card brand-card">
+            <div className="card-icon">🏢</div>
+            <h2 className="pricing-title">{t("pricing.brandPremium")}</h2>
+            <p className="card-description">
+              {t("pricing.plans.brandPremium.desc")}
+            </p>
+            <div className="pricing-price">
+              <span className="price-original">{formatVnd(pricing.brand.premium.original)}</span>
+              <span className="price-discounted">{formatVnd(pricing.brand.premium.discounted)}</span>
+            </div>
+            <div className="pricing-duration">
+              <p>
+                <strong>{t("pricing.plans.brandPremium.duration")}</strong>
+              </p>
+              <p className="pricing-note">{t("pricing.plans.brandPremium.note")}</p>
+            </div>
+            <ul className="pricing-features">
+              <li>
+                <span className="feature-icon">📢</span>
+                <span>{t("pricing.plans.brandPremium.features.postJob")}</span>
+              </li>
+              <li>
+                <span className="feature-icon">📋</span>
+                <span>{t("pricing.plans.brandPremium.features.viewCv")}</span>
+              </li>
+              <li>
+                <span className="feature-icon">🚀</span>
+                <span>{t("pricing.plans.brandPremium.features.postProject")}</span>
+              </li>
+              <li>
+                <span className="feature-icon">⚙️</span>
+                <span>{t("pricing.plans.brandPremium.features.manageBrand")}</span>
+              </li>
+            </ul>
+            <button
+              className="pricing-btn brand-btn"
+              onClick={() => handleBuyNow("brand", "premium")}
+              disabled={processing}
+            >
+              {processing ? t("common.processing") : t("pricing.plans.brandPremium.upgrade").toUpperCase()}
             </button>
           </div>
         </div>
 
         {/* Trust Section */}
         <div className="pricing-trust">
-          <h3 className="trust-title">Tại sao chọn REVLIVE?</h3>
+          <h3 className="trust-title">{t("pricing.trust.title")}</h3>
           <div className="trust-items">
             <div className="trust-item">
               <div className="trust-number">1000+</div>
-              <div className="trust-label">Người dùng tin tưởng</div>
+              <div className="trust-label">{t("pricing.trust.users")}</div>
             </div>
             <div className="trust-item">
               <div className="trust-number">24/7</div>
-              <div className="trust-label">Hỗ trợ khách hàng</div>
+              <div className="trust-label">{t("pricing.trust.support")}</div>
             </div>
             <div className="trust-item">
               <div className="trust-number">99%</div>
-              <div className="trust-label">Độ hài lòng</div>
+              <div className="trust-label">{t("pricing.trust.satisfaction")}</div>
             </div>
             <div className="trust-item">
               <div className="trust-number">30+</div>
-              <div className="trust-label">Ngày đảm bảo hoàn tiền</div>
+              <div className="trust-label">{t("pricing.trust.guarantee")}</div>
             </div>
           </div>
         </div>

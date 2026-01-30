@@ -42,7 +42,7 @@ router.get(
   "/google/callback",
   passport.authenticate("google", {
     session: false,
-    failureRedirect: "http://localhost:5173/login",
+    failureRedirect: `${process.env.FRONTEND_URL || "http://localhost:5173"}/login`,
   }),
   (req, res) => {
     const token = jwt.sign(
@@ -55,8 +55,9 @@ router.get(
       { expiresIn: "7d" }
     );
 
-    // redirect về FE kèm token
-    res.redirect(`http://localhost:5173/login?token=${token}`);
+    // redirect về FE kèm token - sử dụng FRONTEND_URL từ env
+    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+    res.redirect(`${frontendUrl}/login?token=${token}`);
   }
 );
 

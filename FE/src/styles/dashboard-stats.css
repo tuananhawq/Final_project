@@ -192,18 +192,57 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .chart-title {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #ffffff;
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: var(--text-h4, 1.25rem);
+  font-weight: var(--weight-bold, 700);
+  color: var(--color-text-primary, #ffffff);
   margin-bottom: 4px;
 }
 
 .chart-subtitle {
-  font-size: 0.9rem;
-  color: #9ca3af;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--color-text-muted, #9ca3af);
+}
+
+/* Period Filter Styles */
+.chart-period-filter {
+  display: flex;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.period-btn {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted, #9ca3af);
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: var(--weight-medium, 500);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.period-btn:hover {
+  color: var(--color-text-primary, #ffffff);
+  background: rgba(125, 211, 252, 0.1);
+}
+
+.period-btn.active {
+  background: linear-gradient(135deg, rgba(125, 211, 252, 0.3), rgba(167, 139, 250, 0.3));
+  color: var(--color-text-primary, #ffffff);
+  font-weight: var(--weight-semibold, 600);
+  box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.3);
 }
 
 .chart-container {

@@ -7,10 +7,11 @@ import {
     FaEyeSlash,
 } from "react-icons/fa";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { API_URLS } from "../config/api.js";
 import "../styles/register.css";
 import { useNotification } from "../context/NotificationContext.jsx";
+import { useLanguage } from "../context/LanguageContext.jsx";
 
 export default function Register() {
     const [form, setForm] = useState({
@@ -28,6 +29,7 @@ export default function Register() {
 
     const navigate = useNavigate();
     const { notifySuccess } = useNotification();
+    const { t } = useLanguage();
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -39,32 +41,32 @@ export default function Register() {
     // thêm helper validate ở trên component
     const validateRegister = (form) => {
         if (!form.name || !form.email || !form.password || !form.confirmPassword) {
-            return "Vui lòng nhập đầy đủ thông tin";
+            return t("register.usernameRequired");
         }
 
         if (form.name.trim().length < 3) {
-            return "Tên phải có ít nhất 3 ký tự";
+            return t("register.nameMin");
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(form.email)) {
-            return "Email không đúng định dạng";
+            return t("register.emailInvalid");
         }
 
         if (form.password.length < 8) {
-            return "Mật khẩu phải có ít nhất 8 ký tự";
+            return t("register.passwordMin");
         }
 
         if (!/[A-Za-z]/.test(form.password) || !/[0-9]/.test(form.password)) {
-            return "Mật khẩu phải chứa ít nhất 1 chữ và 1 số";
+            return t("register.passwordRequirements");
         }
 
         if (form.password !== form.confirmPassword) {
-            return "Mật khẩu xác nhận không khớp";
+            return t("register.passwordMismatch");
         }
 
         if (!form.agree) {
-            return "Bạn cần đồng ý điều khoản & chính sách";
+            return t("register.agreeRequired");
         }
 
         return "";
@@ -88,17 +90,17 @@ export default function Register() {
                 password: form.password
             });
 
-            notifySuccess("Đăng ký thành công!");
+            notifySuccess(t("register.registerSuccess"));
             navigate("/login");
         } catch (err) {
             const code = err.response?.data?.error;
 
             if (code === "EMAIL_ALREADY_EXISTS") {
-                setError("Email đã được đăng ký");
+                setError(t("register.emailExists"));
             } else if (code === "MISSING_FIELDS") {
-                setError("Thiếu thông tin bắt buộc");
+                setError(t("register.missingFields"));
             } else {
-                setError("Lỗi hệ thống");
+                setError(t("register.systemError"));
             }
         } finally {
             setLoading(false);
@@ -110,24 +112,21 @@ export default function Register() {
         <div className="register-container">
             {/* LEFT */}
             <div className="register-left">
-                <h1>CHÀO MỪNG BẠN ĐẾN VỚI REVLIVE</h1>
-                <p>
-                    Đăng ký ngay để được hợp tác cùng <br />
-                    những đối tác uy tín tại REVLIVE
-                </p>
+                <h1>{t("register.welcome")}</h1>
+                <p>{t("register.welcomeDesc")}</p>
 
-                <label>Họ và tên / Tên doanh nghiệp</label>
+                <label>{t("register.fullName")}</label>
                 <div className="input-box">
                     <FaUser />
                     <input
                         name="name"
-                        placeholder="Nguyễn Văn A / ABC Media"
+                        placeholder={t("register.namePlaceholder")}
                         value={form.name}
                         onChange={handleChange}
                     />
                 </div>
 
-                <label>Email</label>
+                <label>{t("register.email")}</label>
                 <div className="input-box">
                     <FaEnvelope />
                     <input
@@ -139,7 +138,7 @@ export default function Register() {
                     />
                 </div>
 
-                <label>Mật khẩu</label>
+                <label>{t("register.password")}</label>
                 <div className="input-box">
                     <FaLock />
                     <input
@@ -154,7 +153,7 @@ export default function Register() {
                     </span>
                 </div>
 
-                <label>Xác nhận lại mật khẩu</label>
+                <label>{t("register.confirmPassword")}</label>
                 <div className="input-box">
                     <FaLock />
                     <input
@@ -177,21 +176,21 @@ export default function Register() {
                         onChange={handleChange}
                     />
                     <span>
-                        Tôi đã xem và đồng ý với{" "}
+                        {t("register.agreeTerms")}{" "}
                         <a href="/legal" target="_blank" rel="noopener noreferrer">
-                            <b>Điều khoản dịch vụ</b> và <b>Chính sách bảo mật</b>
+                            <b>{t("register.termsAndPolicy")}</b>
                         </a>{" "}
-                        của REVLIVE
+                        {t("register.ofRevlive")}
                     </span>
                 </div>
 
                 {error && <div className="error">{error}</div>}
 
                 <button className="register-btn" onClick={handleRegister} disabled={loading}>
-                    {loading ? "ĐANG ĐĂNG KÝ..." : "ĐĂNG KÝ"}
+                    {loading ? t("register.registering") : t("register.registerButton")}
                 </button>
 
-                <div className="divider">HOẶC</div>
+                <div className="divider">{t("register.or")}</div>
 
                 <div className="social">
                     <button className="google">GOOGLE</button>
@@ -199,9 +198,9 @@ export default function Register() {
                 </div>
 
                 <div className="footer">
-                    Bạn đã có tài khoản?{" "}
+                    {t("register.haveAccount")}{" "}
                     <span onClick={() => navigate("/login")}>
-                        Đăng nhập ngay
+                        {t("register.signIn")}
                     </span>
                 </div>
 
@@ -209,12 +208,16 @@ export default function Register() {
 
             {/* RIGHT */}
             <div className="register-right">
+                <Link to="/" style={{ display: "block", cursor: "pointer" }}>
                 <img
                     src="/logo-revlive.png"
                     alt="Revlive"
                     className="register-logo"
+                        style={{ cursor: "pointer" }}
                 />
+                </Link>
             </div>
         </div>
     );
 }
+

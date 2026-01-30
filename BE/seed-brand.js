@@ -164,10 +164,10 @@ async function seedBrand() {
       {
         brand: brands[0]._id,
         brandName: brands[0].companyName,
-        title: "Tuyển Creator Content cho chiến dịch Tết 2025",
+        title: "Tuyển Creator Content cho chiến dịch Tết 2026",
         jobType: "Content Creator",
         workTime: "Part-time, linh hoạt",
-        content: "Chúng tôi đang tìm kiếm các Creator có khả năng sáng tạo nội dung về Tết Nguyên Đán 2025. Nhiệm vụ bao gồm: tạo video TikTok/Instagram Reels, viết bài blog, chụp ảnh sản phẩm, và tham gia các sự kiện offline của thương hiệu.",
+        content: "Chúng tôi đang tìm kiếm các Creator có khả năng sáng tạo nội dung về Tết Nguyên Đán 2026. Nhiệm vụ bao gồm: tạo video TikTok/Instagram Reels, viết bài blog, chụp ảnh sản phẩm, và tham gia các sự kiện offline của thương hiệu.",
         budget: "15,000,000 - 30,000,000 VNĐ/bài",
         requirements: "Có từ 10K followers trên TikTok hoặc Instagram. Kinh nghiệm tạo nội dung về lifestyle, food & beverage. Có khả năng quay và edit video chất lượng cao.",
         benefits: "Hợp đồng dài hạn, tham gia các sự kiện độc quyền, nhận sản phẩm miễn phí, cơ hội hợp tác với các thương hiệu lớn khác trong hệ sinh thái.",

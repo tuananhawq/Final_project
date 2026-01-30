@@ -107,12 +107,12 @@ router.post(
 
 /**
  * POST /api/upload/blog
- * Upload Blog image (Staff/Admin only)
+ * Upload Blog image (User/Creator/Brand/Staff can upload for their blogs)
  */
 router.post(
   "/blog",
   authGuard,
-  roleGuard("staff", "admin"),
+  roleGuard("staff", "creator", "brand", "user"),
   upload.single("image"),
   uploadBlogImage
 );

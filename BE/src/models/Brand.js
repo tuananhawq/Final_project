@@ -40,6 +40,23 @@ const brandSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  warnings: {
+    type: Number,
+    default: 0,
+  },
+  // Blog violation tracking (for brands)
+  blogWarningCount: {
+    type: Number,
+    default: 0,
+  },
+  isLocked: {
+    type: Boolean,
+    default: false,
+  },
+  lockedReason: {
+    type: String,
+    default: "",
+  },
 }, { timestamps: true });
 
 // ←←←← SỬA DÒNG NÀY: "Job" → "Brand"

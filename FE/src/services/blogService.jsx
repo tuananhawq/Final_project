@@ -100,3 +100,32 @@ export const deleteBlog = async (id) => {
   return res.data;
 };
 
+// ==================== STAFF MANAGEMENT ROUTES ====================
+export const warnBlog = async (id, violationReason, staffNotes) => {
+  const res = await axios.post(
+    `${API_URL}/admin/${id}/warn`,
+    { violationReason, staffNotes },
+    { headers: getAuthHeaders() }
+  );
+  return res.data;
+};
+
+export const deleteBlogWithReason = async (id, violationReason, staffNotes) => {
+  const res = await axios.delete(
+    `${API_URL}/admin/${id}/delete-with-reason`,
+    {
+      data: { violationReason, staffNotes },
+      headers: getAuthHeaders(),
+    }
+  );
+  return res.data;
+};
+
+export const lockBrandAccount = async (userId, reason) => {
+  const res = await axios.post(
+    `${API_URL}/admin/lock-brand/${userId}`,
+    { reason },
+    { headers: getAuthHeaders() }
+  );
+  return res.data;
+};

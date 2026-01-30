@@ -13,6 +13,7 @@ import { FaHeart, FaStar, FaEye, FaCalendarAlt, FaUser } from "react-icons/fa";
 import { jwtDecode } from "jwt-decode";
 import "../styles/blog/blog-detail.css";
 import { useNotification } from "../context/NotificationContext.jsx";
+import { useLanguage } from "../context/LanguageContext.jsx";
 
 export default function BlogDetail() {
   const { id } = useParams();
@@ -25,6 +26,7 @@ export default function BlogDetail() {
   const [submitting, setSubmitting] = useState(false);
   const [user, setUser] = useState(null);
   const { confirm, notifyError } = useNotification();
+  const { t } = useLanguage();
 
   useEffect(() => {
     loadBlog();
@@ -51,12 +53,12 @@ export default function BlogDetail() {
     try {
       setLoading(true);
       const data = await getBlogById(id);
-      
+
       if (!data || data.error) {
         setBlog(null);
         return;
       }
-      
+
       setBlog(data);
 
       // Check if user liked this blog
@@ -65,7 +67,7 @@ export default function BlogDetail() {
         try {
           const decoded = jwtDecode(token);
           const userId = decoded.userId || decoded.id;
-          
+
           // Check like status
           if (data.likes && Array.isArray(data.likes)) {
             setIsLiked(
@@ -75,7 +77,7 @@ export default function BlogDetail() {
               })
             );
           }
-          
+
           // Check user rating
           if (data.ratings && Array.isArray(data.ratings)) {
             const userRatingObj = data.ratings.find((r) => {
@@ -176,7 +178,7 @@ export default function BlogDetail() {
   };
 
   const handleDeleteComment = async (commentId) => {
-    const ok = await confirm("Bạn có chắc muốn xóa bình luận này?");
+    const ok = await confirm(t("blogDetail.deleteCommentConfirm"));
     if (!ok) return;
 
     try {
@@ -187,7 +189,7 @@ export default function BlogDetail() {
       }));
     } catch (error) {
       console.error("Error deleting comment:", error);
-      notifyError("Xóa bình luận thất bại. Vui lòng thử lại.");
+      notifyError(t("common.error"));
     }
   };
 
@@ -203,7 +205,7 @@ export default function BlogDetail() {
     return (
       <div className="blog-page">
         <Header />
-        <div className="blog-detail__loading">Đang tải...</div>
+        <div className="blog-detail__loading">{t("common.loading")}</div>
         <Footer />
       </div>
     );
@@ -213,7 +215,7 @@ export default function BlogDetail() {
     return (
       <div className="blog-page">
         <Header />
-        <div className="blog-detail__error">Không tìm thấy bài viết</div>
+        <div className="blog-detail__error">{t("blogDetail.notFound")}</div>
         <Footer />
       </div>
     );
@@ -227,7 +229,7 @@ export default function BlogDetail() {
           {/* Header */}
           <header className="blog-detail__header">
             {blog.featured && (
-              <div className="blog-detail__badge">Bài viết nổi bật</div>
+              <div className="blog-detail__badge">{t("blogDetail.featuredPost")}</div>
             )}
             <h1 className="blog-detail__title">{blog.title}</h1>
             <div className="blog-detail__meta">
@@ -241,7 +243,7 @@ export default function BlogDetail() {
               </div>
               <div className="blog-detail__meta-right">
                 <span className="blog-detail__views">
-                  <FaEye /> {blog.views || 0} lượt xem
+                  <FaEye /> {blog.views || 0} {t("blogDetail.views")}
                 </span>
               </div>
             </div>
@@ -278,7 +280,7 @@ export default function BlogDetail() {
             </button>
 
             <div className="blog-detail__rating">
-              <span className="blog-detail__rating-label">Đánh giá:</span>
+              <span className="blog-detail__rating-label">{t("blogDetail.rating")}:</span>
               <div className="blog-detail__stars">
                 {[1, 2, 3, 4, 5].map((star) => {
                   const avgRating = parseFloat(blog.averageRating || 0);
@@ -287,9 +289,8 @@ export default function BlogDetail() {
                     <button
                       key={star}
                       onClick={() => handleRate(star)}
-                      className={`blog-detail__star ${
-                        star <= displayRating ? "blog-detail__star--active" : ""
-                      }`}
+                      className={`blog-detail__star ${star <= displayRating ? "blog-detail__star--active" : ""
+                        }`}
                     >
                       <FaStar />
                     </button>
@@ -298,7 +299,7 @@ export default function BlogDetail() {
               </div>
               {(blog.averageRating > 0 || blog.ratings?.length > 0) && (
                 <span className="blog-detail__rating-value">
-                  {blog.averageRating || "0.0"} ({blog.ratings?.length || 0} đánh giá)
+                  {blog.averageRating || "0.0"} ({blog.ratings?.length || 0} {t("blogDetail.ratings")})
                 </span>
               )}
             </div>
@@ -307,7 +308,7 @@ export default function BlogDetail() {
           {/* Comments Section */}
           <section className="blog-detail__comments">
             <h2 className="blog-detail__comments-title">
-              Bình luận ({blog.comments?.length || 0})
+              {t("blogDetail.comments")} ({blog.comments?.length || 0})
             </h2>
 
             {/* Add Comment Form */}
@@ -316,7 +317,7 @@ export default function BlogDetail() {
                 <textarea
                   value={commentContent}
                   onChange={(e) => setCommentContent(e.target.value)}
-                  placeholder="Viết bình luận của bạn..."
+                  placeholder={t("blogDetail.writeComment")}
                   className="blog-detail__comment-input"
                   rows={4}
                   required
@@ -326,17 +327,17 @@ export default function BlogDetail() {
                   disabled={submitting}
                   className="blog-detail__comment-submit"
                 >
-                  {submitting ? "Đang gửi..." : "Gửi bình luận"}
+                  {submitting ? t("blogDetail.sending") : t("blogDetail.sendComment")}
                 </button>
               </form>
             ) : (
               <div className="blog-detail__comment-login">
-                <p>Vui lòng đăng nhập để bình luận</p>
+                <p>{t("blogDetail.loginToComment")}</p>
                 <button
                   onClick={() => navigate("/login")}
                   className="blog-detail__login-btn"
                 >
-                  Đăng nhập
+                  {t("header.login")}
                 </button>
               </div>
             )}
@@ -345,10 +346,10 @@ export default function BlogDetail() {
             <div className="blog-detail__comments-list">
               {blog.comments && blog.comments.length > 0 ? (
                 blog.comments.map((comment) => {
-                  const commentUserId = typeof comment.userId === 'object' 
-                    ? comment.userId._id || comment.userId 
+                  const commentUserId = typeof comment.userId === 'object'
+                    ? comment.userId._id || comment.userId
                     : comment.userId;
-                  
+
                   const canDelete =
                     user &&
                     (commentUserId === user.id ||
@@ -368,7 +369,7 @@ export default function BlogDetail() {
                             onClick={() => handleDeleteComment(comment._id)}
                             className="blog-detail__comment-delete"
                           >
-                            Xóa
+                            {t("blogDetail.deleteComment")}
                           </button>
                         )}
                       </div>
@@ -377,7 +378,7 @@ export default function BlogDetail() {
                   );
                 })
               ) : (
-                <p className="blog-detail__no-comments">Chưa có bình luận nào</p>
+                <p className="blog-detail__no-comments">{t("blogDetail.noComments")}</p>
               )}
             </div>
           </section>

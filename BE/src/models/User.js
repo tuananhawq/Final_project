@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
 
   username: {
     type: String,
-    unique: true,
+    unique: false,
     sparse: true
   },
 
@@ -78,6 +78,19 @@ const userSchema = new mongoose.Schema({
   premiumExpiredAt: {
     type: Date,
     default: null
+  },
+  // Blog violation tracking
+  blogWarningCount: {
+    type: Number,
+    default: 0
+  },
+  isLocked: {
+    type: Boolean,
+    default: false
+  },
+  lockedReason: {
+    type: String,
+    default: ""
   }
 }, {
   timestamps: true

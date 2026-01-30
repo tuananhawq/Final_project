@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import { getFooter } from "../services/homeService.jsx";
+import { useLanguage } from "../context/LanguageContext.jsx";
 import "../styles/home/home-footer.css";
 
 export function Footer() {
   const [footer, setFooter] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchFooter = async () => {
@@ -22,7 +24,7 @@ export function Footer() {
   }, []);
 
   if (loading) {
-    return <div className="home-footer">Loading...</div>;
+    return <div className="home-footer">{t("common.loading")}</div>;
   }
 
   if (!footer) {
@@ -46,47 +48,49 @@ export function Footer() {
             <div className="home-footer__subscribe">
               <input
                 type="email"
-                placeholder="Enter your email"
+                placeholder={footer.email || "Enter your email"}
                 className="home-footer__email-input"
               />
               <button className="home-footer__subscribe-btn">
-                Subscribe
+                {t("footer.subscribe")}
               </button>
             </div>
           </div>
 
           {/* About Us */}
           <div className="home-footer__section">
-            <h3 className="home-footer__section-title">VỀ CHÚNG TÔI</h3>
+            <h3 className="home-footer__section-title">{t("footer.aboutUs")}</h3>
             <ul className="home-footer__list">
               {footer.footerLinks && footer.footerLinks.length > 0 ? (
-                footer.footerLinks.map((link, index) => (
-                  <li key={index} className="home-footer__list-item">
-                    <a href={link.url} className="home-footer__link">
-                      {link.label}
-                    </a>
-                  </li>
-                ))
+                footer.footerLinks
+                  .filter(link => !["Liên hệ", "Contact"].includes(link.label))
+                  .map((link, index) => (
+                    <li key={index} className="home-footer__list-item">
+                      <a href={link.url} className="home-footer__link">
+                        {link.label}
+                      </a>
+                    </li>
+                  ))
               ) : (
                 <>
                   <li className="home-footer__list-item">
                     <a href="/about" className="home-footer__link">
-                      Giới thiệu
+                      {t("footer.introduction")}
                     </a>
                   </li>
                   <li className="home-footer__list-item">
                     <a href="/legal" className="home-footer__link">
-                      Điều khoản & Chính sách
+                      {t("footer.terms")}
                     </a>
                   </li>
                   <li className="home-footer__list-item">
                     <a href="/careers" className="home-footer__link">
-                      Tuyển dụng
+                      {t("footer.careers")}
                     </a>
                   </li>
                   <li className="home-footer__list-item">
                     <a href="/complaints" className="home-footer__link">
-                      Gửi khiếu nại
+                      {t("footer.complaints")}
                     </a>
                   </li>
                 </>
@@ -96,13 +100,18 @@ export function Footer() {
 
           {/* Support */}
           <div className="home-footer__section">
-            <h3 className="home-footer__section-title">TỔNG ĐÀI HỖ TRỢ</h3>
+            <h3 className="home-footer__section-title">{t("header.contact")}</h3>
             <p className="home-footer__contact">{footer.supportPhone || "036.333.5981"}</p>
+            <p className="home-footer__contact">
+              <a href="mailto:revlive.vietnam.media@gmail.com" className="home-footer__link">
+                revlive.vietnam.media@gmail.com
+              </a>
+            </p>
           </div>
 
           {/* Office Location */}
           <div className="home-footer__section">
-            <h3 className="home-footer__section-title">OFFICE LOCATION</h3>
+            <h3 className="home-footer__section-title">{t("footer.officeLocation")}</h3>
             <p className="home-footer__contact">{footer.officeLocation || "REVLIVE"}</p>
           </div>
         </div>

@@ -147,40 +147,91 @@ export const getDashboardStats = async (req, res) => {
 };
 
 // Lấy dữ liệu cho biểu đồ doanh thu (7 ngày gần nhất)
+// Lấy dữ liệu cho biểu đồ doanh thu
+// period: 'week' | 'month' | 'quarter' | 'year'
 export const getRevenueChart = async (req, res) => {
   try {
+    const { period = "week" } = req.query;
     const now = new Date();
-    const sevenDaysAgo = new Date(now);
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    sevenDaysAgo.setHours(0, 0, 0, 0);
+    const endDate = new Date(now);
+    endDate.setHours(23, 59, 59, 999);
+    
+    let startDate = new Date(now);
+    let labels = [];
+    let data = [];
 
-    // Lấy transactions completed trong 7 ngày
+    // Xác định startDate dựa trên period
+    if (period === "week") {
+      startDate.setDate(now.getDate() - 6);
+      startDate.setHours(0, 0, 0, 0);
+    } else if (period === "month") {
+      startDate.setDate(now.getDate() - 29);
+      startDate.setHours(0, 0, 0, 0);
+    } else if (period === "quarter") {
+      startDate.setMonth(now.getMonth() - 2);
+      startDate.setDate(1);
+      startDate.setHours(0, 0, 0, 0);
+    } else if (period === "year") {
+      startDate.setMonth(now.getMonth() - 11);
+      startDate.setDate(1);
+      startDate.setHours(0, 0, 0, 0);
+    } else {
+      // Default fallback
+      startDate.setDate(now.getDate() - 6);
+      startDate.setHours(0, 0, 0, 0);
+    }
+
+    // Query transactions trong khoảng thời gian
     const transactions = await Transaction.find({
       status: "completed",
-      createdAt: { $gte: sevenDaysAgo },
+      createdAt: { $gte: startDate, $lte: endDate },
     }).select("amount createdAt");
 
-    // Nhóm theo ngày
-    const dailyRevenue = {};
-    transactions.forEach((transaction) => {
-      const date = new Date(transaction.createdAt).toISOString().split("T")[0];
-      if (!dailyRevenue[date]) {
-        dailyRevenue[date] = 0;
-      }
-      dailyRevenue[date] += transaction.amount;
-    });
+    // Xử lý dữ liệu
+    if (period === "week" || period === "month") {
+      // Group by Day
+      const dailyRevenue = {};
+      transactions.forEach((t) => {
+        // Chuyển về giờ địa phương VN (UTC+7) để group đúng ngày
+        // Tuy nhiên đơn giản nhất là dùng ISO date string của UTC hoặc xử lý timezone
+        // Ở đây ta dùng toLocaleDateString với múi giờ VN
+        const dateStr = new Date(t.createdAt).toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" }); // YYYY-MM-DD
+        dailyRevenue[dateStr] = (dailyRevenue[dateStr] || 0) + t.amount;
+      });
 
-    // Tạo array cho 7 ngày gần nhất
-    const labels = [];
-    const data = [];
-    for (let i = 6; i >= 0; i--) {
-      const date = new Date(now);
-      date.setDate(date.getDate() - i);
-      date.setHours(0, 0, 0, 0);
-      const dateStr = date.toISOString().split("T")[0];
-      const dayLabel = date.toLocaleDateString("vi-VN", { weekday: "short", day: "numeric" });
-      labels.push(dayLabel);
-      data.push(dailyRevenue[dateStr] || 0);
+      const days = period === "week" ? 7 : 30;
+      for (let i = days - 1; i >= 0; i--) {
+        const d = new Date(now);
+        d.setDate(d.getDate() - i);
+        const dateStr = d.toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" });
+        const label = d.toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit" });
+        labels.push(label);
+        data.push(dailyRevenue[dateStr] || 0);
+      }
+    } else {
+      // Group by Month (quarter, year)
+      const monthlyRevenue = {};
+      transactions.forEach((t) => {
+        const d = new Date(t.createdAt);
+        // Group by YYYY-M
+        const monthKey = `${d.getFullYear()}-${d.getMonth() + 1}`;
+        monthlyRevenue[monthKey] = (monthlyRevenue[monthKey] || 0) + t.amount;
+      });
+
+      const monthsCount = period === "quarter" ? 3 : 12;
+      for (let i = monthsCount - 1; i >= 0; i--) {
+        const d = new Date(now);
+        d.setDate(1); // Reset about day to avoid month skip
+        d.setMonth(d.getMonth() - i);
+        
+        const year = d.getFullYear();
+        const month = d.getMonth() + 1;
+        const monthKey = `${year}-${month}`;
+        const label = `T${month}`; // T1, T2...
+        
+        labels.push(label);
+        data.push(monthlyRevenue[monthKey] || 0);
+      }
     }
 
     res.json({ labels, data });

@@ -4,10 +4,12 @@ import { useParams, Link } from "react-router-dom";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { getBannerDetail } from "../services/bannerService";
+import { useLanguage } from "../context/LanguageContext";
 import "../styles/home/highlight-detail.css";
 
 export default function HighlightDetail() {
   const { id } = useParams();
+  const { t } = useLanguage();
 
   const [banner, setBanner] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -26,8 +28,8 @@ export default function HighlightDetail() {
   }, [id]);
 
 
-  if (loading) return <div className="detail-loading">Đang tải chi tiết...</div>;
-  if (!banner) return <div className="detail-notfound">Không tìm thấy bài viết</div>;
+  if (loading) return <div className="detail-loading">{t("highlightDetail.loading")}</div>;
+  if (!banner) return <div className="detail-notfound">{t("highlightDetail.notFound")}</div>;
 
   const handleLike = () => {
     // Sau này gọi API tăng like
@@ -39,7 +41,7 @@ export default function HighlightDetail() {
     if (!comment.trim()) return;
 
     const newComment = {
-      username: "Bạn", // Sau này lấy từ user login
+      username: t("highlightDetail.you"), // Sau này lấy từ user login
       avatar: "",
       content: comment,
       createdAt: new Date(),
@@ -77,7 +79,7 @@ export default function HighlightDetail() {
           {/* Like & Comment Section */}
           <div className="detail-interaction">
             <button onClick={handleLike} className="like-btn">
-              ❤️ {banner.likes} Thích
+              ❤️ {banner.likes} {t("highlightDetail.like")}
             </button>
 
             <form onSubmit={handleComment} className="comment-form">
@@ -85,16 +87,16 @@ export default function HighlightDetail() {
                 type="text"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                placeholder="Viết bình luận..."
+                placeholder={t("highlightDetail.placeholder")}
                 className="comment-input"
               />
-              <button type="submit" className="comment-submit">Gửi</button>
+              <button type="submit" className="comment-submit">{t("highlightDetail.send")}</button>
             </form>
 
             {/* Danh sách bình luận */}
             <div className="comments-list">
               {banner.comments.length === 0 ? (
-                <p className="no-comment">Chưa có bình luận nào. Hãy là người đầu tiên!</p>
+                <p className="no-comment">{t("highlightDetail.noComments")}</p>
               ) : (
                 banner.comments.map((cmt, i) => (
                   <div key={i} className="comment-item">
@@ -107,7 +109,7 @@ export default function HighlightDetail() {
             </div>
           </div>
 
-          <Link to="/" className="back-home">← Quay lại trang chủ</Link>
+          <Link to="/" className="back-home">← {t("highlightDetail.backHome")}</Link>
         </div>
       </main>
       <Footer />

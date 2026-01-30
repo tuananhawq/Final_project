@@ -4,6 +4,7 @@ import axios from "axios";
 import { API_URLS } from "../config/api.js";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
+import { useLanguage } from "../context/LanguageContext";
 import "../styles/agency-detail.css";
 
 export default function CreatorDetailPage() {
@@ -11,6 +12,7 @@ export default function CreatorDetailPage() {
   const navigate = useNavigate();
   const [creator, setCreator] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchCreator = async () => {
@@ -35,7 +37,7 @@ export default function CreatorDetailPage() {
     return (
       <div className="agency-detail-page">
         <Header />
-        <div className="agency-detail-loading">Đang tải...</div>
+        <div className="agency-detail-loading">{t("creatorDetail.loading")}</div>
         <Footer />
       </div>
     );
@@ -46,8 +48,8 @@ export default function CreatorDetailPage() {
       <div className="agency-detail-page">
         <Header />
         <div className="agency-detail-not-found">
-          <h2>Không tìm thấy Creator</h2>
-          <button onClick={() => navigate("/")}>Về trang chủ</button>
+          <h2>{t("creatorDetail.notFound")}</h2>
+          <button onClick={() => navigate("/")}>{t("creatorDetail.backHome")}</button>
         </div>
         <Footer />
       </div>
@@ -64,7 +66,7 @@ export default function CreatorDetailPage() {
           <div className="agency-detail-hero__container">
             <h1 className="agency-detail-hero__title">{creator.name}</h1>
             <div className="agency-detail-hero__subtitle">
-              Creator / Host nổi bật
+              {t("creatorDetail.subtitle")}
               {creator.followers && ` - ${creator.followers} followers`}
             </div>
           </div>
@@ -93,21 +95,21 @@ export default function CreatorDetailPage() {
             {/* Cột phải: Nội dung chữ dài giới thiệu */}
             <div className="agency-detail-content__right">
               <div className="agency-detail-story">
-                <h2 className="agency-detail-story__title">Câu chuyện của chúng tôi</h2>
+                <h2 className="agency-detail-story__title">{t("creatorDetail.story")}</h2>
                 <div className="agency-detail-story__content">
                   <p>{creator.description}</p>
                 </div>
               </div>
 
               <div className="agency-detail-achievements">
-                <h3 className="agency-detail-achievements__title">Thành tích nổi bật</h3>
+                <h3 className="agency-detail-achievements__title">{t("creatorDetail.achievements")}</h3>
                 <ul className="agency-detail-achievements__list">
                   {creator.followers && (
-                    <li>Hơn {creator.followers} followers trên các nền tảng</li>
+                    <li>{t("creatorDetail.followersItem").replace("{followers}", creator.followers)}</li>
                   )}
-                  <li>Được công nhận là Creator/Host nổi bật</li>
-                  <li>Cam kết tạo ra nội dung chất lượng và sáng tạo</li>
-                  <li>Xây dựng cộng đồng mạnh mẽ và tích cực</li>
+                  <li>{t("creatorDetail.recognized")}</li>
+                  <li>{t("creatorDetail.commitment")}</li>
+                  <li>{t("creatorDetail.community")}</li>
                 </ul>
               </div>
             </div>
@@ -119,3 +121,4 @@ export default function CreatorDetailPage() {
     </div>
   );
 }
+

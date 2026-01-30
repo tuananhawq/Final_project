@@ -1,4 +1,5 @@
 // BE/src/modules/creator/creator.controller.js
+import mongoose from "mongoose";
 import Creator from "../../models/Creator.js";
 
 // Lấy danh sách Creator nổi bật
@@ -29,6 +30,12 @@ export const getFeaturedCreators = async (req, res) => {
 export const getCreatorDetail = async (req, res) => {
   try {
     const { id } = req.params;
+    
+    // Kiểm tra xem id có phải là ObjectId hợp lệ không
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ error: "NOT_FOUND" });
+    }
+    
     const creator = await Creator.findById(id)
       .populate("user", "username avatar bio roles");
 

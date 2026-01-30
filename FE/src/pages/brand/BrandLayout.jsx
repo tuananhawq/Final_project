@@ -61,11 +61,10 @@ export default function BrandLayout() {
 
   // Xác định active tab dựa trên URL
   const getActiveTab = () => {
-    if (location.pathname.includes("/brand/news")) return "news";
     if (location.pathname.includes("/brand/recommended")) return "recommended";
-    if (location.pathname.includes("/brand/cv")) return "cv";
     if (location.pathname.includes("/brand/mynews")) return "mynews";
-    return "news"; // default
+    if (location.pathname.includes("/brand/profile")) return "profile";
+    return "mynews"; // default - hiển thị tin tuyển dụng của tôi
   };
 
   const activeTab = getActiveTab();
@@ -123,21 +122,21 @@ export default function BrandLayout() {
           </div>
 
           <nav className="panel-menu">
-            {/* BẢNG TIN */}
-            <a
-              href="/brand/news"
-              className={`menu-item ${activeTab === "news" ? "active" : ""}`}
-              onClick={(e) => {
-                e.preventDefault();
-                navigate("/brand/news");
-              }}
-            >
-              <span className="menu-icon">📰</span> BẢNG TIN
-            </a>
-
             {/* Các menu chỉ hiện khi là Brand */}
             {isBrand && (
               <>
+                <a
+                  href="/brand/mynews"
+                  className={`menu-item ${
+                    activeTab === "mynews" ? "active" : ""
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/brand/mynews");
+                  }}
+                >
+                  <span className="menu-icon">🏠</span> TIN TUYỂN DỤNG CỦA TÔI
+                </a>
                 <a
                   href="/brand/recommended"
                   className={`menu-item ${
@@ -151,26 +150,16 @@ export default function BrandLayout() {
                   <span className="menu-icon">📢</span> CV ĐỀ XUẤT
                 </a>
                 <a
-                  href="/brand/cv"
-                  className={`menu-item ${activeTab === "cv" ? "active" : ""}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate("/brand/cv");
-                  }}
-                >
-                  <span className="menu-icon">📋</span> QUẢN LÝ CV
-                </a>
-                <a
-                  href="/brand/mynews"
+                  href="/brand/profile"
                   className={`menu-item ${
-                    activeTab === "mynews" ? "active" : ""
+                    activeTab === "profile" ? "active" : ""
                   }`}
                   onClick={(e) => {
                     e.preventDefault();
-                    navigate("/brand/mynews");
+                    navigate("/brand/profile");
                   }}
                 >
-                  <span className="menu-icon">🏠</span> TIN TUYỂN DỤNG CỦA TÔI
+                  <span className="menu-icon">👤</span> BRAND PROFILE
                 </a>
               </>
             )}

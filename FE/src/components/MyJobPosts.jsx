@@ -25,7 +25,7 @@ export function MyJobPosts() {
         return;
       }
       const res = await axios.get(
-        `${API_URLS.BRAND}/job-post`,
+        `${API_URLS.JOB_POST}/brand/job-post`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -38,7 +38,7 @@ export function MyJobPosts() {
       for (const post of postsData) {
         try {
           const appRes = await axios.get(
-            `${API_URLS.BRAND}/job-post/${post._id}/applications`,
+            `${API_URLS.APPLICATION}/brand/job-post/${post._id}/applications`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }
@@ -76,7 +76,7 @@ export function MyJobPosts() {
     if (!ok) return;
     try {
       await axios.delete(
-        `${API_URLS.BRAND}/job-post/${id}`,
+        `${API_URLS.JOB_POST}/brand/job-post/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

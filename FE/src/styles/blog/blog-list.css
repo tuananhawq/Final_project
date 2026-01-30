@@ -187,12 +187,18 @@
 .blog-search__container {
   max-width: 1280px;
   margin: 0 auto;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .blog-search__input {
-  width: 100%;
+  flex: 1;
+  min-width: 300px;
   max-width: 600px;
-  margin: 0 auto;
+  margin: 0;
   display: block;
   padding: 1rem 1.5rem;
   background: rgba(255, 255, 255, 0.05);
@@ -202,6 +208,26 @@
   font-size: 1rem;
   outline: none;
   transition: all 0.3s ease;
+}
+
+.blog-create-btn {
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .blog-search__container {
+    flex-direction: column;
+  }
+  
+  .blog-search__input {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .blog-create-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 .blog-search__input::placeholder {

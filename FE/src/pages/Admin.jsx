@@ -9,7 +9,9 @@ import TransactionManagement from "../components/TransactionManagement.jsx";
 import PaymentConfigManagement from "../components/PaymentConfigManagement.jsx";
 import LegalConfigManagement from "../components/LegalConfigManagement.jsx";
 import { StaffManagement } from "../components/StaffManagement.jsx";
+import { AdminJobPostManagement } from "../components/AdminJobPostManagement.jsx";
 import DashboardStats from "../components/DashboardStats.jsx";
+import { useLanguage } from "../context/LanguageContext.jsx";
 import "../styles/dashboard.css";
 
 export default function Admin() {
@@ -17,7 +19,8 @@ export default function Admin() {
   const [userRoles, setUserRoles] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  
+  const { t } = useLanguage();
+
   // Lấy tab từ URL, mặc định là "dashboard"
   const activeMenu = searchParams.get("tab") || "dashboard";
   const isAdmin = userRoles.includes("admin");
@@ -72,35 +75,49 @@ export default function Admin() {
       <div className="dashboard-layout">
         {/* SIDEBAR */}
         <aside className="dashboard-sidebar">
-          <div className="sidebar-logo">Admin Dashboard</div>
+          <div className="sidebar-logo">{t("admin.dashboard")}</div>
           <nav>
             <div
               className={`nav-item ${activeMenu === "dashboard" ? "active" : ""}`}
               onClick={() => handleMenuClick("dashboard")}
               style={{ cursor: "pointer" }}
             >
-              <span>📊</span> Dashboard
+              <span>📊</span> {t("admin.dashboard")}
             </div>
             <div
               className={`nav-item ${activeMenu === "home-management" ? "active" : ""}`}
               onClick={() => handleMenuClick("home-management")}
               style={{ cursor: "pointer" }}
             >
-              <span>🏠</span> Quản lý Home
+              <span>🏠</span> {t("admin.homeManagement")}
             </div>
-            <div
-              className={`nav-item ${activeMenu === "blog-management" ? "active" : ""}`}
-              onClick={() => handleMenuClick("blog-management")}
-              style={{ cursor: "pointer" }}
-            >
-              <span>📝</span> Quản lý Blog
-            </div>
+            {/* Blog Management - For Staff and Admin */}
+            {(userRoles.includes("staff") || userRoles.includes("admin")) && (
+              <div
+                className={`nav-item ${activeMenu === "blog-management" ? "active" : ""}`}
+                onClick={() => handleMenuClick("blog-management")}
+                style={{ cursor: "pointer" }}
+              >
+                <span>📝</span> {t("admin.blogManagement")}
+              </div>
+            )}
+
+            {/* Job Post Management - For Staff (and Admin) */}
+            {(userRoles.includes("staff") || userRoles.includes("admin")) && (
+              <div
+                className={`nav-item ${activeMenu === "job-post-management" ? "active" : ""}`}
+                onClick={() => handleMenuClick("job-post-management")}
+                style={{ cursor: "pointer" }}
+              >
+                <span>📢</span> Quản lý Bài đăng
+              </div>
+            )}
             <div
               className={`nav-item ${activeMenu === "user-management" ? "active" : ""}`}
               onClick={() => handleMenuClick("user-management")}
               style={{ cursor: "pointer" }}
             >
-              <span>👥</span> Quản lý Users
+              <span>👥</span> {t("admin.userManagement")}
             </div>
             {isAdmin && (
               <div
@@ -108,7 +125,7 @@ export default function Admin() {
                 onClick={() => handleMenuClick("staff-management")}
                 style={{ cursor: "pointer" }}
               >
-                <span>👔</span> Quản lý Staff
+                <span>👔</span> {t("admin.staffManagement")}
               </div>
             )}
             <div
@@ -116,37 +133,31 @@ export default function Admin() {
               onClick={() => handleMenuClick("image-management")}
               style={{ cursor: "pointer" }}
             >
-              <span>🖼️</span> Quản lý Hình ảnh
+              <span>🖼️</span> {t("admin.imageManagement")}
             </div>
             <div
               className={`nav-item ${activeMenu === "transaction-management" ? "active" : ""}`}
               onClick={() => handleMenuClick("transaction-management")}
               style={{ cursor: "pointer" }}
             >
-              <span>💳</span> Quản lý Giao dịch
+              <span>💳</span> {t("admin.transactionManagement")}
             </div>
             <div
               className={`nav-item ${activeMenu === "payment-config" ? "active" : ""}`}
               onClick={() => handleMenuClick("payment-config")}
               style={{ cursor: "pointer" }}
             >
-              <span>⚙️</span> Cấu hình Thanh toán
+              <span>⚙️</span> {t("admin.paymentConfig")}
             </div>
             <div
               className={`nav-item ${activeMenu === "legal-config" ? "active" : ""}`}
               onClick={() => handleMenuClick("legal-config")}
               style={{ cursor: "pointer" }}
             >
-              <span>📄</span> Điều khoản & Chính sách
-            </div>
-            <div className="nav-item">
-              <span>📈</span> Reports
-            </div>
-            <div className="nav-item">
-              <span>⚙️</span> Settings
+              <span>📄</span> {t("admin.legalConfig")}
             </div>
           </nav>
-          <div className="sidebar-footer">© 2025 Company</div>
+          <div className="sidebar-footer">© 2026 Company</div>
         </aside>
 
         {/* MAIN */}
@@ -154,9 +165,9 @@ export default function Admin() {
           {/* HEADER */}
           <header className="dashboard-header">
             <div className="header-left">
-              <div className="header-title">Admin Dashboard</div>
+              <div className="header-title">{t("admin.dashboard")}</div>
               <div className="header-subtitle">
-                Tổng hợp số liệu trong ngày hôm nay
+                {t("admin.todaySummary")}
               </div>
             </div>
             <div className="header-right">
@@ -165,7 +176,7 @@ export default function Admin() {
                 <span className="staff-role">{isAdmin ? "Admin" : "Staff"}</span>
               </div>
               <button className="header-btn" onClick={handleLogout}>
-                Đăng xuất
+                {t("admin.logout")}
               </button>
               <div className="avatar" />
             </div>
@@ -175,8 +186,12 @@ export default function Admin() {
           <main className="dashboard-content">
             {activeMenu === "home-management" ? (
               <HomeManagement />
-            ) : activeMenu === "blog-management" ? (
+            ) : activeMenu === "blog-management" &&
+              (userRoles.includes("staff") || userRoles.includes("admin")) ? (
               <BlogManagement />
+            ) : activeMenu === "job-post-management" &&
+              (userRoles.includes("staff") || userRoles.includes("admin")) ? (
+              <AdminJobPostManagement />
             ) : activeMenu === "user-management" ? (
               <UserManagement />
             ) : activeMenu === "staff-management" && isAdmin ? (

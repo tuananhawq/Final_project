@@ -6,12 +6,14 @@ import { API_URLS } from "../config/api.js";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { EmployerSidebar } from "../components/EmployerSidebar";
+import { useLanguage } from "../context/LanguageContext";
 import "../styles/creator/creator-page.css";
 
 export default function CreatorPage() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const { t } = useLanguage();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -45,7 +47,7 @@ export default function CreatorPage() {
     }, [navigate]);
 
     if (loading) {
-        return <div className="loading">Đang tải...</div>;
+        return <div className="loading">{t("creatorPage.loading")}</div>;
     }
 
     const isCreator = user?.roles?.includes("creator") || false;
@@ -71,10 +73,9 @@ export default function CreatorPage() {
                         </div>
 
                         <div className="highlight-text">
-                            <h1>THÔNG BÁO TUYỂN DỤNG NỔI BẬT HÔM NAY</h1>
+                            <h1>{t("creatorPage.todayHighlight")}</h1>
                             <p>
-                                Hôm nay, nền tảng chính thức mở đợt tuyển chọn và đăng ký hợp tác
-                                với các Host tiềm năng cho chiến dịch truyền thông sắp tới.
+                                {t("creatorPage.highlightDesc")}
                             </p>
                         </div>
                     </section>
@@ -105,3 +106,4 @@ export default function CreatorPage() {
         </div>
     );
 }
+

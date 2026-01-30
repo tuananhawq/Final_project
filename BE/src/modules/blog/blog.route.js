@@ -11,6 +11,9 @@ import {
   createBlog,
   updateBlog,
   deleteBlog,
+  warnBlog,
+  deleteBlogWithReason,
+  lockBrandAccount,
 } from "./blog.controller.js";
 import { authGuard, roleGuard } from "../../middlewares/auth.middleware.js";
 
@@ -27,11 +30,21 @@ router.post("/:id/rate", authGuard, rateBlog);
 router.post("/:id/comments", authGuard, addComment);
 router.delete("/:id/comments/:commentId", authGuard, deleteComment);
 
-// ==================== BLOG MANAGEMENT ROUTES (staff/admin/creator/brand) ====================
-router.get("/admin/all", authGuard, roleGuard("staff", "admin", "creator", "brand"), getAllBlogs);
-router.post("/admin", authGuard, roleGuard("staff", "admin", "creator", "brand"), createBlog);
-router.put("/admin/:id", authGuard, roleGuard("staff", "admin", "creator", "brand"), updateBlog);
+// ==================== BLOG MANAGEMENT ROUTES ====================
+// Cho phép creator, brand, staff xem tất cả blogs (không cho admin/user)
+router.get("/admin/all", authGuard, roleGuard("staff", "admin", "creator", "brand", "user"), getAllBlogs);
+// Cho phép creator, brand tạo blog (staff cũng có thể tạo nếu cần, nhưng không cho admin/user)
+router.post("/admin", authGuard, roleGuard("staff", "admin", "creator", "brand", "user"), createBlog);
+// Cho phép creator, brand, staff chỉnh sửa (nhưng chỉ blog của mình, trừ staff)
+router.put("/admin/:id", authGuard, roleGuard("staff", "admin", "creator", "brand", "user"), updateBlog);
+// Cho phép staff xóa mọi blog, và cho phép creator/brand xóa blog của chính mình
 router.delete("/admin/:id", authGuard, roleGuard("staff", "admin", "creator", "brand"), deleteBlog);
+
+// ==================== STAFF MANAGEMENT ROUTES ====================
+// Chỉ staff mới có quyền cảnh cáo và quản lý vi phạm
+router.post("/admin/:id/warn", authGuard, roleGuard("staff", "admin"), warnBlog);
+router.delete("/admin/:id/delete-with-reason", authGuard, roleGuard("staff", "admin"), deleteBlogWithReason);
+router.post("/admin/lock-brand/:userId", authGuard, roleGuard("staff", "admin"), lockBrandAccount);
 
 export default router;
 

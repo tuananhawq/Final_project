@@ -40,6 +40,7 @@ export default function DashboardStats() {
   const [recentTransactions, setRecentTransactions] = useState([]);
   const [overview, setOverview] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [revenuePeriod, setRevenuePeriod] = useState("week"); // week | month | quarter | year
   const { notifyError } = useNotification();
   const navigate = useNavigate();
 
@@ -50,13 +51,26 @@ export default function DashboardStats() {
     return () => clearInterval(interval);
   }, []);
 
+  // Fetch lại biểu đồ khi thay đổi period
+  useEffect(() => {
+    const fetchChartData = async () => {
+      try {
+        const chartDataResult = await getRevenueChart(revenuePeriod);
+        setChartData(chartDataResult);
+      } catch (error) {
+        console.error("Error fetching revenue chart:", error);
+      }
+    };
+    fetchChartData();
+  }, [revenuePeriod]);
+
   const fetchAllData = async () => {
     try {
       setLoading(true);
       const [statsData, chartDataResult, transactionsData, overviewData] =
         await Promise.all([
           getDashboardStats(),
-          getRevenueChart(),
+          getRevenueChart(revenuePeriod),
           getRecentTransactions(),
           getOverviewStats(),
         ]);
@@ -149,24 +163,24 @@ export default function DashboardStats() {
 
   const chartDataConfig = chartData
     ? {
-        labels: chartData.labels,
-        datasets: [
-          {
-            label: "Doanh thu",
-            data: chartData.data,
-            borderColor: "rgb(125, 211, 252)",
-            backgroundColor: "rgba(125, 211, 252, 0.1)",
-            borderWidth: 3,
-            fill: true,
-            tension: 0.4,
-            pointBackgroundColor: "rgb(125, 211, 252)",
-            pointBorderColor: "#fff",
-            pointBorderWidth: 2,
-            pointRadius: 5,
-            pointHoverRadius: 7,
-          },
-        ],
-      }
+      labels: chartData.labels,
+      datasets: [
+        {
+          label: "Doanh thu",
+          data: chartData.data,
+          borderColor: "rgb(125, 211, 252)",
+          backgroundColor: "rgba(125, 211, 252, 0.1)",
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: "rgb(125, 211, 252)",
+          pointBorderColor: "#fff",
+          pointBorderWidth: 2,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        },
+      ],
+    }
     : null;
 
   if (loading) {
@@ -190,9 +204,8 @@ export default function DashboardStats() {
               {stats ? formatCurrency(stats.revenue.today) : "0 đ"}
             </div>
             <div
-              className={`card-trend ${
-                stats?.revenue.change >= 0 ? "positive" : "negative"
-              }`}
+              className={`card-trend ${stats?.revenue.change >= 0 ? "positive" : "negative"
+                }`}
             >
               {stats?.revenue.change >= 0 ? "↑" : "↓"}{" "}
               {Math.abs(stats?.revenue.change || 0).toFixed(1)}% so với hôm qua
@@ -206,9 +219,8 @@ export default function DashboardStats() {
             <div className="card-label">Đơn hàng mới</div>
             <div className="card-value">{stats?.orders.new || 0}</div>
             <div
-              className={`card-trend ${
-                stats?.orders.change >= 0 ? "positive" : "negative"
-              }`}
+              className={`card-trend ${stats?.orders.change >= 0 ? "positive" : "negative"
+                }`}
             >
               {stats?.orders.change >= 0 ? "↑" : "↓"}{" "}
               {Math.abs(stats?.orders.change || 0).toFixed(1)}% so với tuần trước
@@ -222,9 +234,8 @@ export default function DashboardStats() {
             <div className="card-label">Khách hàng mới</div>
             <div className="card-value">{stats?.customers.new || 0}</div>
             <div
-              className={`card-trend ${
-                stats?.customers.change >= 0 ? "positive" : "negative"
-              }`}
+              className={`card-trend ${stats?.customers.change >= 0 ? "positive" : "negative"
+                }`}
             >
               {stats?.customers.change >= 0 ? "↑" : "↓"}{" "}
               {Math.abs(stats?.customers.change || 0).toFixed(1)}% trong 7 ngày
@@ -240,9 +251,8 @@ export default function DashboardStats() {
               {(stats?.cancelRate.rate || 0).toFixed(1)}%
             </div>
             <div
-              className={`card-trend ${
-                stats?.cancelRate.change <= 0 ? "positive" : "negative"
-              }`}
+              className={`card-trend ${stats?.cancelRate.change <= 0 ? "positive" : "negative"
+                }`}
             >
               {stats?.cancelRate.change <= 0 ? "↓" : "↑"}{" "}
               {Math.abs(stats?.cancelRate.change || 0).toFixed(1)}% so với tháng trước
@@ -261,7 +271,7 @@ export default function DashboardStats() {
               <p>Kiểm tra và duyệt các giao dịch đang chờ xử lý</p>
               <button
                 className="quick-action-btn"
-                onClick={() => navigate("/dashboard?tab=transaction-management")}
+                onClick={() => navigate("/admin?tab=transaction-management")}
               >
                 Xem ngay →
               </button>
@@ -277,8 +287,37 @@ export default function DashboardStats() {
             <div>
               <div className="chart-title">Biểu đồ doanh thu</div>
               <div className="chart-subtitle">
-                Doanh thu 7 ngày gần nhất
+                {revenuePeriod === "week" && "Doanh thu 7 ngày gần nhất"}
+                {revenuePeriod === "month" && "Doanh thu theo tháng"}
+                {revenuePeriod === "quarter" && "Doanh thu theo quý"}
+                {revenuePeriod === "year" && "Doanh thu theo năm"}
               </div>
+            </div>
+            <div className="chart-period-filter">
+              <button
+                className={`period-btn ${revenuePeriod === "week" ? "active" : ""}`}
+                onClick={() => setRevenuePeriod("week")}
+              >
+                7 Ngày
+              </button>
+              <button
+                className={`period-btn ${revenuePeriod === "month" ? "active" : ""}`}
+                onClick={() => setRevenuePeriod("month")}
+              >
+                Tháng
+              </button>
+              <button
+                className={`period-btn ${revenuePeriod === "quarter" ? "active" : ""}`}
+                onClick={() => setRevenuePeriod("quarter")}
+              >
+                Quý
+              </button>
+              <button
+                className={`period-btn ${revenuePeriod === "year" ? "active" : ""}`}
+                onClick={() => setRevenuePeriod("year")}
+              >
+                Năm
+              </button>
             </div>
           </div>
           <div className="chart-container">
@@ -295,7 +334,7 @@ export default function DashboardStats() {
             <h3>Giao dịch gần đây</h3>
             <button
               className="view-all-btn"
-              onClick={() => navigate("/dashboard?tab=transaction-management")}
+              onClick={() => navigate("/admin?tab=transaction-management")}
             >
               Xem tất cả →
             </button>

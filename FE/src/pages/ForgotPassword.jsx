@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaEnvelope } from "react-icons/fa";
 import axios from "axios";
 import { API_URLS } from "../config/api.js";
+import { useLanguage } from "../context/LanguageContext.jsx";
 import "../styles/forgot-password.css";
 
 export default function ForgotPassword() {
@@ -12,17 +13,18 @@ export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   /* ================= VALIDATE ================= */
   const validateEmail = () => {
     if (!email) {
-      return "Vui lòng nhập email";
+      return t("forgotPassword.emailRequired");
     }
 
     // regex email cơ bản (đủ cho đồ án)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return "Email không đúng định dạng";
+      return t("forgotPassword.emailInvalid");
     }
 
     return "";
@@ -51,7 +53,7 @@ export default function ForgotPassword() {
       // 🔥 gửi xong OTP → sang reset password
       navigate("/reset-password", { state: { email } });
     } catch (err) {
-      setError(err.response?.data?.error || "Lỗi gửi OTP");
+      setError(err.response?.data?.error || t("common.error"));
     } finally {
       setLoading(false);
     }
@@ -60,14 +62,14 @@ export default function ForgotPassword() {
   return (
     <div className="forgot-container">
       <div className="forgot-box">
-        <h2>Quên mật khẩu</h2>
-        <p>Nhập email để nhận mã OTP đặt lại mật khẩu</p>
+        <h2>{t("forgotPassword.title")}</h2>
+        <p>{t("forgotPassword.subtitle")}</p>
 
         <div className="input-box">
           <FaEnvelope />
           <input
             type="email"
-            placeholder="you@email.com"
+            placeholder={t("forgotPassword.emailPlaceholder")}
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
@@ -84,13 +86,14 @@ export default function ForgotPassword() {
           onClick={handleSendOTP}
           disabled={loading}
         >
-          {loading ? "ĐANG GỬI..." : "Gửi mã OTP"}
+          {loading ? t("common.processing") : t("forgotPassword.submit")}
         </button>
 
         <div className="back-login" onClick={() => navigate("/login")}>
-          ← Quay lại đăng nhập
+          ← {t("forgotPassword.backToLogin")}
         </div>
       </div>
     </div>
   );
 }
+

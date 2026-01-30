@@ -6,6 +6,7 @@ export const API_URLS = {
   AUTH: `${API_BASE_URL}/auth`,
   HOME: `${API_BASE_URL}/home`,
   BLOG: `${API_BASE_URL}/blog`,
+  NOTIFICATIONS: `${API_BASE_URL}/notifications`,
   BANNER: `${API_BASE_URL}/banners`,
   CREATOR: `${API_BASE_URL}/creators`,
   BRAND: `${API_BASE_URL}/brands`,

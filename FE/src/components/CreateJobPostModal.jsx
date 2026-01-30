@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { API_URLS } from "../config/api.js";
+import { useLanguage } from "../context/LanguageContext";
 
 export function CreateJobPostModal({ open, onClose, onSaved, initialData }) {
   const [form, setForm] = useState({
@@ -14,6 +15,7 @@ export function CreateJobPostModal({ open, onClose, onSaved, initialData }) {
   });
   const [error, setError] = useState("");
   const isEdit = !!initialData;
+  const { t } = useLanguage();
 
   // 🔥 Cập nhật form khi initialData thay đổi (khi mở modal sửa)
   useEffect(() => {
@@ -74,7 +76,7 @@ export function CreateJobPostModal({ open, onClose, onSaved, initialData }) {
       !requirements.trim() ||
       !benefits.trim()
     ) {
-      setError("Vui lòng nhập đầy đủ tất cả các trường bắt buộc.");
+      setError(t("createJobPost.errorRequired"));
       return;
     }
 
@@ -88,13 +90,13 @@ export function CreateJobPostModal({ open, onClose, onSaved, initialData }) {
 
       if (isEdit) {
         await axios.put(
-          `${API_URLS.BRAND}/job-post/${initialData._id}`,
+          `${API_URLS.JOB_POST}/brand/job-post/${initialData._id}`,
           form,
           config
         );
       } else {
         await axios.post(
-          `${API_URLS.BRAND}/job-post`,
+          `${API_URLS.JOB_POST}/brand/job-post`,
           form,
           config
         );
@@ -104,7 +106,7 @@ export function CreateJobPostModal({ open, onClose, onSaved, initialData }) {
       onClose();
     } catch (err) {
       console.error("Save job post error:", err);
-      setError("Có lỗi xảy ra khi lưu tin tuyển dụng.");
+      setError(t("createJobPost.errorSave"));
     }
   };
 
@@ -119,77 +121,77 @@ export function CreateJobPostModal({ open, onClose, onSaved, initialData }) {
         className="brand-modal brand-job-modal"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3>{isEdit ? "Sửa tin tuyển dụng" : "Đăng tin tuyển dụng mới"}</h3>
+        <h3>{isEdit ? t("createJobPost.editTitle") : t("createJobPost.createTitle")}</h3>
         {error && <p className="brand-error-text">{error}</p>}
 
         <form onSubmit={handleSubmit} className="brand-form">
           <label>
-            Tiêu đề bài tuyển dụng *
+            {t("createJobPost.titleLabel")}
             <input
               type="text"
               value={form.title}
               onChange={(e) => handleChange("title", e.target.value)}
-              placeholder="Ví dụ: Tuyển Creator Livestream cho chiến dịch A"
+              placeholder={t("createJobPost.titlePlaceholder")}
             />
           </label>
 
           <label>
-            Loại công việc *
+            {t("createJobPost.typeLabel")}
             <input
               type="text"
               value={form.jobType}
               onChange={(e) => handleChange("jobType", e.target.value)}
-              placeholder="Full-time / Part-time / Freelance / Campaign-based..."
+              placeholder={t("createJobPost.typePlaceholder")}
             />
           </label>
 
           <label>
-            Thời gian làm việc *
+            {t("createJobPost.timeLabel")}
             <input
               type="text"
               value={form.workTime}
               onChange={(e) => handleChange("workTime", e.target.value)}
-              placeholder="Ví dụ: 3 buổi/tuần, 2 tiếng/buổi..."
+              placeholder={t("createJobPost.timePlaceholder")}
             />
           </label>
 
           <label>
-            Ngân sách / Mức lương *
+            {t("createJobPost.budgetLabel")}
             <input
               type="text"
               value={form.budget}
               onChange={(e) => handleChange("budget", e.target.value)}
-              placeholder="Ví dụ: 10.000.000 - 15.000.000 VNĐ / chiến dịch"
+              placeholder={t("createJobPost.budgetPlaceholder")}
             />
           </label>
 
           <label>
-            Nội dung công việc *
+            {t("createJobPost.contentLabel")}
             <textarea
               rows={4}
               value={form.content}
               onChange={(e) => handleChange("content", e.target.value)}
-              placeholder="Mô tả chi tiết công việc, KPI, timeline..."
+              placeholder={t("createJobPost.contentPlaceholder")}
             />
           </label>
 
           <label>
-            Yêu cầu ứng viên *
+            {t("createJobPost.reqLabel")}
             <textarea
               rows={3}
               value={form.requirements}
               onChange={(e) => handleChange("requirements", e.target.value)}
-              placeholder="Kinh nghiệm, kỹ năng, số lượng follower tối thiểu..."
+              placeholder={t("createJobPost.reqPlaceholder")}
             />
           </label>
 
           <label>
-            Quyền lợi / Hỗ trợ từ Brand *
+            {t("createJobPost.benefitsLabel")}
             <textarea
               rows={3}
               value={form.benefits}
               onChange={(e) => handleChange("benefits", e.target.value)}
-              placeholder="Chính sách hỗ trợ, bonus, quyền lợi đặc biệt..."
+              placeholder={t("createJobPost.benefitsPlaceholder")}
             />
           </label>
 
@@ -199,10 +201,10 @@ export function CreateJobPostModal({ open, onClose, onSaved, initialData }) {
               className="secondary-btn"
               onClick={() => onClose()}
             >
-              Hủy
+              {t("createJobPost.cancel")}
             </button>
             <button type="submit" className="primary-btn">
-              {isEdit ? "Lưu thay đổi" : "Đăng bài"}
+              {isEdit ? t("createJobPost.save") : t("createJobPost.post")}
             </button>
           </div>
         </form>
@@ -210,5 +212,6 @@ export function CreateJobPostModal({ open, onClose, onSaved, initialData }) {
     </div>
   );
 }
+
 
 

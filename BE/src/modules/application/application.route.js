@@ -9,17 +9,17 @@ import {
 
 const router = express.Router();
 
-// Creator routes
+// Creator routes - cho phép user và creator đều có thể ứng tuyển
 router.post(
   "/creator/apply",
   authGuard,
-  roleGuard("creator"),
+  roleGuard("creator", "user"),
   createApplication
 );
 router.get(
   "/creator/applications",
   authGuard,
-  roleGuard("creator"),
+  roleGuard("creator", "user"),
   getCreatorApplications
 );
 

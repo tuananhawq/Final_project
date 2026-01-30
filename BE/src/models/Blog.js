@@ -98,6 +98,24 @@ const blogSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  // Staff management fields
+  status: {
+    type: String,
+    enum: ["pending", "approved", "rejected", "warning"],
+    default: "approved",
+  },
+  violationReason: {
+    type: String,
+    default: "",
+  },
+  staffNotes: {
+    type: String,
+    default: "",
+  },
+  warningDate: {
+    type: Date,
+    default: null,
+  },
 }, {
   timestamps: true,
 });

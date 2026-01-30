@@ -2,8 +2,8 @@
 body {
   margin: 0;
   background: radial-gradient(circle at top, #0f172a, #020617);
-  font-family: 'Inter', sans-serif;
-  color: #e5e7eb;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  color: var(--color-text-secondary, #e5e7eb);
   overflow-x: hidden;
 }
 
@@ -33,7 +33,7 @@ body {
   background: linear-gradient(180deg, #1b1f3b 0%, #0f172a 100%);
   border-radius: 28px;
   padding: 32px;
-  box-shadow: 0 25px 70px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,0.05);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, .6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(148, 163, 184, 0.1);
   backdrop-filter: blur(10px);
 }
@@ -73,19 +73,22 @@ body {
 }
 
 .panel-info h3 {
-  font-size: 1.5rem;
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: var(--text-h4, 1.25rem);
   margin: 0 0 4px 0;
-  background: linear-gradient(135deg, #7dd3fc, #d946ef);
+  background: var(--gradient-primary, linear-gradient(135deg, #7dd3fc, #d946ef));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  font-weight: 700;
+  font-weight: var(--weight-bold, 700);
 }
 
 .panel-info p {
+  font-family: var(--font-body, 'Inter', sans-serif);
   opacity: .8;
-  font-size: 0.9rem;
+  font-size: var(--text-sm, 0.875rem);
   margin: 4px 0;
+  color: var(--color-text-muted, #9ca3af);
 }
 
 /* Menu */
@@ -123,13 +126,13 @@ body {
 }
 
 .menu-item:hover {
-  background: rgba(99,102,241,.2);
+  background: rgba(99, 102, 241, .2);
   transform: translateX(4px);
 }
 
 .menu-item.active {
-  background: linear-gradient(90deg, rgba(129,140,248,.4), rgba(236,72,153,.3));
-  box-shadow: 0 0 0 1px rgba(129,140,248,.5);
+  background: linear-gradient(90deg, rgba(129, 140, 248, .4), rgba(236, 72, 153, .3));
+  box-shadow: 0 0 0 1px rgba(129, 140, 248, .5);
   font-weight: 600;
 }
 
@@ -139,7 +142,7 @@ body {
 
 .menu-icon {
   font-size: 1.2rem;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 /* ========== MAIN CONTENT ========== */
@@ -169,17 +172,22 @@ body {
 }
 
 .highlight-text h1 {
-  font-size: 3.5rem;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: var(--text-h1, 3.5rem);
   line-height: 1.2;
-  background: linear-gradient(90deg,#60a5fa,#a78bfa,#f472b6);
+  background: var(--gradient-accent, linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6));
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
+  font-weight: var(--weight-black, 900);
 }
 
 .highlight-text p {
+  font-family: var(--font-body, 'Inter', sans-serif);
   margin-top: 24px;
-  font-size: 1.2rem;
-  color: #d1d5db;
+  font-size: var(--text-lg, 1.125rem);
+  color: var(--color-text-secondary, #d1d5db);
+  line-height: var(--leading-relaxed, 1.7);
 }
 
 /* ========== GRID CONTENT ========== */
@@ -193,7 +201,7 @@ body {
   border-radius: 24px;
   overflow: hidden;
   background: #111827;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
 .grid-item img {
@@ -204,15 +212,18 @@ body {
 
 /* ====== GENERIC SECTION STYLES FOR BRAND TABS ====== */
 .brand-section-title {
-  font-size: 2rem;
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: var(--text-h2, 2.5rem);
+  font-weight: var(--weight-bold, 700);
   margin-bottom: 24px;
+  color: var(--color-text-primary, #ffffff);
 }
 
 .brand-section-loading,
 .brand-empty-state {
   padding: 24px;
   border-radius: 16px;
-  background: rgba(15,23,42,0.85);
+  background: rgba(15, 23, 42, 0.85);
   color: #e5e7eb;
 }
 
@@ -235,7 +246,9 @@ body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .brand-loading-text {
@@ -253,8 +266,8 @@ body {
 .brand-news-item {
   padding: 16px 20px;
   border-radius: 16px;
-  background: rgba(15,23,42,0.9);
-  border: 1px solid rgba(148,163,184,0.3);
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.3);
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease,
     border-color 0.15s ease;
@@ -265,8 +278,8 @@ body {
 
 .brand-news-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 18px 35px rgba(0,0,0,0.5);
-  border-color: rgba(129,140,248,0.7);
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.5);
+  border-color: rgba(129, 140, 248, 0.7);
 }
 
 .brand-news-header {
@@ -285,14 +298,17 @@ body {
 .job-type {
   padding: 2px 10px;
   border-radius: 999px;
-  background: rgba(59,130,246,0.2);
+  background: rgba(59, 130, 246, 0.2);
   color: #bfdbfe;
   font-size: 0.75rem;
 }
 
 .job-title {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
   margin: 4px 0 8px;
-  font-size: 1.2rem;
+  font-size: var(--text-h4, 1.25rem);
+  font-weight: var(--weight-semibold, 600);
+  color: var(--color-text-primary, #ffffff);
 }
 
 .brand-news-meta {
@@ -304,12 +320,15 @@ body {
 }
 
 .budget {
-  color: #fbbf24;
-  font-weight: 600;
+  color: var(--color-warning-light, #fbbf24);
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-weight: var(--weight-bold, 700);
+  font-size: var(--text-base, 1rem);
 }
 
 .work-time {
-  color: #6ee7b7;
+  color: var(--color-success-light, #6ee7b7);
+  font-weight: var(--weight-medium, 500);
 }
 
 .brand-pagination {
@@ -324,7 +343,7 @@ body {
   padding: 6px 12px;
   border-radius: 999px;
   border: none;
-  background: rgba(55,65,81,0.8);
+  background: rgba(55, 65, 81, 0.8);
   color: #e5e7eb;
   cursor: pointer;
 }
@@ -343,7 +362,7 @@ body {
 .brand-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15,23,42,0.8);
+  background: rgba(15, 23, 42, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -355,10 +374,10 @@ body {
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  background: radial-gradient(circle at top left,#1e293b,#020617);
+  background: radial-gradient(circle at top left, #1e293b, #020617);
   border-radius: 24px;
   padding: 24px 28px;
-  box-shadow: 0 28px 80px rgba(0,0,0,0.8);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.8);
 }
 
 .brand-modal h3 {
@@ -380,7 +399,7 @@ body {
   padding: 10px 18px;
   border-radius: 999px;
   border: none;
-  background: linear-gradient(90deg,#4f46e5,#ec4899);
+  background: linear-gradient(90deg, #4f46e5, #ec4899);
   color: white;
   cursor: pointer;
 }
@@ -399,7 +418,7 @@ body {
 
 .brand-error-text {
   color: #fecaca;
-  background: rgba(248,113,113,0.1);
+  background: rgba(248, 113, 113, 0.1);
   border-radius: 8px;
   padding: 8px 10px;
   font-size: 0.9rem;
@@ -422,8 +441,8 @@ body {
 .brand-form input,
 .brand-form textarea {
   border-radius: 10px;
-  border: 1px solid rgba(148,163,184,0.6);
-  background: rgba(15,23,42,0.8);
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: rgba(15, 23, 42, 0.8);
   color: #e5e7eb;
   padding: 8px 10px;
   resize: vertical;
@@ -453,17 +472,17 @@ body {
 }
 
 .primary-btn {
-  background: linear-gradient(90deg,#4f46e5,#ec4899);
+  background: linear-gradient(90deg, #4f46e5, #ec4899);
   color: white;
 }
 
 .secondary-btn {
-  background: rgba(31,41,55,0.9);
+  background: rgba(31, 41, 55, 0.9);
   color: #e5e7eb;
 }
 
 .danger-btn {
-  background: rgba(239,68,68,0.9);
+  background: rgba(239, 68, 68, 0.9);
   color: #fee2e2;
 }
 
@@ -479,7 +498,7 @@ body {
   background: linear-gradient(160deg, #1b1f3b, #0f172a);
   border-radius: 16px;
   padding: 20px;
-  border: 1px solid rgba(148,163,184,0.2);
+  border: 1px solid rgba(148, 163, 184, 0.2);
 }
 
 .application-header {
@@ -498,7 +517,7 @@ body {
 .application-cv-info {
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid rgba(148,163,184,0.1);
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
 }
 
 .application-cv-info p {
@@ -535,13 +554,13 @@ body {
   background: linear-gradient(160deg, #1b1f3b, #0f172a);
   border-radius: 20px;
   padding: 24px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .brand-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 25px 70px rgba(0,0,0,0.7);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.7);
 }
 
 .brand-card-header {
@@ -557,7 +576,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(99,102,241,0.2);
+  background: rgba(99, 102, 241, 0.2);
   overflow: hidden;
 }
 
@@ -612,15 +631,15 @@ body {
 
 .cv-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 18px;
 }
 
 .cv-card {
   padding: 16px 18px;
   border-radius: 18px;
-  background: rgba(15,23,42,0.9);
-  border: 1px solid rgba(148,163,184,0.2);
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.2);
 }
 
 .cv-card-header {
@@ -635,7 +654,7 @@ body {
   height: 40px;
   border-radius: 999px;
   overflow: hidden;
-  background: rgba(15,23,42,0.9);
+  background: rgba(15, 23, 42, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -662,7 +681,7 @@ body {
 
 .cv-detail-btn {
   margin-top: 10px;
-  background: rgba(59,130,246,0.4);
+  background: rgba(59, 130, 246, 0.4);
   color: #eff6ff;
 }
 
@@ -685,8 +704,8 @@ body {
 .brand-job-card {
   padding: 16px 18px;
   border-radius: 18px;
-  background: rgba(15,23,42,0.9);
-  border: 1px solid rgba(148,163,184,0.25);
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.25);
 }
 
 .brand-cv-content,

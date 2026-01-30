@@ -4,12 +4,14 @@ import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { checkoutSuccess } from "../services/paymentService";
 import { useNotification } from "../context/NotificationContext";
+import { useLanguage } from "../context/LanguageContext";
 import "../styles/pricing.css";
 
 export default function CheckoutSuccess() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { notifySuccess, notifyError } = useNotification();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
@@ -38,7 +40,7 @@ export default function CheckoutSuccess() {
 
       try {
         const result = await checkoutSuccess(token);
-        
+
         // Kiểm tra xem có phải là trường hợp đã xử lý trước đó không
         if (result.alreadyProcessed || (result.message && result.message.includes("đã được xử lý"))) {
           setAlreadyProcessed(true);
@@ -50,7 +52,7 @@ export default function CheckoutSuccess() {
           setTransactionData(result);
           notifySuccess("Thanh toán thành công! Tài khoản của bạn đã được nâng cấp.");
         }
-        
+
         // Redirect về trang pricing sau 3 giây
         setTimeout(() => {
           navigate("/pricing");
@@ -62,7 +64,7 @@ export default function CheckoutSuccess() {
           "Không thể xử lý thanh toán. Vui lòng liên hệ hỗ trợ.";
         setError(errorMessage);
         notifyError(errorMessage);
-        
+
         // Redirect về trang pricing sau 5 giây nếu có lỗi
         setTimeout(() => {
           navigate("/pricing");
@@ -100,14 +102,16 @@ export default function CheckoutSuccess() {
                   ? "Giao dịch này đã được xử lý trước đó. Tài khoản của bạn đã được nâng cấp."
                   : "Tài khoản của bạn đã được nâng cấp thành công."}
               </p>
-              
+
               <div className="transaction-details">
                 <div className="detail-item">
                   <span className="detail-label">Gói dịch vụ:</span>
                   <span className="detail-value">
                     {transactionData.transaction?.plan === "creator"
                       ? "Creator VIP"
-                      : "Brand VIP"}
+                      : transactionData.transaction?.amount >= 499000
+                        ? "Brand VIP Premium"
+                        : "Brand VIP"}
                   </span>
                 </div>
                 {transactionData.user?.premiumExpiredAt && (

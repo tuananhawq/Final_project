@@ -11,6 +11,7 @@ export function CreatorNews() {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [appliedPosts, setAppliedPosts] = useState(new Set()); // Track các bài đã ứng tuyển
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const { notifySuccess, notifyError, notifyInfo } = useNotification();
@@ -28,7 +29,7 @@ export function CreatorNews() {
       if (token) {
         try {
           const appliedRes = await axios.get(
-            `${API_URLS.CREATOR}/applications`,
+            `${API_URLS.APPLICATION}/creator/applications`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }
@@ -59,7 +60,7 @@ export function CreatorNews() {
 
     try {
       await axios.post(
-        `${API_URLS.CREATOR}/apply`,
+        `${API_URLS.APPLICATION}/creator/apply`,
         { jobPostId },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -80,6 +81,22 @@ export function CreatorNews() {
 
   useEffect(() => {
     fetchPosts(1);
+    
+    // Fetch user để check role
+    const fetchUser = async () => {
+      if (token) {
+        try {
+          const res = await axios.get(`${API_URLS.AUTH}/me`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setUser(res.data.user);
+        } catch (err) {
+          // Ignore error
+        }
+      }
+    };
+    
+    fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -97,12 +114,23 @@ export function CreatorNews() {
         <div className="brand-news-list">
           {posts.map((post) => {
             const isApplied = appliedPosts.has(post._id);
+            
+            const handlePostClick = (e) => {
+              if (user && user.roles?.includes("user") && 
+                  !user.roles?.includes("creator") && !user.roles?.includes("brand")) {
+                e.preventDefault();
+                notifyInfo("Vui lòng đăng ký gói Creator để xem chi tiết và ứng tuyển");
+                navigate("/pricing");
+              }
+            };
+            
             return (
               <Link
                 key={post._id}
                 to={`/creator/news/${post._id}`}
                 className="brand-news-item"
                 style={{ textDecoration: "none", color: "inherit" }}
+                onClick={handlePostClick}
               >
                 <div className="brand-news-header">
                   <span className="brand-name">{post.brandName}</span>

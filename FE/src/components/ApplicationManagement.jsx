@@ -16,7 +16,7 @@ export function ApplicationManagement({ jobPostId }) {
     try {
       setLoading(true);
       const res = await axios.get(
-        `${API_URLS.BRAND}/job-post/${jobPostId}/applications`,
+        `${API_URLS.APPLICATION}/brand/job-post/${jobPostId}/applications`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -64,7 +64,7 @@ export function ApplicationManagement({ jobPostId }) {
 
     try {
       await axios.put(
-        `${API_URLS.BRAND}/job-post/${jobPostId}/applications/${applicationId}`,
+        `${API_URLS.APPLICATION}/brand/job-post/${jobPostId}/applications/${applicationId}`,
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },

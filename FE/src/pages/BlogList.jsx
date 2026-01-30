@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { getBlogs, getFeaturedBlogs } from "../services/blogService.jsx";
-import { FaEye, FaHeart, FaStar, FaCalendarAlt } from "react-icons/fa";
+import { FaEye, FaHeart, FaStar, FaCalendarAlt, FaPlus } from "react-icons/fa";
+import { useLanguage } from "../context/LanguageContext.jsx";
+import { useNotification } from "../context/NotificationContext.jsx";
 import "../styles/blog/blog-list.css";
 
 export default function BlogList() {
@@ -13,6 +15,53 @@ export default function BlogList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+  const { t } = useLanguage();
+  const { notifyInfo } = useNotification();
+
+  // Check user role
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error("Error parsing user:", e);
+      }
+    }
+  }, []);
+
+  // Check if user can see the create blog button (any logged-in user except admin/staff)
+  const canPostBlog = () => {
+    if (!user) return false;
+    const roles = user.roles || [];
+    // Admin và staff không thấy nút tạo blog ở đây
+    return roles.includes("user") ||
+      roles.includes("creator") ||
+      roles.includes("brand");
+  };
+
+  const handleCreateBlog = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    const roles = user?.roles || [];
+
+    // Nếu user chỉ có role "user" (không có creator hoặc brand)
+    // thì chuyển về trang pricing với thông báo
+    if (roles.includes("user") && !roles.includes("creator") && !roles.includes("brand")) {
+      notifyInfo(t("blog.upgradeRequired"));
+      navigate("/pricing");
+      return;
+    }
+
+    // Navigate to my-blogs page with create mode (for creator/brand)
+    navigate("/my-blogs?create=true");
+  };
 
   useEffect(() => {
     loadBlogs();
@@ -61,10 +110,10 @@ export default function BlogList() {
         <section className="blog-hero">
           <div className="blog-hero__content">
             <h1 className="blog-hero__title">
-              Blog & <span className="blog-hero__title-gradient">News</span>
+              {t("blogList.heroTitle")} <span className="blog-hero__title-gradient">{t("blogList.heroTitleGradient")}</span>
             </h1>
             <p className="blog-hero__subtitle">
-              Khám phá những bài viết mới nhất và tin tức nổi bật
+              {t("blogList.heroSubtitle")}
             </p>
           </div>
         </section>
@@ -73,15 +122,14 @@ export default function BlogList() {
         {featuredBlogs.length > 0 && (
           <section className="blog-featured">
             <div className="blog-featured__container">
-              <h2 className="blog-featured__title">Bài viết nổi bật</h2>
+              <h2 className="blog-featured__title">{t("blogList.featuredPosts")}</h2>
               <div className="blog-featured__grid">
                 {featuredBlogs.map((blog, index) => (
                   <Link
                     key={blog._id}
                     to={`/blog/${blog._id}`}
-                    className={`blog-featured__card ${
-                      index === 1 ? "blog-featured__card--center" : ""
-                    }`}
+                    className={`blog-featured__card ${index === 1 ? "blog-featured__card--center" : ""
+                      }`}
                   >
                     <div className="blog-featured__image-wrapper">
                       <img
@@ -92,7 +140,7 @@ export default function BlogList() {
                           e.target.src = "https://via.placeholder.com/400x250?text=No+Image";
                         }}
                       />
-                      <div className="blog-featured__badge">Nổi bật</div>
+                      <div className="blog-featured__badge">{t("blogList.featuredBadge")}</div>
                     </div>
                     <div className="blog-featured__content">
                       <h3 className="blog-featured__title-text">{blog.title}</h3>
@@ -115,12 +163,12 @@ export default function BlogList() {
           </section>
         )}
 
-        {/* Search Bar */}
+        {/* Search Bar & Create Button */}
         <section className="blog-search">
           <div className="blog-search__container">
             <input
               type="text"
-              placeholder="Tìm kiếm bài viết..."
+              placeholder={t("common.search") + "..."}
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -128,6 +176,38 @@ export default function BlogList() {
               }}
               className="blog-search__input"
             />
+            {canPostBlog() && (
+              <button
+                onClick={handleCreateBlog}
+                className="blog-create-btn"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "12px 24px",
+                  background: "linear-gradient(135deg, #6366f1, #a855f7, #ec4899)",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "8px",
+                  fontSize: "16px",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                  boxShadow: "0 4px 15px rgba(99, 102, 241, 0.3)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow = "0 6px 20px rgba(99, 102, 241, 0.4)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 4px 15px rgba(99, 102, 241, 0.3)";
+                }}
+              >
+                <FaPlus />
+                {t("blog.addNew")}
+              </button>
+            )}
           </div>
         </section>
 
@@ -135,9 +215,9 @@ export default function BlogList() {
         <section className="blog-list">
           <div className="blog-list__container">
             {loading ? (
-              <div className="blog-list__loading">Đang tải...</div>
+              <div className="blog-list__loading">{t("common.loading")}</div>
             ) : blogs.length === 0 ? (
-              <div className="blog-list__empty">Không có bài viết nào</div>
+              <div className="blog-list__empty">{t("blogList.noBlogs")}</div>
             ) : (
               <>
                 <div className="blog-list__grid">
@@ -157,7 +237,7 @@ export default function BlogList() {
                           }}
                         />
                         {blog.featured && (
-                          <div className="blog-list__badge">Nổi bật</div>
+                          <div className="blog-list__badge">{t("blogList.featuredBadge")}</div>
                         )}
                       </div>
                       <div className="blog-list__content">
@@ -201,10 +281,10 @@ export default function BlogList() {
                       disabled={currentPage === 1}
                       className="blog-list__pagination-btn"
                     >
-                      Trước
+                      {t("blogList.prev")}
                     </button>
                     <span className="blog-list__pagination-info">
-                      Trang {currentPage} / {totalPages}
+                      {t("blogList.page")} {currentPage} / {totalPages}
                     </span>
                     <button
                       onClick={() =>
@@ -213,7 +293,7 @@ export default function BlogList() {
                       disabled={currentPage === totalPages}
                       className="blog-list__pagination-btn"
                     >
-                      Sau
+                      {t("blogList.next")}
                     </button>
                   </div>
                 )}

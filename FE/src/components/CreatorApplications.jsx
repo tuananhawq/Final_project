@@ -1,23 +1,30 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { FaSync } from "react-icons/fa";
 import axios from "axios";
 import { API_URLS } from "../config/api.js";
 
 export function CreatorApplications() {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const token = localStorage.getItem("token");
 
-  const fetchApplications = async () => {
+  const fetchApplications = async (isRefresh = false) => {
     try {
+      if (isRefresh) {
+        setRefreshing(true);
+      } else {
       setLoading(true);
+      }
+      
       if (!token) {
         setApplications([]);
         return;
       }
 
       const res = await axios.get(
-        `${API_URLS.CREATOR}/applications`,
+        `${API_URLS.APPLICATION}/creator/applications`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -27,7 +34,12 @@ export function CreatorApplications() {
       console.error("Fetch applications error:", err);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
+  };
+
+  const handleRefresh = () => {
+    fetchApplications(true);
   };
 
   useEffect(() => {
@@ -74,7 +86,46 @@ export function CreatorApplications() {
 
   return (
     <div className="creator-applications">
-      <h2 className="brand-section-title">ĐÃ ỨNG TUYỂN</h2>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+        <h2 className="brand-section-title" style={{ margin: 0 }}>ĐÃ ỨNG TUYỂN</h2>
+        <button
+          onClick={handleRefresh}
+          disabled={refreshing || loading}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "8px 16px",
+            backgroundColor: "rgba(125, 211, 252, 0.1)",
+            border: "1px solid rgba(125, 211, 252, 0.3)",
+            borderRadius: "8px",
+            color: "#7dd3fc",
+            cursor: refreshing || loading ? "not-allowed" : "pointer",
+            opacity: refreshing || loading ? 0.6 : 1,
+            transition: "all 0.2s ease",
+            fontSize: "0.9rem",
+            fontWeight: 500,
+          }}
+          onMouseEnter={(e) => {
+            if (!refreshing && !loading) {
+              e.target.style.backgroundColor = "rgba(125, 211, 252, 0.2)";
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!refreshing && !loading) {
+              e.target.style.backgroundColor = "rgba(125, 211, 252, 0.1)";
+            }
+          }}
+        >
+          <FaSync 
+            className={refreshing ? "spin-icon" : ""}
+            style={{ 
+              fontSize: "14px"
+            }} 
+          />
+          {refreshing ? "Đang tải..." : "Làm mới"}
+        </button>
+      </div>
 
       {applications.length === 0 ? (
         <div className="brand-empty-state">

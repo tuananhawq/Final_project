@@ -18,10 +18,12 @@ export const getDashboardStats = async () => {
   return res.data;
 };
 
-// Lấy dữ liệu biểu đồ doanh thu
-export const getRevenueChart = async () => {
+// Lấy dữ liệu biểu đồ doanh thu theo khoảng thời gian
+// period: "week" | "month" | "quarter" | "year"
+export const getRevenueChart = async (period = "week") => {
   const res = await axios.get(`${API_URL}/revenue-chart`, {
     headers: getAuthHeaders(),
+    params: { period },
   });
   return res.data;
 };

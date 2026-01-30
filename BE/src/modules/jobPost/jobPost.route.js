@@ -7,6 +7,9 @@ import {
   getMyJobPosts,
   updateMyJobPost,
   deleteMyJobPost,
+  adminGetJobPosts,
+  adminWarnBrandPost,
+  adminDeleteJobPost,
 } from "./jobPost.controller.js";
 
 const router = express.Router();
@@ -34,6 +37,28 @@ router.delete(
   authGuard,
   roleGuard("brand"),
   deleteMyJobPost
+);
+
+// Admin/Staff Routes
+router.get(
+  "/admin/job-posts",
+  authGuard,
+  roleGuard("admin", "staff"),
+  adminGetJobPosts
+);
+
+router.post(
+  "/admin/job-posts/:id/warn",
+  authGuard,
+  roleGuard("admin", "staff"),
+  adminWarnBrandPost
+);
+
+router.delete(
+  "/admin/job-posts/:id",
+  authGuard,
+  roleGuard("admin", "staff"),
+  adminDeleteJobPost
 );
 
 export default router;

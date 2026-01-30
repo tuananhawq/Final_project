@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getHeroes } from "../services/homeService.jsx";
+import { useLanguage } from "../context/LanguageContext";
+import defaultHeroBg from "../assets/anhbia3x12136-jp-2200w.png";
 import "../styles/home/home-hero.css";
 
 export function HeroSection() {
   const [hero, setHero] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchHero = async () => {
@@ -23,7 +28,7 @@ export function HeroSection() {
   }, []);
 
   if (loading) {
-    return <div className="home-hero">Loading...</div>;
+    return <div className="home-hero">{t("hero.loading")}</div>;
   }
 
   if (!hero) {
@@ -35,7 +40,7 @@ export function HeroSection() {
       {/* Background Image */}
       <div className="home-hero__background">
         <img
-          src={hero.backgroundImage || "/src/assets/anhbia3x12136-jp-2200w.png"}
+          src={hero.backgroundImage || defaultHeroBg}
           alt="Hero Banner"
           className="home-hero__bg-image"
         />
@@ -48,21 +53,22 @@ export function HeroSection() {
       <div className="home-hero__content">
         <div className="home-hero__text-wrapper">
           <h1 className="home-hero__title">
-            {hero.title || "Nền tảng kết nối"}
+            {hero.title || t("hero.defaultTitle")}
             <span className="home-hero__title-gradient">
               {" "}
-              {hero.titleHighlight || "Creator & Brand"}
+              {hero.titleHighlight || t("hero.defaultHighlight")}
             </span>
           </h1>
           <p className="home-hero__description">
-            {hero.description || "REVLIVE - Nơi các Agency, Brand và Creator gặp gỡ, hợp tác và phát triển cùng nhau"}
+            {hero.description || t("hero.defaultDesc")}
           </p>
-          <button className="home-hero__cta-btn">
-            {hero.ctaText || "Khám phá ngay"}
+          <button className="home-hero__cta-btn" onClick={() => navigate("/about")}>
+            {hero.ctaText || t("hero.cta")}
           </button>
         </div>
       </div>
     </section>
   );
 }
+
 

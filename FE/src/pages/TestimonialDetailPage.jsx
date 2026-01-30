@@ -4,6 +4,7 @@ import axios from "axios";
 import { API_URLS } from "../config/api.js";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
+import { useLanguage } from "../context/LanguageContext";
 import "../styles/agency-detail.css";
 
 export default function TestimonialDetailPage() {
@@ -11,6 +12,7 @@ export default function TestimonialDetailPage() {
   const navigate = useNavigate();
   const [testimonial, setTestimonial] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchTestimonial = async () => {
@@ -35,7 +37,7 @@ export default function TestimonialDetailPage() {
     return (
       <div className="agency-detail-page">
         <Header />
-        <div className="agency-detail-loading">Đang tải...</div>
+        <div className="agency-detail-loading">{t("testimonialDetail.loading")}</div>
         <Footer />
       </div>
     );
@@ -46,8 +48,8 @@ export default function TestimonialDetailPage() {
       <div className="agency-detail-page">
         <Header />
         <div className="agency-detail-not-found">
-          <h2>Không tìm thấy Testimonial</h2>
-          <button onClick={() => navigate("/")}>Về trang chủ</button>
+          <h2>{t("testimonialDetail.notFound")}</h2>
+          <button onClick={() => navigate("/")}>{t("testimonialDetail.backHome")}</button>
         </div>
         <Footer />
       </div>
@@ -62,7 +64,7 @@ export default function TestimonialDetailPage() {
         {/* Section nổi bật với tiêu đề lớn căn giữa */}
         <section className="agency-detail-hero">
           <div className="agency-detail-hero__container">
-            <h1 className="agency-detail-hero__title">Đánh giá từ {testimonial.name}</h1>
+            <h1 className="agency-detail-hero__title">{t("testimonialDetail.reviewFrom")} {testimonial.name}</h1>
             <div className="agency-detail-hero__subtitle">
               {testimonial.role}
             </div>
@@ -90,7 +92,7 @@ export default function TestimonialDetailPage() {
             {/* Cột phải: Nội dung đánh giá */}
             <div className="agency-detail-content__right">
               <div className="agency-detail-story">
-                <h2 className="agency-detail-story__title">Đánh giá về REVLIVE</h2>
+                <h2 className="agency-detail-story__title">{t("testimonialDetail.reviewAbout")}</h2>
                 <div className="agency-detail-story__content">
                   <p style={{ fontSize: "1.2rem", lineHeight: "1.9", fontStyle: "italic", color: "#e5e7eb" }}>
                     "{testimonial.content}"
@@ -99,12 +101,12 @@ export default function TestimonialDetailPage() {
               </div>
 
               <div className="agency-detail-achievements">
-                <h3 className="agency-detail-achievements__title">Thông tin người đánh giá</h3>
+                <h3 className="agency-detail-achievements__title">{t("testimonialDetail.reviewerInfo")}</h3>
                 <ul className="agency-detail-achievements__list">
-                  <li>Tên: {testimonial.name}</li>
-                  <li>Vai trò: {testimonial.role}</li>
-                  <li>Đã sử dụng dịch vụ REVLIVE</li>
-                  <li>Chia sẻ trải nghiệm thực tế</li>
+                  <li>{t("testimonialDetail.name")}: {testimonial.name}</li>
+                  <li>{t("testimonialDetail.role")}: {testimonial.role}</li>
+                  <li>{t("testimonialDetail.usedService")}</li>
+                  <li>{t("testimonialDetail.sharedExperience")}</li>
                 </ul>
               </div>
             </div>
@@ -116,3 +118,4 @@ export default function TestimonialDetailPage() {
     </div>
   );
 }
+

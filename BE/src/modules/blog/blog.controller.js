@@ -1,5 +1,6 @@
 import Blog from "../../models/Blog.js";
 import User from "../../models/User.js";
+import Notification from "../../models/Notification.js";
 
 // ==================== PUBLIC ROUTES ====================
 export const getBlogs = async (req, res) => {
@@ -212,8 +213,19 @@ export const deleteComment = async (req, res) => {
 // ==================== ADMIN ROUTES ====================
 export const getAllBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.find()
-      .populate("author", "username email")
+    // Chỉ staff thấy tất cả blogs
+    // User, creator, brand chỉ thấy blog của mình
+    // Admin không có quyền xem từ admin panel
+    const isStaff = req.user.roles.includes("staff") || req.user.roles.includes("admin");
+    
+    let query = {};
+    if (!isStaff) {
+      // Chỉ hiển thị blog của chính user đó
+      query.author = req.user.id;
+    }
+
+    const blogs = await Blog.find(query)
+      .populate("author", "username email roles blogWarningCount isLocked lockedReason")
       .sort({ createdAt: -1 });
 
     res.json(blogs);
@@ -244,11 +256,23 @@ export const createBlog = async (req, res) => {
 
 export const updateBlog = async (req, res) => {
   try {
-    const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const blog = await Blog.findById(req.params.id);
     if (!blog) {
       return res.status(404).json({ error: "Blog not found" });
     }
-    res.json(blog);
+
+    // Chỉ staff có thể chỉnh sửa bất kỳ blog nào
+    // User, creator, brand chỉ có thể chỉnh sửa blog của chính mình
+    // Admin không có quyền chỉnh sửa blog
+    const isStaff = req.user.roles.includes("staff");
+    const isOwner = blog.author.toString() === req.user.id;
+
+    if (!isStaff && !isOwner) {
+      return res.status(403).json({ error: "You can only edit your own blogs" });
+    }
+
+    const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updatedBlog);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -256,13 +280,214 @@ export const updateBlog = async (req, res) => {
 
 export const deleteBlog = async (req, res) => {
   try {
-    const blog = await Blog.findByIdAndDelete(req.params.id);
+    const blog = await Blog.findById(req.params.id);
     if (!blog) {
       return res.status(404).json({ error: "Blog not found" });
     }
+
+    // Staff có thể xóa bất kỳ blog nào
+    // User, creator, brand chỉ có thể xóa blog của chính mình
+    const isStaff = req.user.roles.includes("staff") || req.user.roles.includes("admin");
+    const isOwner = blog.author.toString() === req.user.id;
+
+    if (!isStaff && !isOwner) {
+      return res.status(403).json({ error: "You can only delete your own blogs" });
+    }
+
+    // Nếu staff/admin xóa blog của người khác -> tạo notification cho tác giả
+    if (isStaff && !isOwner) {
+      await Notification.create({
+        recipient: blog.author,
+        type: "error",
+        title: "Bài đăng của bạn đã bị xóa",
+        message: `Bài đăng của bạn đã bị staff/admin xóa. Nếu bạn cần thêm thông tin, vui lòng liên hệ bộ phận hỗ trợ.`,
+        metadata: {
+          blogId: blog._id,
+        },
+      });
+    }
+
+    await Blog.findByIdAndDelete(req.params.id);
     res.json({ message: "Blog deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
+// ==================== STAFF MANAGEMENT FUNCTIONS ====================
+// Gửi cảnh cáo cho Brand về bài đăng vi phạm
+export const warnBlog = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { violationReason, staffNotes } = req.body;
+
+    if (!violationReason) {
+      return res.status(400).json({ error: "Violation reason is required" });
+    }
+
+    // Chỉ staff mới có quyền cảnh cáo
+    const isStaff = req.user.roles.includes("staff") || req.user.roles.includes("admin");
+    if (!isStaff) {
+      return res.status(403).json({ error: "Only staff can warn blogs" });
+    }
+
+    const blog = await Blog.findById(id).populate("author");
+    if (!blog) {
+      return res.status(404).json({ error: "Blog not found" });
+    }
+
+    const author = await User.findById(blog.author._id);
+    if (!author) {
+      return res.status(404).json({ error: "Author not found" });
+    }
+
+    // Cập nhật blog status và thông tin cảnh cáo
+    blog.status = "warning";
+    blog.violationReason = violationReason;
+    blog.staffNotes = staffNotes || "";
+    blog.warningDate = new Date();
+    await blog.save();
+
+    // Tăng số lần cảnh cáo của Brand
+    author.blogWarningCount = (author.blogWarningCount || 0) + 1;
+    await author.save();
+
+    // Tạo thông báo cho Brand (giống luồng cảnh báo bài đăng tuyển dụng)
+    await Notification.create({
+      recipient: author._id,
+      type: "warning",
+      title: "Vi phạm nội dung bài viết",
+      message: `Bài viết "${blog.title}" của bạn bị cảnh báo. Lý do: ${violationReason}. (Cảnh báo ${author.blogWarningCount}/3)`,
+      metadata: {
+        blogId: blog._id,
+        violationReason,
+        warningCount: author.blogWarningCount,
+      },
+    });
+
+    res.json({
+      message: "Blog warned successfully",
+      blog,
+      authorWarningCount: author.blogWarningCount,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Xóa blog với lý do vi phạm nghiêm trọng
+export const deleteBlogWithReason = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { violationReason, staffNotes } = req.body;
+
+    if (!violationReason) {
+      return res.status(400).json({ error: "Violation reason is required" });
+    }
+
+    // Chỉ staff mới có quyền xóa với lý do
+    const isStaff = req.user.roles.includes("staff") || req.user.roles.includes("admin");
+    if (!isStaff) {
+      return res.status(403).json({ error: "Only staff can delete blogs with reason" });
+    }
+
+    const blog = await Blog.findById(id).populate("author");
+    if (!blog) {
+      return res.status(404).json({ error: "Blog not found" });
+    }
+
+    const author = await User.findById(blog.author._id);
+    if (!author) {
+      return res.status(404).json({ error: "Author not found" });
+    }
+
+    // Tăng số lần cảnh cáo của Brand
+    author.blogWarningCount = (author.blogWarningCount || 0) + 1;
+    await author.save();
+
+    // Tạo thông báo cho Brand trước khi xóa
+    await Notification.create({
+      recipient: author._id,
+      type: "error",
+      title: "Bài đăng đã bị xóa do vi phạm",
+      message: `Bài đăng "${blog.title}" của bạn đã bị xóa do vi phạm nghiêm trọng hoặc không được khắc phục sau cảnh cáo. Lý do: ${violationReason}.`,
+      metadata: {
+        blogId: blog._id,
+        violationReason,
+        warningCount: author.blogWarningCount,
+      },
+    });
+
+    // Xóa blog
+    await Blog.findByIdAndDelete(id);
+
+    res.json({
+      message: "Blog deleted with reason successfully",
+      authorWarningCount: author.blogWarningCount,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Khóa tài khoản Brand nếu vi phạm quá 3 lần
+export const lockBrandAccount = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { reason } = req.body;
+
+    // Chỉ staff mới có quyền khóa tài khoản
+    const isStaff = req.user.roles.includes("staff") || req.user.roles.includes("admin");
+    if (!isStaff) {
+      return res.status(403).json({ error: "Only staff can lock accounts" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Chỉ khóa được Brand
+    if (!user.roles.includes("brand")) {
+      return res.status(400).json({ error: "Can only lock brand accounts" });
+    }
+
+    // Kiểm tra số lần cảnh cáo
+    if ((user.blogWarningCount || 0) < 3) {
+      return res.status(400).json({ 
+        error: "Brand must have at least 3 warnings before account can be locked" 
+      });
+    }
+
+    // Khóa tài khoản
+    user.isLocked = true;
+    user.lockedReason = reason || "Vi phạm quá 3 lần về bài đăng";
+    await user.save();
+
+    // Tạo thông báo cho Brand
+    await Notification.create({
+      recipient: user._id,
+      type: "error",
+      title: "Tài khoản đã bị khóa",
+      message: `Tài khoản của bạn đã bị khóa do vi phạm quá 3 lần về bài đăng. Lý do: ${user.lockedReason}`,
+      metadata: {
+        warningCount: user.blogWarningCount,
+        lockedReason: user.lockedReason,
+      },
+    });
+
+    res.json({
+      message: "Brand account locked successfully",
+      user: {
+        _id: user._id,
+        email: user.email,
+        isLocked: user.isLocked,
+        blogWarningCount: user.blogWarningCount,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 

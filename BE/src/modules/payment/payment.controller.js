@@ -15,8 +15,14 @@ export const PRICING = {
     discounted: 99000,
   },
   brand: {
-    original: 299000,
-    discounted: 199000,
+    basic: {
+      original: 299000,
+      discounted: 199000,
+    },
+    premium: {
+      original: 599000,
+      discounted: 499000,
+    },
   },
 };
 
@@ -30,7 +36,18 @@ export const createTransaction = async (req, res) => {
       return res.status(400).json({ error: "INVALID_PLAN" });
     }
 
-    const pricing = PRICING[plan];
+    // Xử lý plan level cho brand (basic/premium)
+    let pricing;
+    if (plan === "brand") {
+      const { planLevel = "basic" } = req.body; // basic hoặc premium
+      if (!["basic", "premium"].includes(planLevel)) {
+        return res.status(400).json({ error: "INVALID_PLAN_LEVEL" });
+      }
+      pricing = PRICING.brand[planLevel];
+    } else {
+      pricing = PRICING[plan];
+    }
+
     if (!pricing) {
       return res.status(400).json({ error: "INVALID_PLAN" });
     }
@@ -43,7 +60,13 @@ export const createTransaction = async (req, res) => {
 
     // Tạo nội dung chuyển khoản: REVLIVE [Username] [Gói dịch vụ]
     const username = user.username || user.email.split("@")[0];
-    const planName = plan === "creator" ? "Creator VIP 1" : "Brand VIP 2";
+    let planName;
+    if (plan === "creator") {
+      planName = "Creator VIP 1";
+    } else if (plan === "brand") {
+      const { planLevel = "basic" } = req.body;
+      planName = planLevel === "premium" ? "Brand VIP Premium" : "Brand VIP 2";
+    }
     const transferContent = `REVLIVE ${username} ${planName}`;
 
     // Lấy QR code URL từ PaymentConfig
@@ -195,7 +218,7 @@ export const approveTransaction = async (req, res) => {
     if (!user.roles.includes(newMemberType)) {
       user.roles.push(newMemberType);
     }
-
+    
     await user.save();
 
     // Lưu thông tin sau khi nâng cấp
@@ -481,12 +504,18 @@ export const checkoutCreator = async (req, res) => {
   }
 };
 
-// Tạo thanh toán PayOS cho Brand
+// Tạo thanh toán PayOS cho Brand (hỗ trợ basic và premium)
 export const checkoutBrand = async (req, res) => {
   try {
     const userId = req.user.id;
     const plan = "brand";
-    const pricing = PRICING[plan];
+    const { planLevel = "basic" } = req.body; // basic hoặc premium
+    
+    if (!["basic", "premium"].includes(planLevel)) {
+      return res.status(400).json({ error: "INVALID_PLAN_LEVEL" });
+    }
+    
+    const pricing = PRICING.brand[planLevel];
 
     if (!pricing) {
       return res.status(400).json({ error: "INVALID_PLAN" });
@@ -498,9 +527,10 @@ export const checkoutBrand = async (req, res) => {
       return res.status(404).json({ error: "USER_NOT_FOUND" });
     }
 
-    // Tạo token để verify sau khi thanh toán thành công
+    // Tạo token để verify sau khi thanh toán thành công (lưu planLevel vào token)
     const token = signVerifyToken({
       plan,
+      planLevel,
       userId,
     });
 
@@ -515,10 +545,11 @@ export const checkoutBrand = async (req, res) => {
     const orderCode = Number(String(Date.now()).slice(-6));
 
     // Tạo payment request
+    const planName = planLevel === "premium" ? "BVP" : "BV2";
     const body = {
       amount: pricing.discounted,
       orderCode: orderCode,
-      description: `Thanh toán gói Brand VIP`,
+      description: `Thanh toán gói ${planName}`,
       returnUrl: `${req.get("origin") || process.env.FRONTEND_URL || "http://localhost:5173"}/checkout/success?token=${token}`,
       cancelUrl: `${req.get("origin") || process.env.FRONTEND_URL || "http://localhost:5173"}/pricing`,
     };
@@ -533,12 +564,13 @@ export const checkoutBrand = async (req, res) => {
       };
 
       // Tạo transaction với token
+      const planName = planLevel === "premium" ? "Brand VIP Premium" : "Brand VIP 2";
       const transaction = await Transaction.create({
         user: userId,
         plan,
         amount: pricing.discounted,
         originalAmount: pricing.original,
-        transferContent: `REVLIVE ${user.username || user.email.split("@")[0]} Brand VIP 2`,
+        transferContent: `REVLIVE ${user.username || user.email.split("@")[0]} ${planName}`,
         status: "pending",
         beforeUpgrade,
         payosToken: token,
@@ -585,7 +617,7 @@ export const checkoutSuccess = async (req, res) => {
       });
     }
 
-    const { plan, userId } = payload;
+    const { plan, planLevel, userId } = payload;
 
     if (!plan || !userId) {
       return res.status(400).json({
@@ -594,11 +626,9 @@ export const checkoutSuccess = async (req, res) => {
       });
     }
 
-    // Tìm transaction với token này
+    // Tìm transaction với token này (payosToken là unique nên chỉ cần tìm bằng token)
     const transaction = await Transaction.findOne({
       payosToken: token,
-      user: userId,
-      plan,
     }).populate("user");
 
     if (!transaction) {
@@ -657,7 +687,7 @@ export const checkoutSuccess = async (req, res) => {
     if (!user.roles.includes(newMemberType)) {
       user.roles.push(newMemberType);
     }
-
+    
     await user.save();
 
     // Lưu thông tin sau khi nâng cấp

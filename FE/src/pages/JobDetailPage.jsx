@@ -6,6 +6,7 @@ import { API_URLS } from "../config/api.js";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { EmployerSidebar } from "../components/EmployerSidebar";
+import { useLanguage } from "../context/LanguageContext";
 import "../styles/job/job-detail.css";
 
 export default function JobDetailPage() {
@@ -14,6 +15,7 @@ export default function JobDetailPage() {
   const [job, setJob] = useState(null);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -34,8 +36,8 @@ export default function JobDetailPage() {
       .catch(() => setLoading(false));
   }, [id, navigate]);
 
-  if (loading) return <div className="loading">Đang tải chi tiết...</div>;
-  if (!job) return <div className="notfound">Không tìm thấy tin tuyển dụng</div>;
+  if (loading) return <div className="loading">{t("jobDetail.loading")}</div>;
+  if (!job) return <div className="notfound">{t("jobDetail.notFound")}</div>;
 
   const isCreator = user?.roles?.includes("creator") || false;
 
@@ -57,52 +59,52 @@ export default function JobDetailPage() {
               </div>
             </div>
 
-            <h2 className="cv-job-title">{job.title || "TUYỂN CREATOR / KOL"}</h2>
+            <h2 className="cv-job-title">{job.title || t("jobDetail.defaultTitle")}</h2>
 
             {/* MÔ TẢ CÔNG VIỆC */}
             <section className="cv-section">
-              <h3 className="section-title">MÔ TẢ CÔNG VIỆC</h3>
+              <h3 className="section-title">{t("jobDetail.description")}</h3>
               <p className="section-content">{job.description}</p>
             </section>
 
             {/* YÊU CẦU ỨNG VIÊN */}
             <section className="cv-section">
-              <h3 className="section-title">YÊU CẦU ỨNG VIÊN</h3>
+              <h3 className="section-title">{t("jobDetail.requirements")}</h3>
               <ul className="cv-list">
                 {job.requirements.length > 0 ? (
                   job.requirements.map((req, index) => (
                     <li key={index}>{req}</li>
                   ))
                 ) : (
-                  <li>Chưa có yêu cầu cụ thể</li>
+                  <li>{t("jobDetail.noRequirements")}</li>
                 )}
               </ul>
             </section>
 
             {/* QUYỀN LỢI */}
             <section className="cv-section">
-              <h3 className="section-title">QUYỀN LỢI</h3>
+              <h3 className="section-title">{t("jobDetail.benefits")}</h3>
               <ul className="cv-list">
                 {job.benefits.length > 0 ? (
                   job.benefits.map((benefit, index) => (
                     <li key={index}>{benefit}</li>
                   ))
                 ) : (
-                  <li>Thu nhập cạnh tranh, môi trường chuyên nghiệp</li>
+                  <li>{t("jobDetail.defaultBenefits")}</li>
                 )}
               </ul>
             </section>
 
             {/* ĐỊA ĐIỂM LÀM VIỆC */}
             <section className="cv-section">
-              <h3 className="section-title">ĐỊA ĐIỂM LÀM VIỆC</h3>
+              <h3 className="section-title">{t("jobDetail.location")}</h3>
               <p className="section-content">{job.location}</p>
             </section>
 
             {/* LƯƠNG (nếu có) */}
             {job.salary && (
               <section className="cv-section">
-                <h3 className="section-title">MỨC LƯƠNG</h3>
+                <h3 className="section-title">{t("jobDetail.salary")}</h3>
                 <p className="section-content salary-highlight">{job.salary}</p>
               </section>
             )}
@@ -110,13 +112,13 @@ export default function JobDetailPage() {
             {/* NÚT ỨNG TUYỂN */}
             <div className="cv-apply-section">
               <button className="cv-apply-btn">
-                ỨNG TUYỂN NGAY
+                {t("jobDetail.apply")}
               </button>
-              <p className="apply-note">Chúng tôi sẽ phản hồi trong vòng 24-48 giờ</p>
+              <p className="apply-note">{t("jobDetail.applyNote")}</p>
             </div>
 
             <button className="cv-back-btn" onClick={() => navigate(-1)}>
-              ← Quay lại danh sách
+              ← {t("jobDetail.backList")}
             </button>
           </div>
         </main>

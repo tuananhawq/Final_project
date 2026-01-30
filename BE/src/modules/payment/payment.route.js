@@ -73,7 +73,8 @@ router.patch(
 // PayOS Checkout: Tạo thanh toán cho Creator
 router.post("/checkout/creator", authGuard, checkoutCreator);
 
-// PayOS Checkout: Tạo thanh toán cho Brand
+// PayOS Checkout: Tạo thanh toán cho Brand (hỗ trợ basic và premium)
+// Body: { planLevel: "basic" | "premium" } - mặc định là "basic"
 router.post("/checkout/brand", authGuard, checkoutBrand);
 
 // PayOS Checkout: Xử lý callback sau khi thanh toán thành công (public)

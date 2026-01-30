@@ -1,15 +1,17 @@
 // src/components/EmployerSidebar.jsx
 import { useLocation, useNavigate } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
 
 export function EmployerSidebar({ user, isCreator }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const menuItems = [
-    { icon: "📰", label: "BẢNG TIN", path: "/creator" },
-    { icon: "📢", label: "TUYỂN DỤNG ĐỀ XUẤT", path: "/job-offers" },
-    { icon: "📋", label: "QUẢN LÝ CV", path: "/cv-management" },
-    { icon: "🏠", label: "TIN TUYỂN DỤNG CỦA TÔI", path: "/my-jobs" },
+    { icon: "📰", label: t("employerSidebar.dashboard"), path: "/creator" },
+    { icon: "📢", label: t("employerSidebar.jobSuggestions"), path: "/job-offers" },
+    { icon: "📋", label: t("employerSidebar.cvManagement"), path: "/cv-management" },
+    { icon: "🏠", label: t("employerSidebar.myJobs"), path: "/my-jobs" },
   ];
 
   const handleClick = (path) => {
@@ -28,12 +30,12 @@ export function EmployerSidebar({ user, isCreator }) {
           </svg>
         </div>
         <div className="panel-info">
-          <h3>{user?.username || "Tên User Tạm"}</h3>
+          <h3>{user?.username || t("employerSidebar.userTemp")}</h3>
           <p>{isCreator ? "Creator" : "User"}</p>
-          <span>Tài khoản cấp {user?.premiumStatus === "premium" ? "3/3" : "1/3"}</span>
+          <span>{t("employerSidebar.level")} {user?.premiumStatus === "premium" ? "3/3" : "1/3"}</span>
           {!isCreator && (
             <button className="upgrade-btn" onClick={() => navigate("/upgrade-creator")}>
-              Nâng cấp Creator
+              {t("employerSidebar.upgrade")}
             </button>
           )}
         </div>

@@ -100,10 +100,10 @@ export const checkoutCreator = async () => {
 };
 
 // Tạo thanh toán PayOS cho Brand
-export const checkoutBrand = async () => {
+export const checkoutBrand = async (planLevel = "basic") => {
   const res = await axios.post(
     `${API_URL}/checkout/brand`,
-    {},
+    { planLevel },
     { headers: getAuthHeaders() }
   );
   return res.data;

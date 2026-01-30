@@ -6,6 +6,7 @@ import { API_URLS } from "../config/api.js";
 import { Header } from "../components/Header";
 import { EmployerSidebar } from "../components/EmployerSidebar";
 import { Footer } from "../components/Footer";
+import { useLanguage } from "../context/LanguageContext";
 import "../styles/job/job-offers.css";
 
 export default function JobOffersPage() {
@@ -15,6 +16,7 @@ export default function JobOffersPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const fetchJobs = async (page = 1) => {
     setLoading(true);
@@ -45,7 +47,7 @@ export default function JobOffersPage() {
     fetchJobs(1);
   }, [navigate]);
 
-  if (loading) return <div className="loading">Đang tải...</div>;
+  if (loading) return <div className="loading">{t("jobOffers.loading")}</div>;
 
   const isCreator = user?.roles?.includes("creator") || false;
 
@@ -57,11 +59,11 @@ export default function JobOffersPage() {
         <EmployerSidebar user={user} isCreator={isCreator} />
 
         <main className="job-content">
-          <h1 className="page-title">TUYỂN DỤNG NỔI BẬT NGÀY HÔM NAY</h1>
+          <h1 className="page-title">{t("jobOffers.title")}</h1>
 
           <div className="jobs-list">
             {jobs.length === 0 ? (
-              <p>Chưa có tin tuyển dụng nào</p>
+              <p>{t("jobOffers.empty")}</p>
             ) : (
               jobs.map(job => (
                 <div key={job._id} className="job-card">
@@ -71,11 +73,11 @@ export default function JobOffersPage() {
                     <p className="job-desc-truncated">
                       {job.description.slice(0, 50) + (job.description.length > 150 ? "..." : "")}
                     </p>
-                    <button 
+                    <button
                       className="view-detail-btn"
                       onClick={() => navigate(`/job/${job._id}`)}
                     >
-                      XEM CHI TIẾT →
+                      {t("jobOffers.viewDetail")}
                     </button>
                   </div>
                 </div>
@@ -90,16 +92,16 @@ export default function JobOffersPage() {
                 onClick={() => fetchJobs(currentPage - 1)}
                 disabled={!pagination.hasPrev}
               >
-                ‹ Trước
+                ‹ {t("jobPosts.prev")}
               </button>
 
-              <span>Trang {currentPage} / {pagination.totalPages}</span>
+              <span>{t("jobPosts.page")} {currentPage} / {pagination.totalPages}</span>
 
               <button
                 onClick={() => fetchJobs(currentPage + 1)}
                 disabled={!pagination.hasNext}
               >
-                Sau ›
+                {t("jobPosts.next")} ›
               </button>
             </div>
           )}

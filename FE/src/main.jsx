@@ -4,13 +4,16 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import "./styles/index.css";
 import { NotificationProvider } from "./context/NotificationContext.jsx";
+import { LanguageProvider } from "./context/LanguageContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
+      <LanguageProvider>
       <NotificationProvider>
         <App />
       </NotificationProvider>
+      </LanguageProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

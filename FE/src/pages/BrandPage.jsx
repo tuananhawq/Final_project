@@ -9,13 +9,16 @@ import { BrandNews } from "../components/BrandNews";
 import { RecommendedCV } from "../components/RecommendedCV";
 import { BrandCVManager } from "../components/BrandCVManager";
 import { MyJobPosts } from "../components/MyJobPosts";
+import { BrandProfileManager } from "../components/BrandProfileManager";
+import { useLanguage } from "../context/LanguageContext";
 import "../styles/brand/brand-page.css"; // CSS riêng cho Brand
 
 export default function BrandPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("news"); // news | recommended | cv | jobs
+  const [activeTab, setActiveTab] = useState("jobs"); // jobs | recommended | profile
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -49,7 +52,7 @@ export default function BrandPage() {
   }, [navigate]);
 
   if (loading) {
-    return <div className="loading">Đang tải...</div>;
+    return <div className="loading">{t("brandPage.loading")}</div>;
   }
 
   const isBrand = user?.roles?.includes("brand") || false;
@@ -89,10 +92,10 @@ export default function BrandPage() {
               </svg>
             </div>
             <div className="panel-info">
-              <h3>{user?.username || user?.companyName || "Tên Brand"}</h3>
+              <h3>{user?.username || user?.companyName || t("brandPage.brandName")}</h3>
               <p>{isBrand ? "Brand" : "User"}</p>
               <span>
-                Tài khoản cấp{" "}
+                {t("brandPage.accountLevel")}{" "}
                 {user?.premiumStatus === "premium" ? "3/3" : "1/3"}
               </span>
               {!isBrand && (
@@ -100,49 +103,36 @@ export default function BrandPage() {
                   className="upgrade-btn"
                   onClick={() => navigate("/upgrade-brand")}
                 >
-                  Nâng cấp Brand
+                  {t("brandPage.upgradeBrand")}
                 </button>
               )}
             </div>
           </div>
 
           <nav className="panel-menu">
-            {/* BẢNG TIN */}
-            <div
-              className={`menu-item ${
-                activeTab === "news" ? "active" : ""
-              }`}
-              onClick={() => setActiveTab("news")}
-            >
-              <span className="menu-icon">📰</span> BẢNG TIN
-            </div>
-
             {/* Các menu chỉ hiện khi là Brand */}
             {isBrand && (
               <>
                 <div
-                  className={`menu-item ${
-                    activeTab === "recommended" ? "active" : ""
-                  }`}
-                  onClick={() => setActiveTab("recommended")}
-                >
-                  <span className="menu-icon">📢</span> CV ĐỀ XUẤT
-                </div>
-                <div
-                  className={`menu-item ${
-                    activeTab === "cv" ? "active" : ""
-                  }`}
-                  onClick={() => setActiveTab("cv")}
-                >
-                  <span className="menu-icon">📋</span> QUẢN LÝ CV
-                </div>
-                <div
-                  className={`menu-item ${
-                    activeTab === "jobs" ? "active" : ""
-                  }`}
+                  className={`menu-item ${activeTab === "jobs" ? "active" : ""
+                    }`}
                   onClick={() => setActiveTab("jobs")}
                 >
-                  <span className="menu-icon">🏠</span> TIN TUYỂN DỤNG CỦA TÔI
+                  <span className="menu-icon">🏠</span> {t("brandPage.myJobs")}
+                </div>
+                <div
+                  className={`menu-item ${activeTab === "recommended" ? "active" : ""
+                    }`}
+                  onClick={() => setActiveTab("recommended")}
+                >
+                  <span className="menu-icon">📢</span> {t("brandPage.recommendedCv")}
+                </div>
+                <div
+                  className={`menu-item ${activeTab === "profile" ? "active" : ""
+                    }`}
+                  onClick={() => setActiveTab("profile")}
+                >
+                  <span className="menu-icon">👤</span> {t("brandPage.brandProfile")}
                 </div>
               </>
             )}
@@ -154,15 +144,13 @@ export default function BrandPage() {
           <div className="container">
             {!isBrand ? (
               <div className="brand-empty-state">
-                Tài khoản của bạn chưa phải Brand. Vui lòng nâng cấp để sử dụng
-                đầy đủ tính năng.
+                {t("brandPage.notBrand")}
               </div>
             ) : (
               <>
-                {activeTab === "news" && <BrandNews />}
                 {activeTab === "recommended" && <RecommendedCV />}
-                {activeTab === "cv" && <BrandCVManager />}
                 {activeTab === "jobs" && <MyJobPosts />}
+                {activeTab === "profile" && <BrandProfileManager />}
               </>
             )}
           </div>

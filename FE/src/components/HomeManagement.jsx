@@ -1,36 +1,36 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
+import { useNotification } from "../context/NotificationContext.jsx";
 import {
-  getAllHeroes,
-  createHero,
-  updateHero,
-  deleteHero,
-  getAllAgencies,
   createAgency,
-  updateAgency,
-  deleteAgency,
-  getAllCreators,
   createCreator,
-  updateCreator,
-  deleteCreator,
-  getAllTopics,
-  createTopic,
-  updateTopic,
-  deleteTopic,
-  getAllTestimonials,
+  createHero,
   createTestimonial,
-  updateTestimonial,
+  createTopic,
+  deleteAgency,
+  deleteCreator,
+  deleteHero,
   deleteTestimonial,
+  deleteTopic,
+  getAllAgencies,
+  getAllCreators,
+  getAllHeroes,
+  getAllTestimonials,
+  getAllTopics,
   getFooter,
+  updateAgency,
+  updateCreator,
   updateFooter,
+  updateHero,
+  updateTestimonial,
+  updateTopic,
 } from "../services/homeService.jsx";
 import {
-  uploadHeroImage,
   uploadAgencyImage,
   uploadCreatorAvatar,
-  uploadTopicImage,
+  uploadHeroImage,
   uploadTestimonialAvatar,
+  uploadTopicImage,
 } from "../services/uploadService.jsx";
-import { useNotification } from "../context/NotificationContext.jsx";
 
 export function HomeManagement() {
   const [activeTab, setActiveTab] = useState("hero");
@@ -102,6 +102,7 @@ export function HomeManagement() {
     description: "",
     supportPhone: "",
     officeLocation: "",
+    email: "",
     socialLinks: {
       facebook: "",
       twitter: "",
@@ -164,6 +165,7 @@ export function HomeManagement() {
         description: data.description || "",
         supportPhone: data.supportPhone || "",
         officeLocation: data.officeLocation || "",
+        email: data.email || "",
         socialLinks: {
           facebook: data.socialLinks?.facebook || "",
           twitter: data.socialLinks?.twitter || "",
@@ -1488,6 +1490,13 @@ export function HomeManagement() {
                 placeholder="Địa chỉ văn phòng"
                 value={footerForm.officeLocation}
                 onChange={(e) => setFooterForm({ ...footerForm, officeLocation: e.target.value })}
+                style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd" }}
+              />
+              <input
+                type="email"
+                placeholder="Email liên hệ"
+                value={footerForm.email}
+                onChange={(e) => setFooterForm({ ...footerForm, email: e.target.value })}
                 style={{ padding: "8px", borderRadius: "4px", border: "1px solid #ddd" }}
               />
               <h4>Social Links</h4>

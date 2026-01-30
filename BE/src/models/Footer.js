@@ -13,10 +13,14 @@ const footerSchema = new mongoose.Schema({
     type: String,
     default: "REVLIVE",
   },
+  email: {
+    type: String,
+    default: "",
+  },
   socialLinks: {
     facebook: {
       type: String,
-      default: "https://facebook.com",
+      default: "https://www.facebook.com/revlive.media",
     },
     twitter: {
       type: String,

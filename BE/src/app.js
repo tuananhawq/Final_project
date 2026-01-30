@@ -23,6 +23,7 @@ import blogRoutes from './modules/blog/blog.route.js';
 import bannerRoute from "./modules/banner/banner.route.js";
 import creatorRoute from "./modules/creator/creator.route.js";  
 import brandRoute from "./modules/brand/brand.route.js";
+import brandProfileRoute from "./modules/brand/brandProfile.route.js";
 import jobRoute from "./modules/job/job.route.js";
 import jobPostRoute from "./modules/jobPost/jobPost.route.js";
 import cvRoute from "./modules/cv/cv.route.js";
@@ -32,6 +33,8 @@ import applicationRoute from "./modules/application/application.route.js";
 import paymentRoute from "./modules/payment/payment.route.js";
 import dashboardRoute from "./modules/dashboard/dashboard.route.js";
 import legalRoute from "./modules/legal/legal.route.js";
+import projectRoute from "./modules/project/project.route.js";
+import notificationRoute from "./modules/notification/notification.route.js";
 import { setupSwagger } from './config/swagger.js';
 import "./config/passport.js";
 
@@ -70,15 +73,19 @@ app.use('/api/blog', blogRoutes);
 app.use("/api/banners", bannerRoute);
 app.use("/api/creators", creatorRoute);
 app.use("/api/brands", brandRoute);
+app.use("/api", brandProfileRoute);
 app.use("/api/jobs", jobRoute);
 app.use("/api", jobPostRoute);
 app.use("/api", cvRoute);
 app.use("/api", brandCvRoute);
 app.use("/api", creatorCvRoute);
-app.use("/api", applicationRoute);
+app.use("/api/application", applicationRoute);
 app.use("/api/payment", paymentRoute);
 app.use("/api/dashboard", dashboardRoute);
 app.use("/api/legal", legalRoute);
+
+app.use("/api", projectRoute);
+app.use("/api/notifications", notificationRoute);
 // swagger
 setupSwagger(app);
 

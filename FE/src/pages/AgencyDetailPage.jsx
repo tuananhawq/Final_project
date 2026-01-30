@@ -4,6 +4,7 @@ import axios from "axios";
 import { API_URLS } from "../config/api.js";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
+import { useLanguage } from "../context/LanguageContext";
 import "../styles/agency-detail.css";
 
 export default function AgencyDetailPage() {
@@ -11,6 +12,7 @@ export default function AgencyDetailPage() {
   const navigate = useNavigate();
   const [agency, setAgency] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchAgency = async () => {
@@ -35,7 +37,7 @@ export default function AgencyDetailPage() {
     return (
       <div className="agency-detail-page">
         <Header />
-        <div className="agency-detail-loading">Đang tải...</div>
+        <div className="agency-detail-loading">{t("agencyDetail.loading")}</div>
         <Footer />
       </div>
     );
@@ -46,8 +48,8 @@ export default function AgencyDetailPage() {
       <div className="agency-detail-page">
         <Header />
         <div className="agency-detail-not-found">
-          <h2>Không tìm thấy Agency</h2>
-          <button onClick={() => navigate("/")}>Về trang chủ</button>
+          <h2>{t("agencyDetail.notFound")}</h2>
+          <button onClick={() => navigate("/")}>{t("agencyDetail.backHome")}</button>
         </div>
         <Footer />
       </div>
@@ -64,7 +66,7 @@ export default function AgencyDetailPage() {
           <div className="agency-detail-hero__container">
             <h1 className="agency-detail-hero__title">{agency.name}</h1>
             <div className="agency-detail-hero__subtitle">
-              {agency.rank} - Agency/Brand nổi bật
+              {t("agencyDetail.subtitle").replace("{rank}", agency.rank)}
             </div>
           </div>
         </section>
@@ -89,30 +91,23 @@ export default function AgencyDetailPage() {
             {/* Cột phải: Nội dung chữ dài giới thiệu */}
             <div className="agency-detail-content__right">
               <div className="agency-detail-story">
-                <h2 className="agency-detail-story__title">Câu chuyện của chúng tôi</h2>
+                <h2 className="agency-detail-story__title">{t("agencyDetail.story")}</h2>
                 <div className="agency-detail-story__content">
                   {agency.description ? (
                     <p>{agency.description}</p>
                   ) : (
                     <div>
                       <p>
-                        {agency.name} là một trong những Agency/Brand hàng đầu trong lĩnh vực
-                        của chúng tôi, được công nhận với vị trí {agency.rank} trong bảng xếp
-                        hạng tuần này.
+                        {t("agencyDetail.defaultDesc1").replace("{name}", agency.name).replace("{rank}", agency.rank)}
                       </p>
                       <p>
-                        Với sự cam kết không ngừng về chất lượng và sáng tạo, chúng tôi đã xây
-                        dựng được một cộng đồng mạnh mẽ và tạo ra những giá trị bền vững cho
-                        khách hàng và đối tác.
+                        {t("agencyDetail.defaultDesc2")}
                       </p>
                       <p>
-                        Thành tích của chúng tôi không chỉ đến từ những con số, mà còn từ sự
-                        tin tưởng và hài lòng của hàng nghìn khách hàng đã đồng hành cùng chúng
-                        tôi trên hành trình phát triển.
+                        {t("agencyDetail.defaultDesc3")}
                       </p>
                       <p>
-                        Chúng tôi tự hào về những gì đã đạt được và luôn hướng tới tương lai với
-                        tầm nhìn rõ ràng và đam mê không ngừng nghỉ.
+                        {t("agencyDetail.defaultDesc4")}
                       </p>
                     </div>
                   )}
@@ -120,12 +115,12 @@ export default function AgencyDetailPage() {
               </div>
 
               <div className="agency-detail-achievements">
-                <h3 className="agency-detail-achievements__title">Thành tích nổi bật</h3>
+                <h3 className="agency-detail-achievements__title">{t("agencyDetail.achievements")}</h3>
                 <ul className="agency-detail-achievements__list">
-                  <li>Vị trí {agency.rank} trong bảng xếp hạng tuần này</li>
-                  <li>Được công nhận là Agency/Brand nổi bật</li>
-                  <li>Cam kết chất lượng và sáng tạo không ngừng</li>
-                  <li>Xây dựng cộng đồng mạnh mẽ và bền vững</li>
+                  <li>{t("agencyDetail.rankItem").replace("{rank}", agency.rank)}</li>
+                  <li>{t("agencyDetail.recognized")}</li>
+                  <li>{t("agencyDetail.commitment")}</li>
+                  <li>{t("agencyDetail.community")}</li>
                 </ul>
               </div>
             </div>
@@ -137,3 +132,4 @@ export default function AgencyDetailPage() {
     </div>
   );
 }
+

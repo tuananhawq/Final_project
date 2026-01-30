@@ -1,13 +1,28 @@
-import { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { FaSearch, FaMapMarkerAlt, FaBars, FaTimes } from "react-icons/fa";
+import { useEffect, useRef, useState } from "react";
+import { FaBars, FaMapMarkerAlt, FaSearch, FaTimes, FaGlobe, FaBell } from "react-icons/fa";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { API_URLS } from "../config/api.js";
-import { getAgencies, getCreators, getTopics, getTestimonials } from "../services/homeService.jsx";
 import { getBanners } from "../services/bannerService.jsx";
+import { getAgencies, getCreators, getTestimonials, getTopics } from "../services/homeService.jsx";
+import { useLanguage } from "../context/LanguageContext.jsx";
+import {
+  getMyNotifications,
+  markAllNotificationsAsRead,
+  markNotificationAsRead,
+  deleteNotificationById,
+} from "../services/notificationService.jsx";
 import "../styles/home/home-header.css";
 
 export function Header() {
-  const [user, setUser] = useState(null);
+  // Khởi tạo user từ localStorage ngay lập tức để tránh hiện tượng mất user tạm thời
+  const [user, setUser] = useState(() => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      return storedUser ? JSON.parse(storedUser) : null;
+    } catch {
+      return null;
+    }
+  });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -15,15 +30,21 @@ export function Header() {
   const [searchResults, setSearchResults] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const searchInputRef = useRef(null);
+  const [notiOpen, setNotiOpen] = useState(false);
+  const [notiLoading, setNotiLoading] = useState(false);
+  const [notiItems, setNotiItems] = useState([]);
+  const [notiUnread, setNotiUnread] = useState(0);
 
   const navigate = useNavigate();
   const location = useLocation();
+  const { language, toggleLanguage, t } = useLanguage();
 
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
         setUser(null);
+        localStorage.removeItem("user");
         return;
       }
 
@@ -38,7 +59,12 @@ export function Header() {
         setUser(data.user);
         localStorage.setItem("user", JSON.stringify(data.user));
       } catch {
-        setUser(null);
+        // Nếu fetch thất bại, chỉ xóa user nếu token không hợp lệ
+        // Giữ user từ localStorage nếu có
+        const storedUser = localStorage.getItem("user");
+        if (!storedUser) {
+          setUser(null);
+        }
       }
     };
 
@@ -51,6 +77,37 @@ export function Header() {
     const close = () => setOpenMenu(false);
     window.addEventListener("click", close);
     return () => window.removeEventListener("click", close);
+  }, []);
+
+  useEffect(() => {
+    const closeNoti = () => setNotiOpen(false);
+    window.addEventListener("click", closeNoti);
+    return () => window.removeEventListener("click", closeNoti);
+  }, []);
+
+  const loadNotifications = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      setNotiLoading(true);
+      const data = await getMyNotifications();
+      setNotiItems(data.notifications || []);
+      setNotiUnread(data.unreadCount || 0);
+    } catch {
+      // ignore
+    } finally {
+      setNotiLoading(false);
+    }
+  };
+
+  // Poll nhẹ để icon noti cập nhật (ví dụ staff xoá bài thì user thấy ngay)
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    loadNotifications();
+    const id = setInterval(() => loadNotifications(), 15000);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Tự đóng ô search khi đổi route
@@ -210,11 +267,19 @@ export function Header() {
 
   // Logic ẩn/hiện:
   // - User: ẩn cả Creator và Brand
-  // - Creator: ẩn Brand
-  // - Brand: ẩn Creator
-  // - Chưa đăng nhập: hiển thị cả hai
-  const showCreatorLink = !isUser && !isBrand;
-  const showBrandLink = !isUser && !isCreator;
+  // - Creator: chỉ hiện Creator Page, không hiện Brand Page
+  // - Brand: có thể hiện Brand Page
+  // - Chưa đăng nhập: ẩn cả hai (phải đăng ký để xem)
+  const showCreatorLink = isCreator;
+  const showBrandLink = isBrand; // Chỉ hiển thị khi đã đăng nhập và là brand
+
+  // Hàm kiểm tra link có active không
+  const isActiveLink = (path) => {
+    if (path === "/home" || path === "/") {
+      return location.pathname === "/home" || location.pathname === "/";
+    }
+    return location.pathname.startsWith(path);
+  };
 
   return (
     <header className="home-header">
@@ -231,27 +296,52 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="home-header__nav">
-            <Link to="/home" className="home-header__nav-link home-header__nav-link--active">
-              Trang chủ
+            <Link
+              to="/home"
+              className={`home-header__nav-link ${isActiveLink("/home") ? "home-header__nav-link--active" : ""}`}
+            >
+              {t("header.home")}
             </Link>
             {showCreatorLink && (
-              <Link to="/creator" className="home-header__nav-link">
+              <Link
+                to="/creator"
+                className={`home-header__nav-link ${isActiveLink("/creator") ? "home-header__nav-link--active" : ""}`}
+              >
                 Creator Page
               </Link>
             )}
             {showBrandLink && (
-              <Link to="/brand" className="home-header__nav-link">
+              <Link
+                to={isBrand ? "/brand/mynews" : "/brand"}
+                className={`home-header__nav-link ${isActiveLink("/brand") ? "home-header__nav-link--active" : ""}`}
+              >
                 Brand Page
               </Link>
             )}
-            <Link to="/services" className="home-header__nav-link">
-              Dịch vụ
+            {/* Brand page chỉ hiện cho creator, không hiện cho brand */}
+            <Link
+              to="/services"
+              className={`home-header__nav-link ${isActiveLink("/services") ? "home-header__nav-link--active" : ""}`}
+            >
+              {t("header.services")}
             </Link>
-            <Link to="/about" className="home-header__nav-link">
-              Về chúng tôi
+            <Link
+              to="/about"
+              className={`home-header__nav-link ${isActiveLink("/about") ? "home-header__nav-link--active" : ""}`}
+            >
+              {t("header.about")}
             </Link>
-            <Link to="/blog" className="home-header__nav-link">
-              Blog / News
+            <Link
+              to="/blog"
+              className={`home-header__nav-link ${isActiveLink("/blog") ? "home-header__nav-link--active" : ""}`}
+            >
+              {t("header.blog")}
+            </Link>
+            <Link
+              to="/job-posts"
+              className={`home-header__nav-link ${isActiveLink("/job-posts") ? "home-header__nav-link--active" : ""}`}
+            >
+              {t("header.postJob")}
             </Link>
           </nav>
 
@@ -343,14 +433,217 @@ export function Header() {
               )}
             </div>
 
-            {/* Location */}
-            <div className="home-header__location">
-              <FaMapMarkerAlt className="home-header__icon" />
-              <div className="home-header__location-info">
-                <span className="home-header__location-label">Language</span>
-                <span className="home-header__location-value">VIỆT NAM</span>
+            {/* Language Switcher */}
+            <button
+              className="home-header__language-btn"
+              onClick={toggleLanguage}
+              title={language === "vi" ? "Switch to English" : "Chuyển sang Tiếng Việt"}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "8px 16px",
+                background: "rgba(255, 255, 255, 0.1)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                borderRadius: "8px",
+                color: "#fff",
+                cursor: "pointer",
+                transition: "all 0.3s ease",
+                fontSize: "14px",
+                fontWeight: "600",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.2)";
+                e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+                e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
+              }}
+            >
+              <FaGlobe style={{ fontSize: "16px" }} />
+              <span>{language === "vi" ? "VI" : "EN"}</span>
+            </button>
+
+            {/* Notifications */}
+            {user && (
+              <div
+                className="home-header__noti"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const next = !notiOpen;
+                  setNotiOpen(next);
+                  if (next) loadNotifications();
+                }}
+                style={{ position: "relative" }}
+                title={language === "vi" ? "Thông báo" : "Notifications"}
+              >
+                <button
+                  type="button"
+                  className="home-header__noti-btn"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: 42,
+                    height: 42,
+                    borderRadius: 10,
+                    background: "rgba(255,255,255,0.1)",
+                    border: "1px solid rgba(255,255,255,0.2)",
+                    cursor: "pointer",
+                    color: "#fff",
+                  }}
+                >
+                  <FaBell />
+                </button>
+
+                {notiUnread > 0 && (
+                  <span
+                    className="home-header__noti-badge"
+                    style={{
+                      position: "absolute",
+                      top: -6,
+                      right: -6,
+                      minWidth: 18,
+                      height: 18,
+                      padding: "0 6px",
+                      borderRadius: 999,
+                      background: "#ef4444",
+                      color: "#fff",
+                      fontSize: 12,
+                      fontWeight: 700,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      border: "2px solid rgba(11, 11, 30, 0.9)",
+                    }}
+                  >
+                    {notiUnread > 99 ? "99+" : notiUnread}
+                  </span>
+                )}
+
+                {notiOpen && (
+                  <div
+                    className="home-header__noti-dropdown"
+                    onClick={(e) => e.stopPropagation()}
+                    style={{
+                      position: "absolute",
+                      right: 0,
+                      top: 52,
+                      width: 360,
+                      maxWidth: "90vw",
+                      background: "rgba(17, 24, 39, 0.96)",
+                      border: "1px solid rgba(255,255,255,0.12)",
+                      borderRadius: 12,
+                      overflow: "hidden",
+                      boxShadow: "0 20px 60px rgba(0,0,0,0.35)",
+                      zIndex: 9999,
+                    }}
+                  >
+                    <div
+                      style={{
+                        padding: "12px 12px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        borderBottom: "1px solid rgba(255,255,255,0.08)",
+                        color: "#fff",
+                        fontWeight: 700,
+                      }}
+                    >
+                      <span>{language === "vi" ? "Thông báo" : "Notifications"}</span>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          await markAllNotificationsAsRead();
+                          loadNotifications();
+                        }}
+                        style={{
+                          background: "transparent",
+                          border: "none",
+                          color: "#7dd3fc",
+                          cursor: "pointer",
+                          fontWeight: 700,
+                        }}
+                      >
+                        {language === "vi" ? "Đã đọc hết" : "Mark all"}
+                      </button>
+                    </div>
+
+                    <div style={{ maxHeight: 420, overflowY: "auto" }}>
+                      {notiLoading ? (
+                        <div style={{ padding: 12, color: "#9ca3af" }}>
+                          {language === "vi" ? "Đang tải..." : "Loading..."}
+                        </div>
+                      ) : notiItems.length === 0 ? (
+                        <div style={{ padding: 12, color: "#9ca3af" }}>
+                          {language === "vi" ? "Chưa có thông báo" : "No notifications"}
+                        </div>
+                      ) : (
+                        notiItems.map((n) => (
+                          <div
+                            key={n._id}
+                            style={{
+                              display: "flex",
+                              alignItems: "flex-start",
+                              gap: 8,
+                              padding: 10,
+                              borderBottom: "1px solid rgba(255,255,255,0.06)",
+                              background: n.isRead ? "transparent" : "rgba(125,211,252,0.08)",
+                            }}
+                          >
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                if (!n.isRead) await markNotificationAsRead(n._id);
+                                loadNotifications();
+                              }}
+                              style={{
+                                flex: 1,
+                                textAlign: "left",
+                                border: "none",
+                                background: "transparent",
+                                padding: 0,
+                                cursor: "pointer",
+                                color: "#fff",
+                              }}
+                            >
+                              <div style={{ fontWeight: 800, fontSize: 13, marginBottom: 4 }}>
+                                {n.title}
+                              </div>
+                              <div style={{ fontSize: 12, color: "#d1d5db", lineHeight: 1.4 }}>
+                                {n.message}
+                              </div>
+                              <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 6 }}>
+                                {n.createdAt ? new Date(n.createdAt).toLocaleString("vi-VN") : ""}
+                              </div>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                await deleteNotificationById(n._id);
+                                loadNotifications();
+                              }}
+                              style={{
+                                border: "none",
+                                background: "transparent",
+                                color: "#9ca3af",
+                                cursor: "pointer",
+                                fontSize: 14,
+                                padding: "2px 4px",
+                              }}
+                              title={language === "vi" ? "Xóa thông báo" : "Delete notification"}
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
 
             {/* User Section */}
             {user ? (
@@ -390,7 +683,15 @@ export function Header() {
 
                       <div className="dropdown-name">{user.username}</div>
                       <div className="dropdown-role">
-                        {user.roles?.join(", ")}
+                        {(() => {
+                          const roles = user.roles || [];
+                          // Ưu tiên hiển thị: admin > staff > creator > brand > user
+                          if (roles.includes("admin")) return "admin";
+                          if (roles.includes("staff")) return "staff";
+                          if (roles.includes("creator")) return "creator";
+                          if (roles.includes("brand")) return "brand";
+                          return "user";
+                        })()}
                       </div>
                     </div>
 
@@ -400,14 +701,24 @@ export function Header() {
                       className="dropdown-btn"
                       onClick={() => navigate("/profile")}
                     >
-                      Thông tin cá nhân
+                      {t("header.personalInfo")}
                     </button>
+
+                    {/* My Blogs - only for creator/brand */}
+                    {(userRoles.includes("creator") || userRoles.includes("brand")) && (
+                      <button
+                        className="dropdown-btn"
+                        onClick={() => navigate("/my-blogs")}
+                      >
+                        {t("header.myBlogs")}
+                      </button>
+                    )}
 
                     <button
                       className="dropdown-btn logout"
                       onClick={handleLogout}
                     >
-                      Đăng xuất
+                      {t("header.logout")}
                     </button>
                   </div>
                 )}
@@ -416,10 +727,10 @@ export function Header() {
             ) : (
               <div className="home-header__auth">
                 <Link to="/login" className="home-header__auth-link">
-                  Đăng nhập
+                  {t("header.login")}
                 </Link>
                 <Link to="/register" className="home-header__auth-link">
-                  Đăng ký
+                  {t("header.register")}
                 </Link>
               </div>
             )}
@@ -440,7 +751,7 @@ export function Header() {
           <div className="home-header__mobile-menu">
             <nav className="home-header__mobile-nav">
               <Link to="/home" className="home-header__mobile-link">
-                Trang chủ
+                {t("header.home")}
               </Link>
               {showCreatorLink && (
                 <Link to="/creator" className="home-header__mobile-link">
@@ -448,30 +759,33 @@ export function Header() {
                 </Link>
               )}
               {showBrandLink && (
-                <Link to="/brand" className="home-header__mobile-link">
+                <Link to={isBrand ? "/brand/mynews" : "/brand"} className="home-header__mobile-link">
                   Brand Page
                 </Link>
               )}
               <Link to="/services" className="home-header__mobile-link">
-                Dịch vụ
+                {t("header.services")}
               </Link>
               <Link to="/about" className="home-header__mobile-link">
-                Về chúng tôi
+                {t("header.about")}
               </Link>
               <Link to="/blog" className="home-header__mobile-link">
-                Blog / News
+                {t("header.blog")}
+              </Link>
+              <Link to="/job-posts" className="home-header__mobile-link">
+                {t("header.postJob")}
               </Link>
               {user ? (
                 <button onClick={handleLogout} className="home-header__mobile-logout">
-                  Đăng xuất
+                  {t("header.logout")}
                 </button>
               ) : (
                 <>
                   <Link to="/login" className="home-header__mobile-link">
-                    Đăng nhập
+                    {t("header.login")}
                   </Link>
                   <Link to="/register" className="home-header__mobile-link">
-                    Đăng ký
+                    {t("header.register")}
                   </Link>
                 </>
               )}

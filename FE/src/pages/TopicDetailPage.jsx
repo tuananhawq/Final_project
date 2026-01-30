@@ -4,6 +4,7 @@ import axios from "axios";
 import { API_URLS } from "../config/api.js";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
+import { useLanguage } from "../context/LanguageContext";
 import "../styles/agency-detail.css";
 
 export default function TopicDetailPage() {
@@ -11,6 +12,7 @@ export default function TopicDetailPage() {
   const navigate = useNavigate();
   const [topic, setTopic] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchTopic = async () => {
@@ -35,7 +37,7 @@ export default function TopicDetailPage() {
     return (
       <div className="agency-detail-page">
         <Header />
-        <div className="agency-detail-loading">Đang tải...</div>
+        <div className="agency-detail-loading">{t("topicDetail.loading")}</div>
         <Footer />
       </div>
     );
@@ -46,8 +48,8 @@ export default function TopicDetailPage() {
       <div className="agency-detail-page">
         <Header />
         <div className="agency-detail-not-found">
-          <h2>Không tìm thấy Chủ đề</h2>
-          <button onClick={() => navigate("/")}>Về trang chủ</button>
+          <h2>{t("topicDetail.notFound")}</h2>
+          <button onClick={() => navigate("/")}>{t("topicDetail.backHome")}</button>
         </div>
         <Footer />
       </div>
@@ -64,7 +66,7 @@ export default function TopicDetailPage() {
           <div className="agency-detail-hero__container">
             <h1 className="agency-detail-hero__title">{topic.title}</h1>
             <div className="agency-detail-hero__subtitle">
-              Chủ đề yêu thích trong tuần
+              {t("topicDetail.favoriteSubtitle")}
             </div>
           </div>
         </section>
@@ -81,7 +83,7 @@ export default function TopicDetailPage() {
                   className="agency-detail-image"
                 />
                 <div className="agency-detail-rank-badge" style={{ background: "linear-gradient(135deg, #10b981 0%, #059669 100%)" }}>
-                  <span className="agency-detail-rank-text">HOT</span>
+                  <span className="agency-detail-rank-text">{t("topicDetail.hot")}</span>
                 </div>
               </div>
             </div>
@@ -89,27 +91,23 @@ export default function TopicDetailPage() {
             {/* Cột phải: Nội dung chữ dài giới thiệu */}
             <div className="agency-detail-content__right">
               <div className="agency-detail-story">
-                <h2 className="agency-detail-story__title">Về chủ đề này</h2>
+                <h2 className="agency-detail-story__title">{t("topicDetail.about")}</h2>
                 <div className="agency-detail-story__content">
                   {topic.description ? (
                     <p>{topic.description}</p>
                   ) : (
                     <div>
                       <p>
-                        {topic.title} là một trong những chủ đề được yêu thích nhất trong tuần này,
-                        thu hút sự quan tâm của đông đảo cộng đồng.
+                        {topic.title} {t("topicDetail.descriptionDefault1")}
                       </p>
                       <p>
-                        Chủ đề này mang đến những góc nhìn mới mẻ, sáng tạo và đầy cảm hứng,
-                        giúp người xem khám phá và trải nghiệm những điều thú vị.
+                        {t("topicDetail.descriptionDefault2")}
                       </p>
                       <p>
-                        Với sự đa dạng và phong phú về nội dung, {topic.title} đã trở thành
-                        điểm đến lý tưởng cho những ai đam mê khám phá và học hỏi.
+                        {t("topicDetail.descriptionDefault3", { title: topic.title }).replace("{title}", topic.title)}
                       </p>
                       <p>
-                        Chúng tôi tự hào được chia sẻ và lan tỏa những giá trị tích cực
-                        thông qua chủ đề này đến với cộng đồng.
+                        {t("topicDetail.descriptionDefault4")}
                       </p>
                     </div>
                   )}
@@ -117,12 +115,12 @@ export default function TopicDetailPage() {
               </div>
 
               <div className="agency-detail-achievements">
-                <h3 className="agency-detail-achievements__title">Đặc điểm nổi bật</h3>
+                <h3 className="agency-detail-achievements__title">{t("topicDetail.features")}</h3>
                 <ul className="agency-detail-achievements__list">
-                  <li>Chủ đề được yêu thích trong tuần</li>
-                  <li>Nội dung đa dạng và phong phú</li>
-                  <li>Mang đến góc nhìn mới mẻ và sáng tạo</li>
-                  <li>Thu hút sự quan tâm của cộng đồng</li>
+                  <li>{t("topicDetail.feature1")}</li>
+                  <li>{t("topicDetail.feature2")}</li>
+                  <li>{t("topicDetail.feature3")}</li>
+                  <li>{t("topicDetail.feature4")}</li>
                 </ul>
               </div>
             </div>
@@ -134,3 +132,4 @@ export default function TopicDetailPage() {
     </div>
   );
 }
+

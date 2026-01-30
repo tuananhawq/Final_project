@@ -4,6 +4,7 @@ import { getFeaturedBrands, getBrandDetail } from "./brand.controller.js";
 
 const router = express.Router();
 
+// Public routes
 router.get("/", getFeaturedBrands);
 router.get("/:id", getBrandDetail);
 

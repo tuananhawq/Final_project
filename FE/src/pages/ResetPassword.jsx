@@ -5,10 +5,12 @@ import axios from "axios";
 import { API_URLS } from "../config/api.js";
 import "../styles/reset-password.css";
 import { useNotification } from "../context/NotificationContext.jsx";
+import { useLanguage } from "../context/LanguageContext.jsx";
 
 export default function ResetPassword() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const email = location.state?.email;
 
@@ -39,19 +41,19 @@ export default function ResetPassword() {
   /* ================= VALIDATE ================= */
   const validate = () => {
     if (!otp || !password || !confirmPassword) {
-      return "Vui lòng nhập đầy đủ thông tin";
+      return t("resetPassword.passwordRequired");
     }
 
     if (password.length < 8) {
-      return "Mật khẩu phải có ít nhất 8 ký tự";
+      return t("resetPassword.passwordRequired");
     }
 
     if (!/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
-      return "Mật khẩu phải chứa ít nhất 1 chữ và 1 số";
+      return t("resetPassword.passwordRequired");
     }
 
     if (password !== confirmPassword) {
-      return "Mật khẩu xác nhận không khớp";
+      return t("resetPassword.passwordMismatch");
     }
 
     return "";
@@ -75,10 +77,10 @@ export default function ResetPassword() {
         newPassword: password,
       });
 
-      notifySuccess("Đổi mật khẩu thành công");
+      notifySuccess(t("resetPassword.success"));
       navigate("/login");
     } catch (err) {
-      setError(err.response?.data?.error || "Reset failed");
+      setError(err.response?.data?.error || t("resetPassword.tokenInvalid"));
     } finally {
       setLoading(false);
     }
@@ -95,16 +97,16 @@ export default function ResetPassword() {
         email,
       });
     } catch {
-      setError("Không thể gửi lại OTP");
+      setError(t("common.error"));
     }
   };
 
-  if (!email) return <p>Invalid reset flow</p>;
+  if (!email) return <p>{t("resetPassword.tokenInvalid")}</p>;
 
   return (
     <div className="reset-container">
       <div className="reset-box">
-        <h2>Đặt lại mật khẩu</h2>
+        <h2>{t("resetPassword.title")}</h2>
         <p>Email: <b>{email}</b></p>
 
         <div className="input-box">
@@ -119,7 +121,7 @@ export default function ResetPassword() {
         <div className="input-box">
           <FaLock />
           <input
-            placeholder="Mật khẩu mới"
+            placeholder={t("resetPassword.newPassword")}
             type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -132,7 +134,7 @@ export default function ResetPassword() {
         <div className="input-box">
           <FaLock />
           <input
-            placeholder="Xác nhận mật khẩu"
+            placeholder={t("resetPassword.confirmPassword")}
             type={showConfirm ? "text" : "password"}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -145,21 +147,22 @@ export default function ResetPassword() {
         {error && <div className="error">{error}</div>}
 
         <button className="reset-btn" onClick={handleReset} disabled={loading}>
-          {loading ? "ĐANG XỬ LÝ..." : "ĐẶT LẠI MẬT KHẨU"}
+          {loading ? t("common.processing") : t("resetPassword.submit")}
         </button>
 
         <div className="resend">
           {canResend ? (
-            <span onClick={handleResendOTP}>Gửi lại mã OTP</span>
+            <span onClick={handleResendOTP}>{t("forgotPassword.submit")}</span>
           ) : (
-            <span>Gửi lại OTP sau {countdown}s</span>
+            <span>{t("common.processing")} {countdown}s</span>
           )}
         </div>
 
         <div className="back-login" onClick={() => navigate("/login")}>
-          ← Quay lại đăng nhập
+          ← {t("forgotPassword.backToLogin")}
         </div>
       </div>
     </div>
   );
 }
+
