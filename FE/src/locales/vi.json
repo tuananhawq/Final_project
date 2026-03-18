@@ -193,7 +193,7 @@
         "creator": {
             "desc": "Dành cho các Creator tài năng",
             "duration": "Thời gian sử dụng: 1 tháng",
-            "note": "✓ Có hỗ trợ cộng dồn thời gian",
+            "note": "Hỗ trợ cộng dồn thời gian",
             "features": {
                 "cv": "Tạo và quản lý CV chuyên nghiệp",
                 "apply": "Ứng tuyển vào các công việc phù hợp",
@@ -204,7 +204,7 @@
         "brandBasic": {
             "desc": "Dành cho các Brand và Doanh nghiệp",
             "duration": "Thời gian sử dụng: 1 tháng",
-            "note": "✓ Có hỗ trợ cộng dồn thời gian",
+            "note": "Hỗ trợ cộng dồn thời gian",
             "features": {
                 "postJob": "Đăng tin tuyển dụng không giới hạn",
                 "viewCv": "Xem và quản lý CV ứng viên",
@@ -212,10 +212,10 @@
                 "manageBrand": "Quản lý thông tin Brand"
             }
         },
-        "brandPremium": {
+        "a": {
             "desc": "Nâng cấp Brand — mở quyền đăng dự án",
             "duration": "Thời gian sử dụng: 1 tháng",
-            "note": "✓ Có hỗ trợ cộng dồn thời gian",
+            "note": "Hỗ trợ cộng dồn thời gian",
             "upgrade": "NÂNG CẤP",
             "features": {
                 "postJob": "Đăng tin tuyển dụng không giới hạn",

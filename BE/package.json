@@ -11,7 +11,12 @@
     "seed-banners": "node seed-banners.js",
     "seed-blog": "node seed-blog.js",
     "seed-brand": "node seed-brand.js",
-    "seed-all": "node seed-all.js"
+    "seed-all": "node seed-all.js",
+    "seed-users": "node seed-users-only.js",
+    "seed-revenue": "node seed-revenue-only.js",
+    "seed-users-revenue": "node seed-users-and-revenue.js",
+    "migrate-email": "node migrate-email-index.js",
+    "test-email-reuse": "node test-email-reuse.js"
   },
   "dependencies": {
     "@payos/node": "^2.0.4",

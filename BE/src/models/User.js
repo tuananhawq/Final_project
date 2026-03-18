@@ -4,7 +4,6 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
     lowercase: true
   },
 
@@ -63,6 +62,11 @@ const userSchema = new mongoose.Schema({
     default: false
   },
 
+  deletedAt: {
+    type: Date,
+    default: null
+  },
+
   premiumStatus: {
     type: String,
     enum: ["free", "premium"],
@@ -94,6 +98,12 @@ const userSchema = new mongoose.Schema({
   }
 }, {
   timestamps: true
+});
+
+// Compound unique index: allow same email only if one is deleted
+userSchema.index({ email: 1, isDeleted: 1 }, { 
+  unique: true,
+  partialFilterExpression: { isDeleted: false }
 });
 
 export default mongoose.model("User", userSchema);

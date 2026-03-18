@@ -195,9 +195,14 @@ export const deleteUser = async (id) => {
     return null;
   }
 
+  // Soft delete - set isDeleted to true
   user.isDeleted = true;
+  
+  // Optional: Add deletion timestamp for audit purposes
+  user.deletedAt = new Date();
+  
   await user.save();
 
-  return { success: true };
+  return { success: true, message: 'User deleted successfully. Email can now be reused for new registrations.' };
 };
 
